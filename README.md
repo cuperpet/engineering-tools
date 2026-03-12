@@ -56,4 +56,4 @@ Kvôli presnosti je tento integrál v aplikácii riešený numericky, čo zabezp
 ## 📱 Inštalácia a spustenie
 
 Nie je potrebná žiadna inštalácia. Stačí navštíviť:
-`https://cuperpet.github.io/ingineering-tools/`
+`https://cuperpet.github.io/engineering-tools/`
