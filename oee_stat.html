@@ -9,12 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         input[type=range] {
-            height: 8px;
-            -webkit-appearance: none;
+            /* Pre Chrome, Safari, Operu a nový Edge */
+            -webkit-appearance: none; 
+            
+            /* Pre Firefox */
+            -moz-appearance: none;    
+            
+            /* Oficiálny štandard (pre budúcnosť) */
+            appearance: none;         
+            
             width: 100%;
             background: #e5e7eb;
-            border-radius: 5px;
-            outline: none;
+            /* ... zvyšok tvojho kódu ... */
         }
 
         input[type=range]::-webkit-slider-thumb {
@@ -46,11 +52,7 @@
                 <p class="text-teal-100 text-xs mt-1 uppercase tracking-wider">Interaktívna analýza efektivity</p>
             </div>
 
-            <a href="index.html"
-                class="bg-teal-700 hover:bg-teal-800 p-3 rounded-xl transition-all shadow-lg flex items-center gap-2 border border-teal-500">
-                <span class="text-xs font-bold uppercase">Späť</span>
-                <i class="fa-solid fa-arrow-right text-sm"></i>
-            </a>
+            <a href="index.html" class="bg-teal-700 hover:bg-teal-800 px-4 py-2 rounded-lg text-sm transition">Späť</a>
         </div>
 
         <div class="p-8">
