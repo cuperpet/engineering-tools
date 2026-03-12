@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Resistor Decoder</title>
+    <title>Resistor Decoder</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .resistor-body {
             position: relative;
@@ -82,9 +83,13 @@
     </style>
 </head>
 
-<body class="bg-gray-100 p-4 font-sans">
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-blue-600 p-6 text-white flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><i class="fa-solid fa-palette mr-2"></i>Resistor Decoder</h1>
+            <a href="index.html" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg text-sm transition">Späť</a>
+        </div>
 
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div class="flex border-b">
             <button onclick="setMode('leaded')" id="btn-leaded"
                 class="flex-1 py-4 font-bold uppercase tracking-wider tab-active">Leaded</button>
@@ -93,53 +98,49 @@
         </div>
 
         <div id="section-leaded" class="p-6">
-            <div class="flex flex-wrap gap-4 mb-6 items-center justify-between">
-                <div class="flex gap-4">
-                    <label><input type="radio" name="bands" value="4" checked onchange="initLeaded()"> 4-pásiky</label>
-                    <label><input type="radio" name="bands" value="5" onchange="initLeaded()"> 5-pásikov</label>
+            <div class="flex flex-wrap gap-4 mb-6 items-center justify-between text-sm">
+                <div class="flex gap-4 font-bold text-gray-600">
+                    <label class="cursor-pointer"><input type="radio" name="bands" value="4" checked
+                            onchange="initLeaded()"> 4-pásiky</label>
+                    <label class="cursor-pointer"><input type="radio" name="bands" value="5" onchange="initLeaded()">
+                        5-pásikov</label>
                 </div>
-                <select id="bodyColor" onchange="updateLeaded()" class="p-2 border rounded">
+                <select id="bodyColor" onchange="updateLeaded()" class="p-2 border rounded-xl bg-gray-50 outline-none">
                     <option value="#f5f5f5">Biela výplň</option>
                     <option value="#dff5df" selected>Svetlozelená</option>
                     <option value="#dfefff">Svetlomodrá</option>
                 </select>
             </div>
 
-            <div class="flex justify-center py-10 bg-gray-50 rounded-xl mb-6 relative">
-                <div style="position:absolute; width:80%; height:4px; background:#ccc; top:50%; z-index:1;"></div>
+            <div class="flex justify-center py-10 bg-gray-50 rounded-2xl mb-6 relative border border-gray-100">
+                <div style="position:absolute; width:85%; height:4px; background:#ddd; top:50%; z-index:1;"></div>
                 <div id="resistor" class="resistor-body z-10"></div>
             </div>
 
-            <div id="selectors" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+            <div id="selectors" class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8"></div>
 
-            <div id="result" class="mt-8 p-6 bg-blue-600 text-white text-center rounded-xl shadow-lg">
+            <div id="result" class="p-6 bg-blue-600 text-white text-center rounded-2xl shadow-lg transition-all">
                 <div class="text-4xl font-black" id="res-val">-- Ω</div>
-                <div class="text-xl opacity-80" id="res-tol">± 0%</div>
+                <div class="text-xl opacity-80 font-medium" id="res-tol">± 0%</div>
             </div>
         </div>
 
         <div id="section-smd" class="p-6 hidden text-center">
-            <h2 class="text-xl font-bold mb-4">SMD Resistor Decoder</h2>
-            <p class="text-sm text-gray-500 mb-6 text-left bg-gray-50 p-4 rounded">
-                Podporuje: 3-ciferné (330), 4-ciferné (4703), R-formát (3R3, 4R70) a <b>EIA-96 1%</b> (22A, 68C).
-            </p>
-            <input type="text" id="smd-in" oninput="decodeSMD()" placeholder="Zadaj kód (napr. 68C)"
-                class="w-full text-center p-4 text-3xl font-mono border-2 border-blue-200 rounded-xl focus:border-blue-500 outline-none">
-            <div id="smd-res" class="mt-6 text-4xl font-black text-blue-700">---</div>
+            <div class="bg-gray-50 p-4 rounded-2xl mb-6 border border-gray-100 text-left">
+                <p class="text-xs font-bold text-gray-400 uppercase mb-2">Podporované formáty</p>
+                <p class="text-sm text-gray-600">3-ciferné, 4-ciferné, R-formát a <b>EIA-96 1%</b> (napr. 68C).</p>
+            </div>
+            <input type="text" id="smd-in" oninput="decodeSMD()" placeholder="Zadaj kód"
+                class="w-full text-center p-6 text-4xl font-mono border-2 border-blue-100 rounded-2xl focus:border-blue-500 outline-none transition-all">
+            <div id="smd-res" class="mt-8 text-5xl font-black text-blue-700 uppercase tracking-tight">---</div>
         </div>
     </div>
 
     <script>
+        // ... (ponechaj pôvodný JavaScript kód z tvojho resistor_codes.html) ...
         const bandColors = ["Black", "Brown", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Grey", "White"];
-        const multipliers = {
-            "Black": 1, "Brown": 10, "Red": 100, "Orange": 1000, "Yellow": 10000,
-            "Green": 100000, "Blue": 1000000, "Gold": 0.1, "Silver": 0.01
-        };
-        const tolerances = {
-            "Brown": "1%", "Red": "2%", "Green": "0.5%", "Blue": "0.25%",
-            "Purple": "0.1%", "Grey": "0.05%", "Gold": "5%", "Silver": "10%"
-        };
-
+        const multipliers = { "Black": 1, "Brown": 10, "Red": 100, "Orange": 1000, "Yellow": 10000, "Green": 100000, "Blue": 1000000, "Gold": 0.1, "Silver": 0.01 };
+        const tolerances = { "Brown": "1%", "Red": "2%", "Green": "0.5%", "Blue": "0.25%", "Purple": "0.1%", "Grey": "0.05%", "Gold": "5%", "Silver": "10%" };
         const eia96_vals = [100, 102, 105, 107, 110, 113, 115, 118, 121, 124, 127, 130, 133, 137, 140, 143, 147, 150, 154, 158, 162, 165, 169, 174, 178, 182, 187, 191, 196, 200, 205, 210, 215, 221, 226, 232, 237, 243, 249, 255, 261, 267, 274, 280, 287, 294, 301, 309, 316, 324, 332, 340, 348, 357, 365, 374, 383, 392, 402, 412, 422, 432, 442, 453, 464, 475, 487, 499, 511, 523, 536, 549, 562, 576, 590, 604, 619, 634, 649, 665, 681, 698, 715, 732, 750, 768, 787, 806, 825, 845, 866, 887, 909, 931, 953, 976];
         const eia96_mults = { "Z": 0.001, "Y": 0.01, "X": 0.1, "S": 0.1, "R": 0.1, "A": 1, "B": 10, "C": 100, "D": 1000, "E": 10000, "F": 100000 };
 
@@ -154,23 +155,15 @@
             const bands = document.querySelector('input[name="bands"]:checked').value;
             const selDiv = document.getElementById('selectors');
             selDiv.innerHTML = '';
-
             for (let i = 0; i < bands; i++) {
                 let label = (i < bands - 2) ? `Digit ${i + 1}` : (i == bands - 2 ? 'Multiplier' : 'Tolerance');
                 let opts = "";
-
-                if (i === 0) { // Prvý pásik bez čiernej
-                    bandColors.slice(1).forEach(c => opts += `<option value="${c}">${c}</option>`);
-                } else if (i === bands - 2) { // Multiplier
-                    Object.keys(multipliers).forEach(c => opts += `<option value="${c}">${c}</option>`);
-                } else if (i === bands - 1) { // Tolerance
-                    Object.keys(tolerances).forEach(c => opts += `<option value="${c}" ${c == 'Gold' ? 'selected' : ''}>${c}</option>`);
-                } else { // Ostatné digity
-                    bandColors.forEach(c => opts += `<option value="${c}">${c}</option>`);
-                }
-
+                if (i === 0) { bandColors.slice(1).forEach(c => opts += `<option value="${c}">${c}</option>`); }
+                else if (i === bands - 2) { Object.keys(multipliers).forEach(c => opts += `<option value="${c}">${c}</option>`); }
+                else if (i === bands - 1) { Object.keys(tolerances).forEach(c => opts += `<option value="${c}" ${c == 'Gold' ? 'selected' : ''}>${c}</option>`); }
+                else { bandColors.forEach(c => opts += `<option value="${c}">${c}</option>`); }
                 selDiv.innerHTML += `<div><label class="text-[10px] uppercase font-bold text-gray-400">${label}</label>
-                <select class="w-full p-2 border rounded-lg l-sel" onchange="updateLeaded()">${opts}</select></div>`;
+                <select class="w-full p-2 border rounded-lg l-sel bg-gray-50" onchange="updateLeaded()">${opts}</select></div>`;
             }
             updateLeaded();
         }
@@ -180,18 +173,15 @@
             const resBody = document.getElementById('resistor');
             resBody.style.background = document.getElementById('bodyColor').value;
             resBody.innerHTML = '';
-
             let valStr = "";
             selects.forEach((s, i) => {
                 const color = s.value;
                 resBody.innerHTML += `<div class="band b-${color.toLowerCase()}"></div>`;
                 if (i < selects.length - 2) valStr += bandColors.indexOf(color);
             });
-
             const mult = multipliers[selects[selects.length - 2].value];
             const tol = tolerances[selects[selects.length - 1].value];
             const total = parseInt(valStr) * mult;
-
             document.getElementById('res-val').innerText = formatOhm(total);
             document.getElementById('res-tol').innerText = "± " + tol;
         }
@@ -205,23 +195,19 @@
         function decodeSMD() {
             let code = document.getElementById('smd-in').value.trim().toUpperCase();
             let res = "---";
-
-            if (code.includes('R')) {
-                res = code.replace('R', '.') + " Ω";
-            } else if (/^\d{3,4}$/.test(code)) {
+            if (code.includes('R')) { res = code.replace('R', '.') + " Ω"; }
+            else if (/^\d{3,4}$/.test(code)) {
                 let digits = code.length === 3 ? code.slice(0, 2) : code.slice(0, 3);
                 let exp = code.slice(-1);
                 res = formatOhm(parseInt(digits) * Math.pow(10, parseInt(exp)));
-            } else if (/^\d{2}[A-F|R|X|Y|Z|S]$/.test(code)) {
+            }
+            else if (/^\d{2}[A-Z]$/.test(code)) {
                 let idx = parseInt(code.slice(0, 2)) - 1;
                 let m = code.slice(-1);
-                if (eia96_vals[idx] && eia96_mults[m]) {
-                    res = formatOhm(eia96_vals[idx] * eia96_mults[m]) + " (1%)";
-                }
+                if (eia96_vals[idx] && eia96_mults[m]) { res = formatOhm(eia96_vals[idx] * eia96_mults[m]) + " (1%)"; }
             }
             document.getElementById('smd-res').innerText = res;
         }
-
         initLeaded();
     </script>
 </body>
