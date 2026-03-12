@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMD Reel Counter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            background: #fff;
+        }
+
+        .data-table th {
+            @apply p-2 text-xs uppercase text-gray-500 text-center;
+        }
+
+        .data-table td {
+            @apply p-2 text-sm border-t text-center;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+
+        <div class="w-full md:w-1/3 p-6 bg-gray-50 border-r border-gray-200">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-blue-600 p-2 rounded-lg text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h1 class="text-xl font-bold text-gray-800">SMD Reel Calculator</h1>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vnútorný priemer D_in
+                        [mm]</label>
+                    <input type="number" id="dIn" value="60"
+                        class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vonkajší priemer D_out
+                        [mm]</label>
+                    <input type="number" id="dOut" value="91"
+                        class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Typ pásky (Predvoľba)</label>
+                    <select id="preset" onchange="applyPreset()"
+                        class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="1.35_4">1.35T 4K</option>
+                        <option value="0.95_4" selected>0.95T 4K</option>
+                        <option value="0.6_5">0.6T 5K</option>
+                        <option value="0.43_2">0.43T 10K</option>
+                        <option value="0.6_2">0.6T 10K</option>
+                        <option value="0.75_4">0.75T 5K</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Hrúbka t</label>
+                        <input type="number" id="thickness" step="0.01"
+                            class="w-full p-3 border rounded-xl outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Pitch</label>
+                        <input type="number" id="pitch" step="0.1" class="w-full p-3 border rounded-xl outline-none">
+                    </div>
+                </div>
+
+                <button onclick="calculate()"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg">
+                    VYPOČÍTAŤ
+                </button>
+                <a href="index.html" class="block text-center text-sm text-gray-400 hover:underline">Návrat do Hubu</a>
+            </div>
+        </div>
+
+        <div class="w-full md:w-2/3 p-6 flex flex-col gap-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-blue-50 border border-blue-100 p-4 rounded-2xl">
+                    <span class="text-xs font-bold text-blue-600 uppercase italic">Ideálny počet</span>
+                    <div id="idealResult" class="text-3xl font-black text-blue-900 leading-none mt-1">--</div>
+                </div>
+                <div class="bg-green-50 border border-green-100 p-4 rounded-2xl">
+                    <span class="text-xs font-bold text-green-600 uppercase italic">Po korekcii (Odhad)</span>
+                    <div id="correctedResult" class="text-3xl font-black text-green-900 leading-none mt-1">--</div>
+                    <div id="factorResult" class="text-xs text-green-600 mt-1 italic"></div>
+                </div>
+            </div>
+
+            <div class="relative flex justify-center items-center bg-gray-50 rounded-3xl p-4 border border-gray-100">
+                <canvas id="spiralCanvas" width="400" height="400"></canvas>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full data-table">
+                    <thead>
+                        <tr>
+                            <th>K [tis.]</th>
+                            <th>r [mm]</th>
+                            <th>N Ideál</th>
+                            <th>Faktor</th>
+                            <th>Vrstvy</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const presets = {
+            "1.35_4": { t: 1.35, p: 4, measured: [[1, 53.5], [2, 71]] },
+            "0.95_4": { t: 0.95, p: 4, measured: [[1, 47.5], [2, 60.5], [3, 72.2], [4, 77.7]] },
+            "0.6_5": { t: 0.6, p: 4, measured: [[1, 44], [2, 51.9], [3, 60], [4, 67], [5, 74]] },
+            "0.43_2": { t: 0.43, p: 2, measured: [[2, 40], [4, 48], [6, 54], [8, 60], [10, 66]] },
+            "0.6_2": { t: 0.6, p: 2, measured: [[2, 43], [4, 54], [6, 61.5], [8, 68], [10, 74]] },
+            "0.75_4": { t: 0.75, p: 4, measured: [[1, 45], [2, 56], [3, 65.5], [4, 73], [5, 80]] }
+        };
+
+        function applyPreset() {
+            const val = document.getElementById('preset').value;
+            document.getElementById('thickness').value = presets[val].t;
+            document.getElementById('pitch').value = presets[val].p;
+            calculate();
+        }
+
+        // Numerická integrácia (Simpsonovo pravidlo)
+        function integrateSpiral(r_i, b, theta_max) {
+            const steps = 1000;
+            const h = theta_max / steps;
+            let sum = 0;
+
+            function f(theta) {
+                return Math.sqrt(Math.pow(r_i + b * theta, 2) + Math.pow(b, 2));
+            }
+
+            for (let i = 0; i <= steps; i++) {
+                let x = i * h;
+                let weight = (i === 0 || i === steps) ? 1 : (i % 2 === 1 ? 4 : 2);
+                sum += weight * f(x);
+            }
+            return (h / 3) * sum;
+        }
+
+        function calculate() {
+            const dIn = parseFloat(document.getElementById('dIn').value);
+            const dOut = parseFloat(document.getElementById('dOut').value);
+            const t = parseFloat(document.getElementById('thickness').value);
+            const pitch = parseFloat(document.getElementById('pitch').value);
+            const presetKey = document.getElementById('preset').value;
+
+            const r_i = dIn / 2;
+            const r_o = dOut / 2;
+            const b = t / (2 * Math.PI);
+            const theta_max = (r_o - r_i) / b;
+
+            // Celková ideálna dĺžka
+            const lTotal = integrateSpiral(r_i, b, theta_max);
+            const nIdeal = Math.floor(lTotal / pitch);
+            document.getElementById('idealResult').innerText = nIdeal.toLocaleString();
+
+            // Korekcia podľa meraní
+            let factors = [];
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            const measured = presets[presetKey].measured;
+
+            measured.forEach(([K, r]) => {
+                const theta_r = (r - r_i) / b;
+                const l_r = integrateSpiral(r_i, b, theta_r);
+                const n_r_ideal = l_r / pitch;
+                const f_k = (K * 1000) / n_r_ideal;
+                factors.push(f_k);
+                const layers = Math.floor((r - r_i) / t);
+
+                tableBody.innerHTML += `<tr>
+                <td class="font-bold">${K}k</td>
+                <td>${r.toFixed(1)}</td>
+                <td>${Math.floor(n_r_ideal)}</td>
+                <td class="text-blue-600 font-bold">${f_k.toFixed(3)}</td>
+                <td>${layers}</td>
+            </tr>`;
+            });
+
+            const avgFactor = factors.reduce((a, b) => a + b, 0) / factors.length;
+            const nCorrected = Math.floor(nIdeal * avgFactor);
+
+            document.getElementById('correctedResult').innerText = nCorrected.toLocaleString();
+            document.getElementById('factorResult').innerText = `Korekčný faktor: ${avgFactor.toFixed(3)}`;
+
+            drawReel(r_i, r_o, b, theta_max, measured);
+        }
+
+        function drawReel(ri, ro, b, thetaMax, measured) {
+            const canvas = document.getElementById('spiralCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const scale = 160 / (ro > 89 ? ro : 89); // Dynamická mierka
+
+            // Fyzický okraj kotúča (178mm alebo 330mm)
+            const physR = (ro > 89 ? 328 / 2 : 178 / 2) * scale;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, physR, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // D_in a D_out kružnice
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath(); ctx.arc(centerX, centerY, ri * scale, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#3b82f6'; ctx.stroke();
+
+            ctx.beginPath(); ctx.arc(centerX, centerY, ro * scale, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#ef4444'; ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Archimedova špirála
+            ctx.beginPath();
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 1.5;
+            for (let th = 0; th <= thetaMax; th += 0.1) {
+                let r = (ri + b * th) * scale;
+                let x = centerX + r * Math.cos(th);
+                let y = centerY + r * Math.sin(th);
+                if (th === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Meracie body
+            measured.forEach(([K, r]) => {
+                ctx.fillStyle = '#8b5cf6';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - (r * scale), 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+        }
+
+        // Spustenie pri načítaní
+        window.onload = applyPreset;
+    </script>
+</body>
+
+</html>
