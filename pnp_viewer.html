@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Prehliadač Pick&Place</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            padding: 4px 8px;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        #canvas-container {
+            position: relative;
+            margin-bottom: 10px;
+            border: 1px solid #aaa;
+            background-color: white;
+            /* šírka a výška sa nastaví JS podľa DPS */
+        }
+
+        #canvas-container-bottom {
+            position: relative;
+            margin-top: 10px;
+            border: 1px solid #aaa;
+            background-color: white;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            /* umožní klik na rect, ale neblokuje obraz */
+        }
+
+        svg .component-rect {
+            pointer-events: all;
+            /* povolí interakciu s rect (napr. klik) */
+        }
+
+        #boardImage {
+            width: 100%;
+            display: block;
+        }
+
+        #overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            pointer-events: auto;
+            /* šírka a výška sa nastaví JS podľa DPS */
+        }
+
+        rect.highlight {
+            stroke: red;
+            stroke-width: 2;
+            fill: rgba(255, 0, 0, 0.6) !important;
+        }
+
+        #board-outline {
+            fill: none;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        #filters {
+            margin-bottom: 10px;
+        }
+
+        .selected-row {
+            background-color: #fffae6;
+        }
+
+        #tableWrapper {
+            max-height: 300px;
+            /* nastav výšku podľa potreby */
+            overflow-y: auto;
+            /* scroll, keď je dlhšia */
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            /* voliteľne pre rámik */
+        }
+
+        /*#legend {
+            max-width: 250px;
+            word-wrap: break-word;
+        }*/
+
+        .highlight-row {
+            background-color: #ffe599 !important;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<div>
+    <h2>Prehliadač Pick&Place</h2>
+
+    <div id="filters">
+        <label>Nahrať pick&place súbor: <input type="file" id="fileInput" accept=".txt,.csv,text/plain"></label>
+        <button id="exportPdfBtn">Exportovať PDF (Top & Bottom)</button><br><br>
+        <label>Nahrať výkres DPS Top (voliteľné): <input type="file" id="imageInput" accept="image/png"></label><br><br>
+        <label>Nahrať výkres DPS Bottom (voliteľné): <input type="file" id="imageInputBottom"
+                accept="image/png"></label><br><br>
+        <label>Šírka DPS (mm): <input type="number" id="boardWidth" value="145" step="1"></label>
+        <label>Výška DPS (mm): <input type="number" id="boardHeight" value="60" step="1"></label><br><br>
+
+        <fieldset style="margin-top: 10px; margin-bottom:10px; padding: 10px; border: 1px solid #ccc;">
+            <legend>Zrkadlenie Bottom vrstvy</legend>
+            <label><input type="radio" name="mirrorMode" value="none" checked> Žiadne</label>
+            <label><input type="radio" name="mirrorMode" value="x"> Zrkadli cez os X (šírku)</label>
+            <label><input type="radio" name="mirrorMode" value="y"> Zrkadli cez os Y (výšku)</label>
+        </fieldset>
+
+        <label>Vrstva:
+            <select id="layerFilter">
+                <option value="ALL">Všetky</option>
+                <option value="TopLayer">TopLayer</option>
+                <option value="BottomLayer">BottomLayer</option>
+            </select>
+        </label>
+
+        <label>Typ:
+            <select id="typeFilter">
+                <option value="ALL">Všetko</option>
+                <option value="SMT">SMT</option>
+                <option value="THT">THT</option>
+            </select>
+        </label>
+
+        <label>Hľadať: <input type="text" id="searchBox" placeholder="Designator alebo Comment"></label>
+    </div>
+
+    <fieldset style="margin-top:20px; border:1px solid #ccc; padding:10px;">
+        <legend>Úprava rotácie pre Footprinty</legend>
+        <label for="footprintSelect">Footprint:</label>
+        <select id="footprintSelect"></select>
+        <button onclick="rotateFootprint(-90)">⟲ -90°</button>
+        <button onclick="rotateFootprint(90)">⟳ +90°</button>
+        <span id="footprintRotationDisplay" style="margin-left: 10px;">Aktuálna rotácia: 0°</span>
+        <div style="margin-top:10px;">
+            <label>Šírka (mm): <input type="number" id="footprintWidthInput" value="1" step="0.1"
+                    style="width:60px;"></label>
+            <label>Výška (mm): <input type="number" id="footprintHeightInput" value="2" step="0.1"
+                    style="width:60px;"></label>
+            <button onclick="updateFootprintSize()">Uložiť veľkosť</button>
+        </div>
+
+    </fieldset>
+
+    <label for="radiusSlider">Veľkosť THT markerov: </label>
+    <input type="range" id="radiusSlider" min="0.5" max="10" step="0.1" value="1">
+    <span id="radiusValue">1</span>
+
+    <div id="canvas-container">
+        <img id="boardImage" alt="Výkres DPS - Top" />
+        <svg id="overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <div id="canvas-container-bottom">
+        <img id="boardImageBottom" alt="Výkres DPS - Bottom" />
+        <svg id="overlayBottom" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <div id="legend" style="font-size: 14px; margin-top: 10px;"></div>
+
+    <div>
+        <strong>Počet komponentov:</strong> <span id="compCount">0</span> |
+        <strong>Počet typov:</strong> <span id="typeCount">0</span>
+    </div>
+
+    <br>
+
+    <div id="componentInfo" style="margin-top:15px; padding:10px; border:1px solid #ccc; background:#f9f9f9;">
+        Kliknite na súčiastku vo výkrese pre zobrazenie detailov.
+    </div>
+
+    <div id="tooltip" style="
+        position: absolute;
+        pointer-events: none;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        visibility: hidden;
+        z-index: 1000;
+        white-space: nowrap;
+    "></div>
+
+    <div id="tableWrapper">
+        <table id="resultTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>BOM</th>
+                    <th>ID</th>
+                    <th>Comment</th>
+                    <th>Footprint</th>
+                    <th>Designators</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- riadky dopĺňa JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        let allData = [], currentFiltered = [];
+        let scaleX = 1, scaleY = 1;
+        let thtRadiusScale = 1; // slider hodnota × scaleX
+
+        let mirrorMode = "none";
+        document.querySelectorAll("input[name='mirrorMode']").forEach(el => {
+            el.addEventListener("change", () => {
+                mirrorMode = el.value;
+                drawOverlay(); // prekresli všetko s novým režimom
+            });
+        });
+
+        document.getElementById("legend").style.display = "none"; // skrytie legendy
+
+        const fileInput = document.getElementById("fileInput");
+        const boardWidthInput = document.getElementById("boardWidth");
+        const boardHeightInput = document.getElementById("boardHeight");
+        const layerFilter = document.getElementById("layerFilter");
+        const typeFilter = document.getElementById("typeFilter");
+        const searchBox = document.getElementById("searchBox");
+        const svg = document.getElementById("overlay");
+        const boardImage = document.getElementById("boardImage");
+        const imageInput = document.getElementById("imageInput");
+        const canvasContainer = document.getElementById("canvas-container");
+        const svgBottom = document.getElementById("overlayBottom");
+        const boardImageBottom = document.getElementById("boardImageBottom");
+        const imageInputBottom = document.getElementById("imageInputBottom");
+        const canvasContainerBottom = document.getElementById("canvas-container-bottom");
+        const footprintRotationOverrides = {}; // napr. { "R_0603": 90 } globálna mapa pre úpravu rotácie
+        const footprintSizeOverrides = {}; // napr. { "R_0603": {width: 0.9, height: 1.6} } mapa pre veľkosti
+
+
+        fileInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 🔹 Extrahuj rozmery z názvu súboru ešte pred čítaním obsahu
+            extractBoardDimensionsFromFilename(file.name);
+
+            const reader = new FileReader();
+            reader.onload = evt => {
+                const text = evt.target.result;
+                parsePickPlace(text);
+                const matchedDesignator = applyFilters();
+                drawOverlay(matchedDesignator);
+            };
+            reader.readAsText(file, "utf-8");
+        });
+
+        imageInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = evt => {
+                boardImage.src = evt.target.result;
+                boardImage.onload = () => {
+                    // Obrazok ma svoju prirodzenu velkost, ale my pracujeme s mm a mierkou
+                    // Len ho zobrazime na 100% sirky kontajnera (ktory nastavujeme v drawOverlay)
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        imageInputBottom.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = evt => {
+                boardImageBottom.src = evt.target.result;
+                boardImage.onload = () => {
+                    // Obrazok ma svoju prirodzenu velkost, ale my pracujeme s mm a mierkou
+                    // Len ho zobrazime na 100% sirky kontajnera (ktory nastavujeme v drawOverlay)
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        [layerFilter, typeFilter, searchBox, boardWidthInput, boardHeightInput].forEach(el => {
+            el.addEventListener("input", () => {
+                const matchedDesignator = applyFilters();
+                drawOverlay(matchedDesignator);
+            });
+        });
+
+        function extractBoardDimensionsFromFilename(filename) {
+            const match = filename.match(/\((\d+)\s*[xX]\s*(\d+)\)/);
+            if (match) {
+                const width = parseInt(match[1]);
+                const height = parseInt(match[2]);
+
+                document.getElementById('boardWidth').value = width;
+                document.getElementById('boardHeight').value = height;
+            }
+        }
+
+        function splitCSVLine(line, delimiter) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++; // preskoč duplikovanú úvodzovku
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === delimiter && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim()); // posledný stĺpec
+
+            return result.map(cell => cell.replace(/^"|"$/g, ''));
+        }
+
+        function parsePickPlace(text) {
+            const lines = text.split(/\r?\n/);
+            const headerLineIndex = lines.findIndex(line => line.trim().startsWith("Designator"));
+
+            if (headerLineIndex === -1) {
+                alert("Neplatný súbor – chýba hlavička.");
+                return;
+            }
+
+            const rawHeader = lines[headerLineIndex].trim();
+
+            let delimiter = null;
+            if (rawHeader.includes(",")) delimiter = ",";
+            else if (rawHeader.includes(";")) delimiter = ";"
+
+            const header = delimiter
+                //? rawHeader.split(delimiter).map(h => h.trim().replace(/^"|"$/g, ""))
+                ? splitCSVLine(rawHeader, delimiter)
+                : rawHeader.match(/("[^"]+"|\S+)/g).map(h => h.replace(/^"|"$/g, ""));
+
+            allData = [];
+            for (let i = headerLineIndex + 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+
+                let parts = [];
+
+                if (delimiter) {
+                    //parts = line.split(delimiter).map(p => p.trim().replace(/^"|"$/g, ""));
+                    parts = splitCSVLine(line, delimiter);
+                } else {
+                    parts = line.match(/("[^"]*"|\S+)/g);
+                    if (!parts) continue;
+                    parts = parts.map(p => p.replace(/^"|"$/g, ""));
+                }
+
+                if (parts.length < header.length) continue;
+
+                const item = {};
+                for (let j = 0; j < header.length; j++) {
+                    item[header[j]] = parts[j] || "";
+                }
+                allData.push(item);
+            }
+            updateFootprintDropdown();
+        }
+
+        function updateFootprintDropdown() {
+            const select = document.getElementById("footprintSelect");
+            const uniqueFootprints = [...new Set(allData.map(row => row.Footprint).filter(fp => fp))];
+            select.innerHTML = "";
+            for (const fp of uniqueFootprints) {
+                const option = document.createElement("option");
+                option.value = fp;
+                option.textContent = fp;
+                select.appendChild(option);
+            }
+            updateFootprintRotationDisplay();
+        }
+
+        function rotateFootprint(delta) {
+            const select = document.getElementById("footprintSelect");
+            const fp = select.value;
+            if (!fp) return;
+
+            let current = footprintRotationOverrides[fp] || 0;
+            current = ((current + delta + 360) % 360);
+            if (current === 360) current = 0;
+            footprintRotationOverrides[fp] = current;
+
+            updateFootprintRotationDisplay();
+            drawOverlay();
+        }
+
+        function updateFootprintRotationDisplay() {
+            const select = document.getElementById("footprintSelect");
+            const fp = select.value;
+            const rot = footprintRotationOverrides[fp] || 0;
+            document.getElementById("footprintRotationDisplay").textContent = `Aktuálna rotácia: ${rot}°`;
+            // + aktualizácia veľkosti pri zmene výberu
+            const size = footprintSizeOverrides[fp] || { width: 1, height: 2 };
+            document.getElementById("footprintWidthInput").value = size.width;
+            document.getElementById("footprintHeightInput").value = size.height;
+        }
+
+        function updateFootprintSize() {
+            const fp = document.getElementById("footprintSelect").value;
+            if (!fp) return;
+
+            const w = parseFloat(document.getElementById("footprintWidthInput").value);
+            const h = parseFloat(document.getElementById("footprintHeightInput").value);
+
+            if (w > 0 && h > 0) {
+                footprintSizeOverrides[fp] = { width: w, height: h };
+                drawOverlay();
+            }
+        }
+
+        document.getElementById("footprintSelect").addEventListener("change", updateFootprintRotationDisplay);
+
+        function applyFilters() {
+            const layer = layerFilter.value;
+            const type = typeFilter.value;
+            const query = searchBox.value.trim().toLowerCase();
+
+            let matchedDesignator = null;
+
+            const layerAndTypeFiltered = allData.filter(item => {
+                const isLayerOK = layer === "ALL" || item.Layer === layer;
+                const isTypeOK = type === "ALL" || (type === "SMT" && item.SMD === "True") || (type === "THT" && item.SMD === "False");
+                return isLayerOK && isTypeOK;
+            });
+
+            // Ak je zadaný konkrétny designátor alebo komentár
+            if (query) {
+                const matchedRow = layerAndTypeFiltered.find(item =>
+                    item.Designator?.toLowerCase() === query || item.Comment?.toLowerCase() === query
+                );
+
+                if (matchedRow) {
+                    // Získaj všetky komponenty so zhodným SAVIS_ID (alebo Comment)
+                    const groupKey = matchedRow.SAVIS_ID || matchedRow.Comment;
+                    currentFiltered = layerAndTypeFiltered.filter(item =>
+                        (item.SAVIS_ID || item.Comment) === groupKey
+                    );
+
+                    matchedDesignator = matchedRow.Designator;
+                    showComponentInfo(matchedRow);
+                } else {
+                    currentFiltered = [];
+                    clearComponentInfo();
+                }
+
+            } else {
+                currentFiltered = layerAndTypeFiltered;
+                clearComponentInfo();
+            }
+
+            updateTable(currentFiltered, matchedDesignator);
+            drawOverlay(matchedDesignator);
+            return matchedDesignator;
+        }
+
+        function updateTable(data, highlightDes = null) {
+            const tbody = document.querySelector("#resultTable tbody");
+            tbody.innerHTML = "";
+
+            const palette = [
+                "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0",
+                "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8"
+            ];
+
+            const colorMap = {};
+            let colorIndex = 0;
+
+            // Vytvor farby pre každý typ
+            for (const row of data) {
+                const typeKey = row.SAVIS_ID || row.Comment || "default";
+                if (!colorMap[typeKey]) {
+                    colorMap[typeKey] = palette[colorIndex % palette.length];
+                    colorIndex++;
+                }
+            }
+
+            const grouped = {};
+            for (const row of data) {
+                const key = row.SAVIS_ID || row.Comment || "UNKNOWN";
+                if (!grouped[key]) {
+                    grouped[key] = {
+                        SAVIS_ID: row.SAVIS_ID,
+                        Comment: row.Comment,
+                        Footprint: row.Footprint,
+                        Designators: [],
+                        isTHT: false  // flag, či aspoň jeden komponent v skupine je THT
+                    };
+                }
+                grouped[key].Designators.push(row.Designator);
+
+                // Ak je tento komponent THT (SMD === "False"), nastav flag
+                if (row.SMD === "False") {
+                    grouped[key].isTHT = true;
+                }
+            }
+
+            const keys = Object.keys(grouped);
+            document.getElementById("compCount").textContent = data.length;
+            document.getElementById("typeCount").textContent = keys.length;
+
+            for (const key of keys) {
+                const row = grouped[key];
+                const tr = document.createElement("tr");
+                tr.setAttribute("data-designators", row.Designators.join(","));
+
+                const designatorHTML = row.Designators.map(d => {
+                    return d === highlightDes ? `<strong style="color:red">${d}</strong>` : d;
+                }).join(",");
+
+                // Urči farbu iba ak je skupina THT, inak dáme sivú
+                const typeKey = row.SAVIS_ID || row.Comment || "default";
+                const bomColor = row.isTHT ? (colorMap[typeKey] || "#ccc") : "#ddd";
+
+                tr.innerHTML = `
+            <td>
+                <span style="
+                    display:inline-block;
+                    width:14px;
+                    height:14px;
+                    background:${bomColor};
+                    border:1px solid #666;
+                    border-radius:2px;">
+                </span>
+            </td>
+            <td>${row.SAVIS_ID}</td>
+            <td>${row.Comment}</td>
+            <td>${row.Footprint}</td>
+            <td>${designatorHTML}</td>
+        `;
+
+                tr.addEventListener("click", () => {
+                    const newHighlight = row.Designators[0];
+                    updateTable(currentFiltered, newHighlight);
+                    drawOverlay(newHighlight);
+                    highlightComponents(row.Designators);
+                    highlightRow(newHighlight);
+                    const matchedRow = currentFiltered.find(item => item.Designator === newHighlight);
+                    if (matchedRow) showComponentInfo(matchedRow);
+                });
+
+                tbody.appendChild(tr);
+            }
+        }
+
+
+        function resizeCanvasContainer() {
+            const bw = parseFloat(boardWidthInput.value);
+            const bh = parseFloat(boardHeightInput.value);
+            if (!bw || !bh) return;
+
+            // Max sirka kontajnera v pixeloch
+            const maxWidth = 800;
+
+            scaleX = maxWidth / bw;
+            scaleY = scaleX;
+
+            canvasContainer.style.width = (bw * scaleX) + "px";
+            canvasContainer.style.height = (bh * scaleY) + "px";
+            svg.setAttribute("width", bw * scaleX);
+            svg.setAttribute("height", bh * scaleY);
+            svg.style.width = (bw * scaleX) + "px";
+            svg.style.height = (bh * scaleY) + "px";
+            // Upravit aj obrazok dps, ak je
+            boardImage.style.width = "100%";
+            boardImage.style.height = "auto";
+
+            canvasContainerBottom.style.width = (bw * scaleX) + "px";
+            canvasContainerBottom.style.height = (bh * scaleY) + "px";
+            svgBottom.setAttribute("width", bw * scaleX);
+            svgBottom.setAttribute("height", bh * scaleY);
+            svgBottom.style.width = (bw * scaleX) + "px";
+            svgBottom.style.height = (bh * scaleY) + "px";
+            boardImageBottom.style.width = "100%";
+            boardImageBottom.style.height = "auto";
+
+        }
+
+        const radiusSlider = document.getElementById("radiusSlider");
+        const radiusValue = document.getElementById("radiusValue");
+
+        radiusSlider.addEventListener("input", (e) => {
+            thtRadiusScale = parseFloat(e.target.value);
+            radiusValue.textContent = thtRadiusScale;
+            drawOverlay(); // Redraw s novou hodnotou
+        });
+
+        function drawOverlay(highlightDes = null) {
+            resizeCanvasContainer();
+            svg.innerHTML = "";
+            svgBottom.innerHTML = "";
+
+            const bw = parseFloat(boardWidthInput.value);
+            const bh = parseFloat(boardHeightInput.value);
+            if (!bw || !bh) return;
+
+            // Board outline
+            ["svg", "svgBottom"].forEach(id => {
+                const svgEl = id === "svg" ? svg : svgBottom;
+                const outline = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                outline.setAttribute("id", "board-outline");
+                outline.setAttribute("x", 0);
+                outline.setAttribute("y", 0);
+                outline.setAttribute("width", bw * scaleX);
+                outline.setAttribute("height", bh * scaleY);
+                outline.setAttribute("fill", "none");
+                outline.setAttribute("stroke", "black");
+                outline.setAttribute("stroke-width", "1");
+                svgEl.appendChild(outline);
+            });
+
+            const colorMap = {};
+            let colorIndex = 0;
+            const palette = [
+                "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0",
+                "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8"
+            ]; // vynechaná červená (#e6194b)
+
+            for (const row of currentFiltered) {
+                const isBottom = row.Layer && row.Layer.toUpperCase().includes("BOTTOM");
+                const targetSvg = isBottom ? svgBottom : svg;
+
+                const x = parseFloat(row["Center-X(mm)"]);
+                const y = parseFloat(row["Center-Y(mm)"]);
+
+                //const rotation = parseFloat(row.Rotation) || 0;
+                let rotation = parseFloat(row.Rotation) || 0;
+                const override = footprintRotationOverrides[row.Footprint] || 0;
+                rotation = (rotation + override + 360) % 360;
+
+                const designator = row.Designator || "";
+                const isHighlight = designator.trim() === (highlightDes ? highlightDes.trim() : "");
+                const isTHT = row.SMD === "False";
+
+                let px = x * scaleX;
+                let py = bh * scaleY - y * scaleY;
+
+                if (isBottom) {
+                    if (mirrorMode === "x") {
+                        px = (bw * scaleX) - px;
+                    } else if (mirrorMode === "y") {
+                        py = (bh * scaleY) - py;
+                    }
+                }
+
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                g.setAttribute("transform", `translate(${px},${py}) rotate(${-rotation})`);
+
+                let shape;
+                if (isTHT) {
+                    // Farba podľa typu
+                    const typeKey = row.SAVIS_ID || row.Comment || "default";
+                    if (!colorMap[typeKey]) {
+                        colorMap[typeKey] = palette[colorIndex % palette.length];
+                        colorIndex++;
+                    }
+
+                    shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    //const circleRadius = 1*scaleX; // ← tu je aktuálny polomer 
+                    const circleRadius = thtRadiusScale * scaleX;
+                    shape.setAttribute("r", circleRadius);
+                    shape.setAttribute("fill", colorMap[typeKey]);
+                    shape.setAttribute("stroke", isHighlight ? "black" : "#333");
+                    shape.setAttribute("stroke-width", "1");
+
+                    shape.classList.add("component-rect");
+                    shape.dataset.designator = designator;
+
+                    g.appendChild(shape);
+
+                    // Ak je zvýraznený, pridaj červený štvorček okolo (alebo nad) kruhu
+                    if (isHighlight) {
+                        const highlightRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        const rectSize = circleRadius * 2; // štvorček rovnakej veľkosti ako priemer kruhu
+                        highlightRect.setAttribute("x", -rectSize / 2);
+                        highlightRect.setAttribute("y", -rectSize / 2);
+                        highlightRect.setAttribute("width", rectSize);
+                        highlightRect.setAttribute("height", rectSize);
+                        highlightRect.setAttribute("fill", "none");
+                        highlightRect.setAttribute("stroke", "red");
+                        highlightRect.setAttribute("stroke-width", "2");
+                        g.appendChild(highlightRect);
+                    }
+
+                } else {
+                    shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    /*
+                    shape.setAttribute("x", -0.5 * scaleX);
+                    shape.setAttribute("y", -1 * scaleY);
+                    shape.setAttribute("width", 1 * scaleX);
+                    shape.setAttribute("height", 2 * scaleY);
+                    */
+                    const sizeOverride = footprintSizeOverrides[row.Footprint] || { width: 1, height: 2 };
+                    const w = sizeOverride.width * scaleX;
+                    const h = sizeOverride.height * scaleY;
+                    shape.setAttribute("x", -0.5 * w);
+                    shape.setAttribute("y", -0.5 * h);
+                    shape.setAttribute("width", w);
+                    shape.setAttribute("height", h);
+
+
+                    shape.setAttribute("fill", isHighlight ? "rgba(255, 0, 0, 0.6)" : "rgba(0, 100, 255, 0.4)");
+                    shape.setAttribute("stroke", isHighlight ? "red" : "blue");
+                    shape.setAttribute("stroke-width", "1");
+                }
+
+                shape.classList.add("component-rect");
+                shape.dataset.designator = designator;
+
+                shape.addEventListener("click", () => {
+                    showComponentInfo(row);
+                    updateTable(currentFiltered, designator);
+                    drawOverlay(designator);
+                    scrollToTableRow(designator);
+                });
+
+                shape.addEventListener("mousemove", (e) => {
+                    const tooltip = document.getElementById("tooltip");
+                    tooltip.style.left = (e.pageX + 10) + "px";
+                    tooltip.style.top = (e.pageY + 10) + "px";
+                    tooltip.style.visibility = "visible";
+
+                    tooltip.innerHTML = `
+                            <strong>${designator}</strong><br>
+                            ID: ${row.SAVIS_ID || "–"}<br>
+                            Comment: ${row.Comment || "–"}<br>
+                            Footprint: ${row.Footprint || "–"}<br>
+                            Layer: ${row.Layer || "–"}<br>
+                            Pos: (${row["Center-X(mm)"] || "–"}, ${row["Center-Y(mm)"] || "–"})<br>
+                            Rotation: ${row.Rotation || "–"}°
+                        `;
+                });
+
+                shape.addEventListener("mouseout", () => {
+                    document.getElementById("tooltip").style.visibility = "hidden";
+                });
+
+                g.appendChild(shape);
+                targetSvg.appendChild(g);
+            }
+
+            /*
+            if (Object.keys(colorMap).length > 0) {
+                    // Vygeneruj legendu pre THT
+                const legendDiv = document.getElementById("legend");
+                legendDiv.innerHTML = "<strong>Legenda THT komponentov podľa typu:</strong><br>";
+                for (const key in colorMap) {
+                    const color = colorMap[key];
+                    // Nájde prvý záznam s rovnakým SAVIS_ID alebo Comment
+                    const matched = currentFiltered.find(row => (row.SAVIS_ID || row.Comment) === key);
+                    const comment = matched?.Comment || "–";
+                    legendDiv.innerHTML += `
+                        <div style="display:inline-block; margin:2px 10px;">
+                            <span style="display:inline-block; width:14px; height:14px; background:${color}; border:1px solid #666; margin-right:5px;"></span>
+                            ${key} <span style="color: #555;">(${comment})</span>
+                        </div>
+                    `;
+                }
+            }
+            */
+        }
+
+        function highlightComponents(designators) {
+            document.querySelectorAll(".component-rect.highlight").forEach(el => el.classList.remove("highlight"));
+
+            for (const des of designators) {
+                const rect = Array.from(document.querySelectorAll(".component-rect")).find(r => r.dataset.designator === des);
+                if (rect) {
+                    rect.classList.add("highlight");
+                }
+            }
+        }
+
+        function highlightRow(designator) {
+            // Odstráni zvýraznenie zo všetkých riadkov
+            document.querySelectorAll("#resultTable tbody tr").forEach(tr => tr.classList.remove("selected-row"));
+
+            // Nájde riadok obsahujúci designator a zvýrazní ho
+            const rows = document.querySelectorAll("#resultTable tbody tr");
+            for (const row of rows) {
+                if (row.innerHTML.includes(designator)) {
+                    row.classList.add("selected-row");
+                    // posuň scroll na zvýraznený riadok, ak treba
+                    row.scrollIntoView({ behavior: "smooth", block: "center" });
+                    break;
+                }
+            }
+        }
+
+        function showComponentInfo(component) {
+            const infoDiv = document.getElementById("componentInfo");
+
+            infoDiv.innerHTML = `
+                <strong>ID:</strong> ${component.SAVIS_ID || "–"}<br>
+                <strong>Comment:</strong> ${component.Comment || "–"}<br>
+                <strong>Footprint:</strong> ${component.Footprint || "–"}<br>
+                <strong>Designator:</strong> ${component.Designator || "–"}<br>
+                <strong>Layer:</strong> ${component.Layer || "–"}<br>
+                <strong>Position (X, Y):</strong> ${component["Center-X(mm)"] || "–"}, ${component["Center-Y(mm)"] || "–"}<br>
+                <strong>Rotation:</strong> ${component.Rotation || "–"}°
+            `;
+        }
+
+        function scrollToTableRow(designator) {
+            const rows = document.querySelectorAll("#resultTable tbody tr");
+            for (const row of rows) {
+                const designators = row.getAttribute("data-designators")?.split(",");
+                if (designators && designators.includes(designator)) {
+                    // Zvýrazni rad
+                    rows.forEach(r => r.classList.remove("highlight-row")); // odstráni z predchádzajúcich
+                    row.classList.add("highlight-row");
+
+                    // Scrolluj do výhľadu
+                    row.scrollIntoView({ behavior: "smooth", block: "center" });
+                    break;
+                }
+            }
+        }
+
+        function clearComponentInfo() {
+            const infoDiv = document.getElementById("componentInfo");
+            infoDiv.innerHTML = "<em>Žiadna súčiastka nie je vybraná</em>";
+        }
+
+        async function exportPdfWithHighlighting() {
+            const { jsPDF } = window.jspdf;
+
+            // Zvýrazni designátory podľa vrstvy (TOP alebo BOTTOM)
+            function highlightDesignatorsByLayer(table, layerFilter) {
+                const tbody = table.querySelector("tbody");
+                for (const tr of tbody.rows) {
+                    const designatorsCell = tr.querySelector("td[data-designators]");
+                    if (!designatorsCell) continue;
+
+                    const designators = designatorsCell.getAttribute("data-designators")?.split(",") || [];
+
+                    const newHtml = designators.map(des => {
+                        const comp = currentFiltered.find(row => row.Designator === des.trim());
+                        const isInLayer = comp && comp.Layer && comp.Layer.toUpperCase().includes(layerFilter);
+                        if (isInLayer) {
+                            return `<span style="font-weight:bold; color:red;">${des.trim()}</span>`;
+                        } else {
+                            return `<span style="color:#888;">${des.trim()}</span>`;
+                        }
+                    }).join(", ");
+
+                    designatorsCell.innerHTML = newHtml;
+                }
+            }
+
+            // Vytvor stránku s výkresom a tabuľkou pre danú vrstvu
+            async function renderPage(svgElement, layerFilter) {
+                const tempDiv = document.createElement("div");
+                tempDiv.style.position = "fixed";
+                tempDiv.style.top = "-10000px";
+                tempDiv.style.left = "0";
+                tempDiv.style.background = "white";
+                tempDiv.style.padding = "10px";
+                tempDiv.style.zIndex = "9999";
+                document.body.appendChild(tempDiv);
+
+                // Skopíruj SVG
+                const svgClone = svgElement.cloneNode(true);
+                svgClone.style.width = "500px";
+                svgClone.style.height = "auto";
+                tempDiv.appendChild(svgClone);
+
+                // Skopíruj tabuľku
+                const tableClone = document.querySelector("#resultTable").cloneNode(true);
+                highlightDesignatorsByLayer(tableClone, layerFilter);
+                tempDiv.appendChild(tableClone);
+
+                const canvas = await html2canvas(tempDiv, {
+                    scale: 2,
+                    backgroundColor: "#fff",
+                    useCORS: true
+                });
+
+                document.body.removeChild(tempDiv);
+
+                return canvas.toDataURL("image/png");
+            }
+
+            // Vygeneruj oba obrázky
+            const topImage = await renderPage(svg, "TOP");
+            const bottomImage = await renderPage(svgBottom, "BOTTOM");
+
+            // Vytvor PDF
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+
+            // Strana 1 – TOP
+            pdf.setFontSize(14);
+            pdf.text("Top strana (osadzovací výkres + tabuľka)", 10, 10);
+            const imgPropsTop = pdf.getImageProperties(topImage);
+            const imgWidthTop = pageWidth - 20;
+            const imgHeightTop = (imgPropsTop.height * imgWidthTop) / imgPropsTop.width;
+            pdf.addImage(topImage, "PNG", 10, 15, imgWidthTop, imgHeightTop);
+
+            // Strana 2 – BOTTOM
+            pdf.addPage();
+            pdf.text("Bottom strana (osadzovací výkres + tabuľka)", 10, 10);
+            const imgPropsBottom = pdf.getImageProperties(bottomImage);
+            const imgWidthBottom = pageWidth - 20;
+            const imgHeightBottom = (imgPropsBottom.height * imgWidthBottom) / imgPropsBottom.width;
+            pdf.addImage(bottomImage, "PNG", 10, 15, imgWidthBottom, imgHeightBottom);
+
+            // Ulož PDF
+            pdf.save("osadzovaci_vykres.pdf");
+        }
+
+        document.getElementById("exportPdfBtn").addEventListener("click", () => {
+            exportPdfWithHighlighting().catch(err => console.error(err));
+        });
+    </script>
+</div>
+
+</html>
