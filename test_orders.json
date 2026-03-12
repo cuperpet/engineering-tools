@@ -1,0 +1,3912 @@
+{
+  "10000": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1770958800112,
+        "end": 1770960000112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1770960000112,
+        "end": 1770963600112,
+        "goodPieces": 7,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1770963600112,
+        "end": 1770964080112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1770964080112,
+        "end": 1770965280112,
+        "goodPieces": 5,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 12,
+    "badPieces": 4,
+    "completedAt": 1770965280112,
+    "plannedPieces": 32
+  },
+  "10001": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1770965280112,
+        "end": 1770966480112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1770966480112,
+        "end": 1770970080112,
+        "goodPieces": 6,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1770970080112,
+        "end": 1770970440112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1770970440112,
+        "end": 1770971640112,
+        "goodPieces": 9,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 15,
+    "badPieces": 4,
+    "completedAt": 1770971640112,
+    "plannedPieces": 38
+  },
+  "10002": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771045200112,
+        "end": 1771046400112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771046400112,
+        "end": 1771050000112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771050000112,
+        "end": 1771050660112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771050660112,
+        "end": 1771051860112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 15,
+    "badPieces": 0,
+    "completedAt": 1771051860112,
+    "plannedPieces": 27
+  },
+  "10003": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771051860112,
+        "end": 1771053060112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771053060112,
+        "end": 1771056660112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771056660112,
+        "end": 1771057080112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771057080112,
+        "end": 1771058280112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771058280112,
+        "end": 1771059120112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771059120112,
+        "end": 1771060320112,
+        "goodPieces": 9,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 24,
+    "badPieces": 4,
+    "completedAt": 1771060320112,
+    "plannedPieces": 30
+  },
+  "10004": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771131600112,
+        "end": 1771132800112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771132800112,
+        "end": 1771136400112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771136400112,
+        "end": 1771136700112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771136700112,
+        "end": 1771137900112,
+        "goodPieces": 4,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 10,
+    "badPieces": 3,
+    "completedAt": 1771137900112,
+    "plannedPieces": 21
+  },
+  "10005": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771137900112,
+        "end": 1771139100112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771139100112,
+        "end": 1771142700112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771142700112,
+        "end": 1771143300112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771143300112,
+        "end": 1771144500112,
+        "goodPieces": 5,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 10,
+    "badPieces": 2,
+    "completedAt": 1771144500112,
+    "plannedPieces": 17
+  },
+  "10006": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771218000112,
+        "end": 1771219200112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771219200112,
+        "end": 1771222800112,
+        "goodPieces": 12,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771222800112,
+        "end": 1771223700112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771223700112,
+        "end": 1771224900112,
+        "goodPieces": 3,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 15,
+    "badPieces": 0,
+    "completedAt": 1771224900112,
+    "plannedPieces": 23
+  },
+  "10007": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771224900112,
+        "end": 1771226100112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771226100112,
+        "end": 1771229700112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771229700112,
+        "end": 1771230600112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771230600112,
+        "end": 1771231800112,
+        "goodPieces": 8,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 18,
+    "badPieces": 3,
+    "completedAt": 1771231800112,
+    "plannedPieces": 24
+  },
+  "10008": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771304400112,
+        "end": 1771305600112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771305600112,
+        "end": 1771309200112,
+        "goodPieces": 13,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771309200112,
+        "end": 1771310040112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771310040112,
+        "end": 1771311240112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771311240112,
+        "end": 1771311900112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771311900112,
+        "end": 1771313100112,
+        "goodPieces": 8,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 27,
+    "badPieces": 6,
+    "completedAt": 1771313100112,
+    "plannedPieces": 40
+  },
+  "10009": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771313100112,
+        "end": 1771314300112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771314300112,
+        "end": 1771317900112,
+        "goodPieces": 15,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771317900112,
+        "end": 1771318380112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771318380112,
+        "end": 1771319580112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771319580112,
+        "end": 1771320180112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771320180112,
+        "end": 1771321380112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 28,
+    "badPieces": 2,
+    "completedAt": 1771321380112,
+    "plannedPieces": 32
+  },
+  "10010": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771390800112,
+        "end": 1771392000112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771392000112,
+        "end": 1771395600112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771395600112,
+        "end": 1771396380112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771396380112,
+        "end": 1771397580112,
+        "goodPieces": 5,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 11,
+    "badPieces": 1,
+    "completedAt": 1771397580112,
+    "plannedPieces": 28
+  },
+  "10011": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771397580112,
+        "end": 1771398780112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771398780112,
+        "end": 1771402380112,
+        "goodPieces": 14,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771402380112,
+        "end": 1771402920112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771402920112,
+        "end": 1771404120112,
+        "goodPieces": 4,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 18,
+    "badPieces": 2,
+    "completedAt": 1771404120112,
+    "plannedPieces": 33
+  },
+  "10012": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771477200112,
+        "end": 1771478400112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771478400112,
+        "end": 1771482000112,
+        "goodPieces": 5,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771482000112,
+        "end": 1771482300112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771482300112,
+        "end": 1771483500112,
+        "goodPieces": 7,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 12,
+    "badPieces": 4,
+    "completedAt": 1771483500112,
+    "plannedPieces": 26
+  },
+  "10013": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771483500112,
+        "end": 1771484700112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771484700112,
+        "end": 1771488300112,
+        "goodPieces": 6,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771488300112,
+        "end": 1771489200112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771489200112,
+        "end": 1771490400112,
+        "goodPieces": 3,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 9,
+    "badPieces": 5,
+    "completedAt": 1771490400112,
+    "plannedPieces": 24
+  },
+  "10014": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771563600112,
+        "end": 1771564800112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771564800112,
+        "end": 1771568400112,
+        "goodPieces": 15,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771568400112,
+        "end": 1771568760112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771568760112,
+        "end": 1771569960112,
+        "goodPieces": 5,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771569960112,
+        "end": 1771570440112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771570440112,
+        "end": 1771571640112,
+        "goodPieces": 10,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 30,
+    "badPieces": 2,
+    "completedAt": 1771571640112,
+    "plannedPieces": 45
+  },
+  "10015": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771571640112,
+        "end": 1771572840112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771572840112,
+        "end": 1771576440112,
+        "goodPieces": 14,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771576440112,
+        "end": 1771576980112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771576980112,
+        "end": 1771578180112,
+        "goodPieces": 3,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771578180112,
+        "end": 1771578720112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771578720112,
+        "end": 1771579920112,
+        "goodPieces": 6,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 23,
+    "badPieces": 2,
+    "completedAt": 1771579920112,
+    "plannedPieces": 30
+  },
+  "10016": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771650000112,
+        "end": 1771651200112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771651200112,
+        "end": 1771654800112,
+        "goodPieces": 15,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771654800112,
+        "end": 1771655400112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771655400112,
+        "end": 1771656600112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771656600112,
+        "end": 1771657260112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771657260112,
+        "end": 1771658460112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 29,
+    "badPieces": 3,
+    "completedAt": 1771658460112,
+    "plannedPieces": 44
+  },
+  "10017": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771658460112,
+        "end": 1771659660112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771659660112,
+        "end": 1771663260112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771663260112,
+        "end": 1771664160112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771664160112,
+        "end": 1771665360112,
+        "goodPieces": 10,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771665360112,
+        "end": 1771666080112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771666080112,
+        "end": 1771667280112,
+        "goodPieces": 8,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771667280112,
+        "end": 1771668180112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771668180112,
+        "end": 1771669380112,
+        "goodPieces": 4,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771669380112,
+        "end": 1771669860112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771669860112,
+        "end": 1771671060112,
+        "goodPieces": 4,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 34,
+    "badPieces": 3,
+    "completedAt": 1771671060112,
+    "plannedPieces": 49
+  },
+  "10018": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771736400112,
+        "end": 1771737600112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771737600112,
+        "end": 1771741200112,
+        "goodPieces": 12,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771741200112,
+        "end": 1771741500112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771741500112,
+        "end": 1771742700112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771742700112,
+        "end": 1771743120112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771743120112,
+        "end": 1771744320112,
+        "goodPieces": 3,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 25,
+    "badPieces": 4,
+    "completedAt": 1771744320112,
+    "plannedPieces": 31
+  },
+  "10019": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771744320112,
+        "end": 1771745520112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771745520112,
+        "end": 1771749120112,
+        "goodPieces": 13,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771749120112,
+        "end": 1771750020112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771750020112,
+        "end": 1771751220112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771751220112,
+        "end": 1771751640112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771751640112,
+        "end": 1771752840112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 28,
+    "badPieces": 2,
+    "completedAt": 1771752840112,
+    "plannedPieces": 35
+  },
+  "10020": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771822800112,
+        "end": 1771824000112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771824000112,
+        "end": 1771827600112,
+        "goodPieces": 11,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771827600112,
+        "end": 1771828200112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771828200112,
+        "end": 1771829400112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771829400112,
+        "end": 1771829940112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771829940112,
+        "end": 1771831140112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771831140112,
+        "end": 1771831560112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771831560112,
+        "end": 1771832760112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771832760112,
+        "end": 1771833300112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771833300112,
+        "end": 1771834500112,
+        "goodPieces": 4,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 33,
+    "badPieces": 6,
+    "completedAt": 1771834500112,
+    "plannedPieces": 39
+  },
+  "10021": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771834500112,
+        "end": 1771835700112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771835700112,
+        "end": 1771839300112,
+        "goodPieces": 15,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771839300112,
+        "end": 1771839600112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771839600112,
+        "end": 1771840800112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771840800112,
+        "end": 1771841460112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771841460112,
+        "end": 1771842660112,
+        "goodPieces": 8,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 29,
+    "badPieces": 5,
+    "completedAt": 1771842660112,
+    "plannedPieces": 34
+  },
+  "10022": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771909200112,
+        "end": 1771910400112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771910400112,
+        "end": 1771914000112,
+        "goodPieces": 11,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771914000112,
+        "end": 1771914720112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771914720112,
+        "end": 1771915920112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771915920112,
+        "end": 1771916640112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771916640112,
+        "end": 1771917840112,
+        "goodPieces": 4,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 21,
+    "badPieces": 1,
+    "completedAt": 1771917840112,
+    "plannedPieces": 32
+  },
+  "10023": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771917840112,
+        "end": 1771919040112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771919040112,
+        "end": 1771922640112,
+        "goodPieces": 12,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771922640112,
+        "end": 1771922940112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771922940112,
+        "end": 1771924140112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771924140112,
+        "end": 1771924740112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771924740112,
+        "end": 1771925940112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771925940112,
+        "end": 1771926600112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771926600112,
+        "end": 1771927800112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1771927800112,
+        "end": 1771928700112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771928700112,
+        "end": 1771929900112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 40,
+    "badPieces": 7,
+    "completedAt": 1771929900112,
+    "plannedPieces": 57
+  },
+  "10024": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1771995600112,
+        "end": 1771996800112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1771996800112,
+        "end": 1772000400112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772000400112,
+        "end": 1772001060112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772001060112,
+        "end": 1772002260112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772002260112,
+        "end": 1772003160112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772003160112,
+        "end": 1772004360112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772004360112,
+        "end": 1772004780112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772004780112,
+        "end": 1772005980112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772005980112,
+        "end": 1772006460112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772006460112,
+        "end": 1772007660112,
+        "goodPieces": 10,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 44,
+    "badPieces": 4,
+    "completedAt": 1772007660112,
+    "plannedPieces": 50
+  },
+  "10025": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772007660112,
+        "end": 1772008860112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772008860112,
+        "end": 1772012460112,
+        "goodPieces": 8,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772012460112,
+        "end": 1772012880112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772012880112,
+        "end": 1772014080112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772014080112,
+        "end": 1772014440112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772014440112,
+        "end": 1772015640112,
+        "goodPieces": 8,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 25,
+    "badPieces": 7,
+    "completedAt": 1772015640112,
+    "plannedPieces": 35
+  },
+  "10026": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772082000112,
+        "end": 1772083200112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772083200112,
+        "end": 1772086800112,
+        "goodPieces": 14,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772086800112,
+        "end": 1772087340112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772087340112,
+        "end": 1772088540112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772088540112,
+        "end": 1772088840112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772088840112,
+        "end": 1772090040112,
+        "goodPieces": 8,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 32,
+    "badPieces": 3,
+    "completedAt": 1772090040112,
+    "plannedPieces": 48
+  },
+  "10027": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772090040112,
+        "end": 1772091240112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772091240112,
+        "end": 1772094840112,
+        "goodPieces": 8,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772094840112,
+        "end": 1772095380112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772095380112,
+        "end": 1772096580112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772096580112,
+        "end": 1772097180112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772097180112,
+        "end": 1772098380112,
+        "goodPieces": 10,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 24,
+    "badPieces": 1,
+    "completedAt": 1772098380112,
+    "plannedPieces": 26
+  },
+  "10028": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772168400112,
+        "end": 1772169600112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772169600112,
+        "end": 1772173200112,
+        "goodPieces": 13,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772173200112,
+        "end": 1772173680112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772173680112,
+        "end": 1772174880112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772174880112,
+        "end": 1772175660112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772175660112,
+        "end": 1772176860112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772176860112,
+        "end": 1772177700112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772177700112,
+        "end": 1772178900112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772178900112,
+        "end": 1772179500112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772179500112,
+        "end": 1772180700112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772180700112,
+        "end": 1772181060112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772181060112,
+        "end": 1772182260112,
+        "goodPieces": 7,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772182260112,
+        "end": 1772182680112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772182680112,
+        "end": 1772183880112,
+        "goodPieces": 3,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 54,
+    "badPieces": 9,
+    "completedAt": 1772183880112,
+    "plannedPieces": 78
+  },
+  "10029": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772183880112,
+        "end": 1772185080112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772185080112,
+        "end": 1772188680112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772188680112,
+        "end": 1772189580112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772189580112,
+        "end": 1772190780112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772190780112,
+        "end": 1772191380112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772191380112,
+        "end": 1772192580112,
+        "goodPieces": 8,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772192580112,
+        "end": 1772193060112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772193060112,
+        "end": 1772194260112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772194260112,
+        "end": 1772195040112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772195040112,
+        "end": 1772196240112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772196240112,
+        "end": 1772196600112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772196600112,
+        "end": 1772197800112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772197800112,
+        "end": 1772198700112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772198700112,
+        "end": 1772199900112,
+        "goodPieces": 7,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 59,
+    "badPieces": 7,
+    "completedAt": 1772199900112,
+    "plannedPieces": 72
+  },
+  "10030": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772254800112,
+        "end": 1772256000112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772256000112,
+        "end": 1772259600112,
+        "goodPieces": 14,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772259600112,
+        "end": 1772260020112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772260020112,
+        "end": 1772261220112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772261220112,
+        "end": 1772261640112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772261640112,
+        "end": 1772262840112,
+        "goodPieces": 4,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772262840112,
+        "end": 1772263260112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772263260112,
+        "end": 1772264460112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772264460112,
+        "end": 1772265360112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772265360112,
+        "end": 1772266560112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772266560112,
+        "end": 1772267220112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772267220112,
+        "end": 1772268420112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772268420112,
+        "end": 1772268900112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772268900112,
+        "end": 1772270100112,
+        "goodPieces": 3,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 46,
+    "badPieces": 13,
+    "completedAt": 1772270100112,
+    "plannedPieces": 77
+  },
+  "10031": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772270100112,
+        "end": 1772271300112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772271300112,
+        "end": 1772274900112,
+        "goodPieces": 15,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772274900112,
+        "end": 1772275260112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772275260112,
+        "end": 1772276460112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772276460112,
+        "end": 1772277180112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772277180112,
+        "end": 1772278380112,
+        "goodPieces": 7,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772278380112,
+        "end": 1772279160112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772279160112,
+        "end": 1772280360112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772280360112,
+        "end": 1772281140112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772281140112,
+        "end": 1772282340112,
+        "goodPieces": 4,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772282340112,
+        "end": 1772282640112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772282640112,
+        "end": 1772283840112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772283840112,
+        "end": 1772284740112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772284740112,
+        "end": 1772285940112,
+        "goodPieces": 10,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 62,
+    "badPieces": 9,
+    "completedAt": 1772285940112,
+    "plannedPieces": 75
+  },
+  "10032": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772341200112,
+        "end": 1772342400112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772342400112,
+        "end": 1772346000112,
+        "goodPieces": 6,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772346000112,
+        "end": 1772346300112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772346300112,
+        "end": 1772347500112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772347500112,
+        "end": 1772348340112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772348340112,
+        "end": 1772349540112,
+        "goodPieces": 10,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772349540112,
+        "end": 1772349840112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772349840112,
+        "end": 1772351040112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772351040112,
+        "end": 1772351640112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772351640112,
+        "end": 1772352840112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772352840112,
+        "end": 1772353560112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772353560112,
+        "end": 1772354760112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772354760112,
+        "end": 1772355240112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772355240112,
+        "end": 1772356440112,
+        "goodPieces": 5,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 53,
+    "badPieces": 9,
+    "completedAt": 1772356440112,
+    "plannedPieces": 68
+  },
+  "10033": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772356440112,
+        "end": 1772357640112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772357640112,
+        "end": 1772361240112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772361240112,
+        "end": 1772361780112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772361780112,
+        "end": 1772362980112,
+        "goodPieces": 5,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772362980112,
+        "end": 1772363460112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772363460112,
+        "end": 1772364660112,
+        "goodPieces": 4,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772364660112,
+        "end": 1772365380112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772365380112,
+        "end": 1772366580112,
+        "goodPieces": 5,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 20,
+    "badPieces": 5,
+    "completedAt": 1772366580112,
+    "plannedPieces": 37
+  },
+  "10034": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772427600112,
+        "end": 1772428800112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772428800112,
+        "end": 1772432400112,
+        "goodPieces": 13,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772432400112,
+        "end": 1772433000112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772433000112,
+        "end": 1772434200112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772434200112,
+        "end": 1772434920112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772434920112,
+        "end": 1772436120112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772436120112,
+        "end": 1772436600112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772436600112,
+        "end": 1772437800112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772437800112,
+        "end": 1772438340112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772438340112,
+        "end": 1772439540112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772439540112,
+        "end": 1772440140112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772440140112,
+        "end": 1772441340112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772441340112,
+        "end": 1772442120112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772442120112,
+        "end": 1772443320112,
+        "goodPieces": 3,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 56,
+    "badPieces": 12,
+    "completedAt": 1772443320112,
+    "plannedPieces": 88
+  },
+  "10035": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772443320112,
+        "end": 1772444520112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772444520112,
+        "end": 1772448120112,
+        "goodPieces": 7,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772448120112,
+        "end": 1772448720112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772448720112,
+        "end": 1772449920112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772449920112,
+        "end": 1772450340112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772450340112,
+        "end": 1772451540112,
+        "goodPieces": 3,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772451540112,
+        "end": 1772451840112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772451840112,
+        "end": 1772453040112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772453040112,
+        "end": 1772453340112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772453340112,
+        "end": 1772454540112,
+        "goodPieces": 10,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772454540112,
+        "end": 1772454900112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772454900112,
+        "end": 1772456100112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772456100112,
+        "end": 1772456880112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772456880112,
+        "end": 1772458080112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 48,
+    "badPieces": 2,
+    "completedAt": 1772458080112,
+    "plannedPieces": 64
+  },
+  "10036": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772514000112,
+        "end": 1772515200112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772515200112,
+        "end": 1772518800112,
+        "goodPieces": 14,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772518800112,
+        "end": 1772519340112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772519340112,
+        "end": 1772520540112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772520540112,
+        "end": 1772521200112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772521200112,
+        "end": 1772522400112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772522400112,
+        "end": 1772523180112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772523180112,
+        "end": 1772524380112,
+        "goodPieces": 5,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 34,
+    "badPieces": 3,
+    "completedAt": 1772524380112,
+    "plannedPieces": 45
+  },
+  "10037": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772524380112,
+        "end": 1772525580112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772525580112,
+        "end": 1772529180112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772529180112,
+        "end": 1772529480112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772529480112,
+        "end": 1772530680112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772530680112,
+        "end": 1772531160112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772531160112,
+        "end": 1772532360112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772532360112,
+        "end": 1772532840112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772532840112,
+        "end": 1772534040112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772534040112,
+        "end": 1772534940112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772534940112,
+        "end": 1772536140112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772536140112,
+        "end": 1772536560112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772536560112,
+        "end": 1772537760112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772537760112,
+        "end": 1772538300112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772538300112,
+        "end": 1772539500112,
+        "goodPieces": 8,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 49,
+    "badPieces": 8,
+    "completedAt": 1772539500112,
+    "plannedPieces": 61
+  },
+  "10038": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772600400112,
+        "end": 1772601600112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772601600112,
+        "end": 1772605200112,
+        "goodPieces": 11,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772605200112,
+        "end": 1772606100112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772606100112,
+        "end": 1772607300112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772607300112,
+        "end": 1772608080112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772608080112,
+        "end": 1772609280112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772609280112,
+        "end": 1772609820112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772609820112,
+        "end": 1772611020112,
+        "goodPieces": 7,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 34,
+    "badPieces": 4,
+    "completedAt": 1772611020112,
+    "plannedPieces": 52
+  },
+  "10039": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772611020112,
+        "end": 1772612220112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772612220112,
+        "end": 1772615820112,
+        "goodPieces": 13,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772615820112,
+        "end": 1772616480112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772616480112,
+        "end": 1772617680112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772617680112,
+        "end": 1772618340112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772618340112,
+        "end": 1772619540112,
+        "goodPieces": 7,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772619540112,
+        "end": 1772619960112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772619960112,
+        "end": 1772621160112,
+        "goodPieces": 3,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 29,
+    "badPieces": 6,
+    "completedAt": 1772621160112,
+    "plannedPieces": 46
+  },
+  "10040": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772686800112,
+        "end": 1772688000112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772688000112,
+        "end": 1772691600112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772691600112,
+        "end": 1772692020112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772692020112,
+        "end": 1772693220112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772693220112,
+        "end": 1772693820112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772693820112,
+        "end": 1772695020112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772695020112,
+        "end": 1772695740112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772695740112,
+        "end": 1772696940112,
+        "goodPieces": 4,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772696940112,
+        "end": 1772697240112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772697240112,
+        "end": 1772698440112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772698440112,
+        "end": 1772699040112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772699040112,
+        "end": 1772700240112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772700240112,
+        "end": 1772700840112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772700840112,
+        "end": 1772702040112,
+        "goodPieces": 3,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 47,
+    "badPieces": 10,
+    "completedAt": 1772702040112,
+    "plannedPieces": 71
+  },
+  "10041": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772702040112,
+        "end": 1772703240112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772703240112,
+        "end": 1772706840112,
+        "goodPieces": 10,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772706840112,
+        "end": 1772707140112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772707140112,
+        "end": 1772708340112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772708340112,
+        "end": 1772708700112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772708700112,
+        "end": 1772709900112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772709900112,
+        "end": 1772710740112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772710740112,
+        "end": 1772711940112,
+        "goodPieces": 5,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 28,
+    "badPieces": 4,
+    "completedAt": 1772711940112,
+    "plannedPieces": 32
+  },
+  "10042": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772773200112,
+        "end": 1772774400112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772774400112,
+        "end": 1772778000112,
+        "goodPieces": 9,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772778000112,
+        "end": 1772778660112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772778660112,
+        "end": 1772779860112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772779860112,
+        "end": 1772780460112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772780460112,
+        "end": 1772781660112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772781660112,
+        "end": 1772782140112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772782140112,
+        "end": 1772783340112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772783340112,
+        "end": 1772783700112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772783700112,
+        "end": 1772784900112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772784900112,
+        "end": 1772785680112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772785680112,
+        "end": 1772786880112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772786880112,
+        "end": 1772787540112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772787540112,
+        "end": 1772788740112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772788740112,
+        "end": 1772789100112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772789100112,
+        "end": 1772790300112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772790300112,
+        "end": 1772790660112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772790660112,
+        "end": 1772791860112,
+        "goodPieces": 9,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 67,
+    "badPieces": 15,
+    "completedAt": 1772791860112,
+    "plannedPieces": 94
+  },
+  "10043": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772791860112,
+        "end": 1772793060112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772793060112,
+        "end": 1772796660112,
+        "goodPieces": 13,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772796660112,
+        "end": 1772796960112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772796960112,
+        "end": 1772798160112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772798160112,
+        "end": 1772798520112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772798520112,
+        "end": 1772799720112,
+        "goodPieces": 3,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772799720112,
+        "end": 1772800260112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772800260112,
+        "end": 1772801460112,
+        "goodPieces": 7,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772801460112,
+        "end": 1772802120112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772802120112,
+        "end": 1772803320112,
+        "goodPieces": 9,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 42,
+    "badPieces": 5,
+    "completedAt": 1772803320112,
+    "plannedPieces": 61
+  },
+  "10044": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772859600112,
+        "end": 1772860800112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772860800112,
+        "end": 1772864400112,
+        "goodPieces": 14,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772864400112,
+        "end": 1772865240112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772865240112,
+        "end": 1772866440112,
+        "goodPieces": 4,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772866440112,
+        "end": 1772867220112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772867220112,
+        "end": 1772868420112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772868420112,
+        "end": 1772869320112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772869320112,
+        "end": 1772870520112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772870520112,
+        "end": 1772871300112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772871300112,
+        "end": 1772872500112,
+        "goodPieces": 10,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 47,
+    "badPieces": 7,
+    "completedAt": 1772872500112,
+    "plannedPieces": 55
+  },
+  "10045": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772872500112,
+        "end": 1772873700112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772873700112,
+        "end": 1772877300112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772877300112,
+        "end": 1772877660112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772877660112,
+        "end": 1772878860112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772878860112,
+        "end": 1772879400112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772879400112,
+        "end": 1772880600112,
+        "goodPieces": 10,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772880600112,
+        "end": 1772881200112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772881200112,
+        "end": 1772882400112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772882400112,
+        "end": 1772882820112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772882820112,
+        "end": 1772884020112,
+        "goodPieces": 3,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772884020112,
+        "end": 1772884500112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772884500112,
+        "end": 1772885700112,
+        "goodPieces": 5,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772885700112,
+        "end": 1772886000112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772886000112,
+        "end": 1772887200112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772887200112,
+        "end": 1772887860112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772887860112,
+        "end": 1772889060112,
+        "goodPieces": 8,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772889060112,
+        "end": 1772889480112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772889480112,
+        "end": 1772890680112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 69,
+    "badPieces": 6,
+    "completedAt": 1772890680112,
+    "plannedPieces": 89
+  },
+  "10046": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772946000112,
+        "end": 1772947200112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772947200112,
+        "end": 1772950800112,
+        "goodPieces": 8,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772950800112,
+        "end": 1772951580112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772951580112,
+        "end": 1772952780112,
+        "goodPieces": 8,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772952780112,
+        "end": 1772953080112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772953080112,
+        "end": 1772954280112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772954280112,
+        "end": 1772955000112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772955000112,
+        "end": 1772956200112,
+        "goodPieces": 10,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772956200112,
+        "end": 1772956620112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772956620112,
+        "end": 1772957820112,
+        "goodPieces": 4,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 36,
+    "badPieces": 3,
+    "completedAt": 1772957820112,
+    "plannedPieces": 52
+  },
+  "10047": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1772957820112,
+        "end": 1772959020112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772959020112,
+        "end": 1772962620112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772962620112,
+        "end": 1772962920112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772962920112,
+        "end": 1772964120112,
+        "goodPieces": 3,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772964120112,
+        "end": 1772964660112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772964660112,
+        "end": 1772965860112,
+        "goodPieces": 4,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772965860112,
+        "end": 1772966700112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772966700112,
+        "end": 1772967900112,
+        "goodPieces": 6,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772967900112,
+        "end": 1772968500112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772968500112,
+        "end": 1772969700112,
+        "goodPieces": 3,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772969700112,
+        "end": 1772970120112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772970120112,
+        "end": 1772971320112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772971320112,
+        "end": 1772971620112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772971620112,
+        "end": 1772972820112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772972820112,
+        "end": 1772973720112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772973720112,
+        "end": 1772974920112,
+        "goodPieces": 9,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1772974920112,
+        "end": 1772975340112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1772975340112,
+        "end": 1772976540112,
+        "goodPieces": 10,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 56,
+    "badPieces": 11,
+    "completedAt": 1772976540112,
+    "plannedPieces": 85
+  },
+  "10048": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773032400112,
+        "end": 1773033600112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773033600112,
+        "end": 1773037200112,
+        "goodPieces": 15,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773037200112,
+        "end": 1773037680112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773037680112,
+        "end": 1773038880112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773038880112,
+        "end": 1773039420112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773039420112,
+        "end": 1773040620112,
+        "goodPieces": 4,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773040620112,
+        "end": 1773041400112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773041400112,
+        "end": 1773042600112,
+        "goodPieces": 3,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773042600112,
+        "end": 1773043080112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773043080112,
+        "end": 1773044280112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773044280112,
+        "end": 1773045180112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773045180112,
+        "end": 1773046380112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773046380112,
+        "end": 1773046920112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773046920112,
+        "end": 1773048120112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773048120112,
+        "end": 1773048420112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773048420112,
+        "end": 1773049620112,
+        "goodPieces": 7,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773049620112,
+        "end": 1773050220112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773050220112,
+        "end": 1773051420112,
+        "goodPieces": 10,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 65,
+    "badPieces": 5,
+    "completedAt": 1773051420112,
+    "plannedPieces": 71
+  },
+  "10049": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773051420112,
+        "end": 1773052620112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773052620112,
+        "end": 1773056220112,
+        "goodPieces": 8,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773056220112,
+        "end": 1773056820112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773056820112,
+        "end": 1773058020112,
+        "goodPieces": 4,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773058020112,
+        "end": 1773058440112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773058440112,
+        "end": 1773059640112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773059640112,
+        "end": 1773060240112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773060240112,
+        "end": 1773061440112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773061440112,
+        "end": 1773062160112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773062160112,
+        "end": 1773063360112,
+        "goodPieces": 7,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 32,
+    "badPieces": 4,
+    "completedAt": 1773063360112,
+    "plannedPieces": 39
+  },
+  "10050": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773118800112,
+        "end": 1773120000112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773120000112,
+        "end": 1773123600112,
+        "goodPieces": 13,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773123600112,
+        "end": 1773124080112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773124080112,
+        "end": 1773125280112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773125280112,
+        "end": 1773125580112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773125580112,
+        "end": 1773126780112,
+        "goodPieces": 3,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773126780112,
+        "end": 1773127440112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773127440112,
+        "end": 1773128640112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773128640112,
+        "end": 1773129540112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773129540112,
+        "end": 1773130740112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773130740112,
+        "end": 1773131520112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773131520112,
+        "end": 1773132720112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773132720112,
+        "end": 1773133140112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773133140112,
+        "end": 1773134340112,
+        "goodPieces": 4,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773134340112,
+        "end": 1773134760112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773134760112,
+        "end": 1773135960112,
+        "goodPieces": 10,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773135960112,
+        "end": 1773136320112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773136320112,
+        "end": 1773137520112,
+        "goodPieces": 6,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 69,
+    "badPieces": 11,
+    "completedAt": 1773137520112,
+    "plannedPieces": 82
+  },
+  "10051": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773137520112,
+        "end": 1773138720112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773138720112,
+        "end": 1773142320112,
+        "goodPieces": 7,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773142320112,
+        "end": 1773142920112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773142920112,
+        "end": 1773144120112,
+        "goodPieces": 3,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773144120112,
+        "end": 1773144960112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773144960112,
+        "end": 1773146160112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773146160112,
+        "end": 1773147060112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773147060112,
+        "end": 1773148260112,
+        "goodPieces": 6,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773148260112,
+        "end": 1773148980112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773148980112,
+        "end": 1773150180112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773150180112,
+        "end": 1773150660112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773150660112,
+        "end": 1773151860112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773151860112,
+        "end": 1773152520112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773152520112,
+        "end": 1773153720112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773153720112,
+        "end": 1773154380112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773154380112,
+        "end": 1773155580112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773155580112,
+        "end": 1773155940112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773155940112,
+        "end": 1773157140112,
+        "goodPieces": 9,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 64,
+    "badPieces": 14,
+    "completedAt": 1773157140112,
+    "plannedPieces": 86
+  },
+  "10052": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773205200112,
+        "end": 1773206400112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773206400112,
+        "end": 1773210000112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773210000112,
+        "end": 1773210420112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773210420112,
+        "end": 1773211620112,
+        "goodPieces": 7,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773211620112,
+        "end": 1773212340112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773212340112,
+        "end": 1773213540112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773213540112,
+        "end": 1773213840112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773213840112,
+        "end": 1773215040112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773215040112,
+        "end": 1773215580112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773215580112,
+        "end": 1773216780112,
+        "goodPieces": 5,
+        "badPieces": 1
+      }
+    ],
+    "goodPieces": 35,
+    "badPieces": 7,
+    "completedAt": 1773216780112,
+    "plannedPieces": 46
+  },
+  "10053": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773216780112,
+        "end": 1773217980112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773217980112,
+        "end": 1773221580112,
+        "goodPieces": 13,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773221580112,
+        "end": 1773222360112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773222360112,
+        "end": 1773223560112,
+        "goodPieces": 6,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773223560112,
+        "end": 1773223980112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773223980112,
+        "end": 1773225180112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773225180112,
+        "end": 1773226080112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773226080112,
+        "end": 1773227280112,
+        "goodPieces": 10,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773227280112,
+        "end": 1773227940112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773227940112,
+        "end": 1773229140112,
+        "goodPieces": 5,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 39,
+    "badPieces": 3,
+    "completedAt": 1773229140112,
+    "plannedPieces": 48
+  },
+  "10054": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773291600112,
+        "end": 1773292800112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773292800112,
+        "end": 1773296400112,
+        "goodPieces": 12,
+        "badPieces": 3
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773296400112,
+        "end": 1773297060112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773297060112,
+        "end": 1773298260112,
+        "goodPieces": 5,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773298260112,
+        "end": 1773298740112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773298740112,
+        "end": 1773299940112,
+        "goodPieces": 5,
+        "badPieces": 0
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773299940112,
+        "end": 1773300660112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773300660112,
+        "end": 1773301860112,
+        "goodPieces": 7,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773301860112,
+        "end": 1773302700112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773302700112,
+        "end": 1773303900112,
+        "goodPieces": 8,
+        "badPieces": 0
+      }
+    ],
+    "goodPieces": 37,
+    "badPieces": 6,
+    "completedAt": 1773303900112,
+    "plannedPieces": 47
+  },
+  "10055": {
+    "state": "STOPPED",
+    "current": null,
+    "history": [
+      {
+        "state": "SETUP",
+        "start": 1773303900112,
+        "end": 1773305100112
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773305100112,
+        "end": 1773308700112,
+        "goodPieces": 5,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773308700112,
+        "end": 1773309360112,
+        "reason": "Chýba materiál"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773309360112,
+        "end": 1773310560112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773310560112,
+        "end": 1773310920112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773310920112,
+        "end": 1773312120112,
+        "goodPieces": 3,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773312120112,
+        "end": 1773312660112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773312660112,
+        "end": 1773313860112,
+        "goodPieces": 9,
+        "badPieces": 2
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773313860112,
+        "end": 1773314520112,
+        "reason": "Porucha stroja"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773314520112,
+        "end": 1773315720112,
+        "goodPieces": 3,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773315720112,
+        "end": 1773316080112,
+        "reason": "Iné"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773316080112,
+        "end": 1773317280112,
+        "goodPieces": 8,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773317280112,
+        "end": 1773318000112,
+        "reason": "Kvalita"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773318000112,
+        "end": 1773319200112,
+        "goodPieces": 9,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773319200112,
+        "end": 1773319860112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773319860112,
+        "end": 1773321060112,
+        "goodPieces": 4,
+        "badPieces": 1
+      },
+      {
+        "state": "DOWNTIME",
+        "start": 1773321060112,
+        "end": 1773321720112,
+        "reason": "Úprava programu"
+      },
+      {
+        "state": "PRODUCTION",
+        "start": 1773321720112,
+        "end": 1773322920112,
+        "goodPieces": 5,
+        "badPieces": 2
+      }
+    ],
+    "goodPieces": 54,
+    "badPieces": 11,
+    "completedAt": 1773322920112,
+    "plannedPieces": 79
+  }
+}
