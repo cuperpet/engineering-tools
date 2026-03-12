@@ -1,65 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="sk">
 
 <head>
     <meta charset="UTF-8">
-    <title>Engineering Tools</title>
-
-    <style>
-        body {
-            font-family: Arial;
-            background: #f0f2f5;
-            text-align: center;
-        }
-
-        h1 {
-            margin-top: 40px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            margin: auto;
-            padding: 40px;
-        }
-
-        .tool {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            text-decoration: none;
-            color: black;
-            font-size: 18px;
-        }
-
-        .tool:hover {
-            background: #e8f0ff;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Tools Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body>
+<body class="bg-gray-50 min-h-screen font-sans">
 
-    <h1>Engineering Tools</h1>
+    <header class="bg-blue-700 text-white py-12 px-4 shadow-lg">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-black mb-2 tracking-tight">Engineering Tools</h1>
+            <p class="text-blue-100 text-lg">Profesionálne kalkulačky pre elektroniku a vývoj</p>
+        </div>
+    </header>
 
-    <div class="container">
+    <main class="max-w-5xl mx-auto py-12 px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <a class="tool" href="resistor_codes.html">🎨 Resistor Color Code</a>
+            <a href="resistor_codes.html"
+                class="group bg-white p-8 rounded-2xl shadow-md border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1">
+                <div
+                    class="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-palette"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Resistor Decoder</h2>
+                <p class="text-gray-500 text-sm">Výpočet hodnôt pre vývodové (4/5 pásikov) a SMD rezistory (vrátane
+                    EIA-96).</p>
+            </a>
 
-        <a class="tool" href="smd.html">📦 SMD Decoder</a>
+            <a href="ohm.html"
+                class="group bg-white p-8 rounded-2xl shadow-md border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1">
+                <div
+                    class="w-14 h-14 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-yellow-500 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Ohm's Law</h2>
+                <p class="text-gray-500 text-sm">Rýchly výpočet napätia, prúdu, odporu a výkonu v obvode.</p>
+            </a>
 
-        <a class="tool" href="ohm.html">⚡ Ohm Law</a>
+            <a href="divider.html"
+                class="group bg-white p-8 rounded-2xl shadow-md border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1">
+                <div
+                    class="w-14 h-14 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-battery-half"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Voltage Divider</h2>
+                <p class="text-gray-500 text-sm">Kalkulačka pre odporové deliče napätia so záťažou aj bez.</p>
+            </a>
 
-        <a class="tool" href="divider.html">🔋 Voltage Divider</a>
+            <a href="gerber.html"
+                class="group bg-white p-8 rounded-2xl shadow-md border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1">
+                <div
+                    class="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Gerber Viewer</h2>
+                <p class="text-gray-500 text-sm">Jednoduchý náhľad na výrobné vrstvy plošných spojov (PCB).</p>
+            </a>
 
-        <a class="tool" href="basicMOSTpro_v2.2.html">🖨 basicMOST</a>
+            <div
+                class="border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center p-8 text-gray-400">
+                <p class="text-sm italic">Ďalšie nástroje čoskoro...</p>
+            </div>
 
-    </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-400 text-xs">
+        &copy; 2026 Engineering Tools Hub | Beží na GitHub Pages
+    </footer>
 
 </body>
-
 
 </html>
