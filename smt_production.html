@@ -3,132 +3,1581 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMT Production Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>SMT Odvádzanie výroby – Offline systém</title>
     <style>
-        .data-table th {
-            padding: 0.5rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #6b7280;
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .panel {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .panel.totals span {
+            margin-right: 40px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 3px;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+        }
+
+        #startBtn.active {
+            background: #2196F3;
+            color: #fff;
+        }
+
+        #prodBtn.active {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        #downBtn.active {
+            background: #FF9800;
+            color: #fff;
+        }
+
+        #resumeBtn.active {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        #stopBtn.active {
+            background: #f44336;
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 5px;
             text-align: center;
         }
 
-        .data-table td {
-            padding: 0.5rem;
-            font-size: 0.875rem;
-            border-top: 1px solid #e5e7eb;
+        th {
+            background: #eee;
+        }
+
+        .running {
+            font-weight: bold;
+            background: #fafafa;
+        }
+
+        .stop-order {
+            color: red;
+            font-weight: bold;
+        }
+
+        #timelineWrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        #timelineCanvas {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+        }
+
+        #timelineLabels {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #percentWrapper {
+            display: flex;
+            height: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .percentBar {
+            height: 100%;
             text-align: center;
+            font-size: 10px;
+            color: #fff;
+            line-height: 15px;
+        }
+
+        #recentWrapper {
+            margin-bottom: 10px;
+        }
+
+        .recentCanvas {
+            width: 100%;
+            height: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 3px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .legend div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend span {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        /* ---------- Grafy vedľa seba ---------- */
+        .charts-wrapper {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* zalamovanie na menších obrazovkách */
+            margin-top: 10px;
+        }
+
+        .chart-container {
+            flex: 1 1 300px;
+            /* každý graf minimálne 300px, flexibilný rast */
+            min-width: 280px;
+            height: 260px;
+            /* výška grafu */
+            position: relative;
+            /* pre Chart.js */
+        }
+
+        /* Responsívne pre tablety / mobily */
+        @media (max-width: 900px) {
+            .chart-container {
+                flex: 1 1 100%;
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .chart-container {
+                height: 180px;
+            }
         }
     </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+<body>
 
-    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
-        <div class="bg-indigo-700 p-6 text-white flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold italic">SMT Production Line #1</h1>
-                <p class="text-indigo-200 text-xs uppercase tracking-widest">Sledovanie a odvádzanie výroby</p>
-            </div>
-            <a href="index.html"
-                class="bg-indigo-800 hover:bg-indigo-900 px-4 py-2 rounded-lg text-sm transition">Späť</a>
+    <h2>SMT odvádzanie výroby (offline)</h2>
+
+    <div class="panel">
+        <label>Zákazka:</label>
+        <select id="orderSelect"></select>
+        <button id="newOrderBtn">➕ Nová zákazka</button>
+        <button id="clearCacheBtn">🗑 Vymazať všetky zákazky</button>
+        <input type="file" id="importFile" style="display:none" />
+        <button id="importBtn">📂 Import JSON</button>
+        <button id="exportAllBtn">⬇️ Export všetkých zákaziek</button>
+    </div>
+
+    <div class="panel">
+        Aktuálny stav: <strong id="currentState">IDLE</strong><br><br>
+
+        <button id="startBtn">▶ START</button>
+        <button id="prodBtn">🟢 VÝROBA</button>
+        <button id="downBtn">🔴 PRESTOJ</button>
+        <button id="resumeBtn">🟢 POKRAČOVAŤ</button>
+        <button id="stopBtn">⏹ STOP</button>
+    </div>
+
+    <div class="panel" id="downtimeReasonPanel" style="display:none;">
+        <label>Dôvod prestoja:</label>
+        <select id="downtimeReasonSelect">
+            <option value="">-- vyber --</option>
+            <option>Chýba materiál</option>
+            <option>Porucha stroja</option>
+            <option>Úprava programu</option>
+            <option>Kvalita</option>
+            <option>Iné</option>
+        </select>
+        <button id="confirmReasonBtn">Potvrdiť</button>
+    </div>
+
+    <div class="panel totals">
+        <span>SETUP: <span id="tSetup">0:00</span></span>
+        <span>VÝROBA: <span id="tProd">0:00</span></span>
+        <span>PRESTOJ: <span id="tDown">0:00</span></span>
+    </div>
+
+    <div class="panel">
+        <button id="exportBtn">⬇️ Export vybranej zákazky</button>
+    </div>
+
+    <div class="panel" id="recentWrapper">
+        <div>Posledné 3 zákazky:</div>
+    </div>
+
+    <div class="panel">
+        <div id="percentWrapper">
+            <div id="percentSetup" class="percentBar" style="background:#2196F3;width:0%">SETUP</div>
+            <div id="percentProd" class="percentBar" style="background:#4CAF50;width:0%">VÝROBA</div>
+            <div id="percentDown" class="percentBar" style="background:#FF9800;width:0%">PRESTOJ</div>
         </div>
-
-        <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="md:col-span-1 space-y-4 border-r border-gray-100 pr-6">
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Číslo príkazu / Order</label>
-                    <input type="text" id="orderNo" placeholder="napr. MO-2026-001"
-                        class="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vyrobené kusy (Aktuálne)</label>
-                    <div class="flex gap-2">
-                        <input type="number" id="qtyInput" value="1"
-                            class="w-full p-3 bg-gray-50 border rounded-xl text-center text-xl font-bold">
-                        <button onclick="addProduction()"
-                            class="bg-indigo-600 text-white px-6 rounded-xl hover:bg-indigo-700 transition">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="pt-4">
-                    <button onclick="reportDowntime()"
-                        class="w-full py-3 bg-red-100 text-red-600 rounded-xl font-bold text-sm hover:bg-red-200 transition">
-                        <i class="fa-solid fa-circle-exclamation mr-2"></i>NAHLÁSIŤ PRESTOJ
-                    </button>
-                </div>
-            </div>
-
-            <div class="md:col-span-2 space-y-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase">Celkovo vyrobené</span>
-                        <div id="totalQty" class="text-3xl font-black text-indigo-900">0</div>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase">Aktuálna OEE</span>
-                        <div id="oeeVal" class="text-3xl font-black text-green-600">-- %</div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                    <table class="w-full data-table">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th>Čas</th>
-                                <th>Udalosť</th>
-                                <th>Množstvo</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="logTable">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div id="timelineWrapper">
+            <div id="timelineLabels"></div>
+            <canvas id="timelineCanvas"></canvas>
+        </div>
+        <div class="legend">
+            <div><span style="background:#2196F3"></span> SETUP</div>
+            <div><span style="background:#4CAF50"></span> VÝROBA</div>
+            <div><span style="background:#FF9800"></span> PRESTOJ</div>
         </div>
     </div>
 
+    <div class="panel">
+        <table>
+            <thead>
+                <tr>
+                    <th>Zákazka</th>
+                    <th>Stav</th>
+                    <th>Dátum</th>
+                    <th>Začiatok</th>
+                    <th>Koniec</th>
+                    <th>Trvanie</th>
+                    <th>Dôvod</th>
+                    <th>Kusy (dobré / zlé)</th>
+                    <th>Plán</th>
+                </tr>
+            </thead>
+            <tbody id="log"></tbody>
+        </table>
+    </div>
+
+    <div class="panel">
+        <h3>Analýza prestojov</h3>
+        <label>Obdobie:</label>
+        <select id="downtimeFilter">
+            <option value="today">Dnes</option>
+            <option value="lastOrder">Posledná zákazka</option>
+            <option value="thisWeek">Tento týždeň</option>
+            <option value="thisMonth" selected>Tento mesiac</option>
+            <option value="7">Posledných 7 dní</option>
+            <option value="30">Posledných 30 dní</option>
+            <option value="custom">Vlastné dátumy</option>
+        </select>
+
+        <!-- len ak je zvolený vlastný interval -->
+        <div id="customRange" style="display:none;">
+            <input type="date" id="customFrom"> –
+            <input type="date" id="customTo">
+            <button id="customApply">Použiť</button>
+        </div>
+        <div class="charts-wrapper">
+            <div class="chart-container">
+                <canvas id="paretoChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="countChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="perOrderChart"></canvas>
+            </div>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 20px;">
+            <!-- Graf -->
+            <div style="width:400px; height:250px;">
+                <canvas id="trendChart"></canvas>
+            </div>
+
+            <!-- Analýza vedľa grafu -->
+            <div id="trendAnalysis" style="font-size:0.9em; line-height:1.4; "></div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script>
-        let total = 0;
+        // ---------- ČASŤ 2: STAVY, FARBY, UTILITY ----------
+        const State = { IDLE: "IDLE", SETUP: "SETUP", PRODUCTION: "PRODUCTION", DOWNTIME: "DOWNTIME", STOPPED: "STOPPED" };
+        const StateLabel = { IDLE: "IDLE", SETUP: "SETUP", PRODUCTION: "VÝROBA", DOWNTIME: "PRESTOJ", STOPPED: "STOP" };
+        const COLORS = { SETUP: "#2196F3", PRODUCTION: "#4CAF50", DOWNTIME: "#FF9800" };
+        const STORAGE_KEY = "smt_orders";
+        const now = () => Date.now(); // Pomocné funkcie času
+        const ft = t => new Date(t).toLocaleTimeString(); // formát hh:mm:ss
+        const fd = m => `${Math.floor(m / 60000)}:${String(Math.floor(m / 1000) % 60).padStart(2, "0")}`; // formát min:sekundy z ms
+        const fdFull = t => new Date(t).toLocaleString(); // dátum a čas pre tabuľku
 
-        function addProduction() {
-            const qty = parseInt(document.getElementById('qtyInput').value);
-            const order = document.getElementById('orderNo').value || "Default Order";
-            if (isNaN(qty) || qty <= 0) return;
+        // Premenné
+        let orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        let active = null;
 
-            total += qty;
-            document.getElementById('totalQty').innerText = total.toLocaleString();
+        // Rýchle skratky pre DOM
+        const qs = id => document.getElementById(id);
+        const startBtn = qs("startBtn"), prodBtn = qs("prodBtn"), downBtn = qs("downBtn"),
+            resumeBtn = qs("resumeBtn"), stopBtn = qs("stopBtn"), newOrderBtn = qs("newOrderBtn"),
+            exportBtn = qs("exportBtn"), orderSelect = qs("orderSelect"), totalsEls = { SETUP: qs("tSetup"), PRODUCTION: qs("tProd"), DOWNTIME: qs("tDown") },
+            timelineCanvas = qs("timelineCanvas"), ctx = timelineCanvas.getContext("2d"),
+            timelineLabels = qs("timelineLabels"),
+            percentSetup = qs("percentSetup"), percentProd = qs("percentProd"), percentDown = qs("percentDown"),
+            recentWrapper = qs("recentWrapper"),
+            clearCacheBtn = qs("clearCacheBtn"),
+            importBtn = qs("importBtn"),
+            importFile = qs("importFile"),
+            exportAllBtn = qs("exportAllBtn");
+        const downtimeReasonPanel = qs("downtimeReasonPanel");
+        const downtimeReasonSelect = qs("downtimeReasonSelect");
+        const confirmReasonBtn = qs("confirmReasonBtn");
 
-            addLogRow(order, qty, "Vyrobené", "text-green-600");
-            updateOEE();
+
+        // Uloženie všetkých zákaziek
+        function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(orders)); }
+
+        function refreshOrders() {
+            orderSelect.innerHTML = "";
+            Object.keys(orders).forEach(id => {
+                const opt = document.createElement("option");
+                opt.value = id;
+                opt.textContent = id + (orders[id].state === State.STOPPED ? " ⛔" : "");
+                orderSelect.appendChild(opt);
+            });
+            if (active && orders[active]) orderSelect.value = active;
         }
 
-        function reportDowntime() {
-            addLogRow("Línia zastavená", "-", "Prestoj", "text-red-600 font-bold");
+        function newOrder() {
+            const id = prompt("Zadaj číslo zákazky:");
+            if (!id || orders[id]) return;
+
+            orders[id] = {
+                state: State.IDLE,
+                current: null,
+                history: [],
+                goodPieces: 0,
+                badPieces: 0,
+                completedAt: null
+            };
+
+            active = id;
+
+            save();
+            refreshOrders();
+            render();                   // existujúce Pareto a celková aktivita
         }
 
-        function addLogRow(order, qty, status, statusClass) {
-            const table = document.getElementById('logTable');
-            const now = new Date().toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit' });
-            const row = `<tr>
-                <td>${now}</td>
-                <td class="text-left font-medium">${order}</td>
-                <td>${qty}</td>
-                <td class="${statusClass}">${status}</td>
-            </tr>`;
-            table.insertAdjacentHTML('afterbegin', row);
+        orderSelect.onchange = e => {
+            active = e.target.value;
+            updateButtons();
+            render();
+        };
+
+
+        function setState(s, r = "") {
+            if (!active) return;
+            const o = orders[active];
+            if (o.state === State.STOPPED) return;
+            if (o.current) { o.current.end = now(); o.history.push(o.current); }
+            o.current = { state: s, start: now(), end: null, reason: r };
+            o.state = s;
+            save();
+            updateButtons();
         }
 
-        function updateOEE() {
-            // Simulácia OEE výpočtu
-            const randomOEE = (Math.random() * (98 - 85) + 85).toFixed(1);
-            document.getElementById('oeeVal').innerText = randomOEE + " %";
+        function stopOrder() {
+            if (!active) return;
+            const o = orders[active];
+
+            const choice = prompt(
+                "Zadaj:\n1 = Pauza (pokračovať neskôr)\n2 = Ukončiť zákazku"
+            );
+            if (!choice) return;
+
+            // Zadanie kusov vždy pred ukončením current (okrem Downtime)
+            let good = 0, bad = 0;
+            if (choice === "1" || choice === "2") {
+                good = parseInt(prompt("Zadaj počet DOBRÝCH kusov od poslednej pauzy/štartu:"), 10) || 0;
+                bad = parseInt(prompt("Zadaj počet ZLÝCH kusov od poslednej pauzy/štartu:"), 10) || 0;
+            }
+
+            // Ukončí aktuálny segment a pridá kusy
+            if (o.current) {
+                o.current.end = now();
+
+                if (o.current.state !== State.DOWNTIME) {
+                    // uloží do segmentu, aby render vedel zobrazovať kumulatívne
+                    o.current.goodPieces = good;
+                    o.current.badPieces = bad;
+
+                    // doplní do kumulatívneho počtu zákazky
+                    o.goodPieces = (o.goodPieces || 0) + good;
+                    o.badPieces = (o.badPieces || 0) + bad;
+                }
+
+                o.history.push(o.current);
+                o.current = null;
+            }
+
+            if (choice === "1") {
+                // Pauza → nastav stav IDLE
+                o.state = State.IDLE;
+                o.current = null;
+            } else if (choice === "2") {
+                // Ukončenie
+                o.state = State.STOPPED;
+                o.completedAt = now();
+
+                // Kontrola proti plánu
+                if (o.plannedPieces && (o.goodPieces + o.badPieces !== o.plannedPieces)) {
+                    alert(
+                        `Pozor! Plánované kusy: ${o.plannedPieces}, zadali ste spolu: ${o.goodPieces + o.badPieces}`
+                    );
+                }
+            }
+
+            save();
+            refreshOrders();
+            updateButtons();
+            render();
+
+            renderDowntimeParetoChart();
+            renderDowntimeCountChart();
+            renderTotalActivityChart();
+            renderTrendChart();
+            renderTrendAnalysis();
         }
+
+        function totals(o) {
+            const t = { SETUP: 0, PRODUCTION: 0, DOWNTIME: 0 };
+            o.history.forEach(e => { if (t[e.state] !== undefined) t[e.state] += e.end - e.start; });
+            if (o.current && t[o.current.state] !== undefined) t[o.current.state] += now() - o.current.start;
+            return t;
+        }
+
+        function updateButtons() {
+            if (!active) return;
+            const o = orders[active];
+            const s = o.state;
+            const stopped = s === State.STOPPED;
+            startBtn.disabled = s !== State.IDLE || stopped;
+            prodBtn.disabled = s !== State.SETUP || stopped;
+            downBtn.disabled = s !== State.PRODUCTION || stopped;
+            resumeBtn.disabled = s !== State.DOWNTIME || stopped;
+            stopBtn.disabled = s === State.IDLE || stopped;
+
+
+            [startBtn, prodBtn, downBtn, resumeBtn, stopBtn].forEach(b => b.classList.remove("active"));
+            if (!stopped) {
+                if (s === State.SETUP) startBtn.classList.add("active");
+                if (s === State.PRODUCTION) prodBtn.classList.add("active");
+                if (s === State.DOWNTIME) downBtn.classList.add("active");
+            }
+            if (stopped) stopBtn.classList.add("active");
+        }
+
+        function render() {
+            if (!active) return;
+            const o = orders[active];
+            qs("currentState").textContent = StateLabel[o.state];
+            qs("currentState").className = o.state === State.STOPPED ? "stop-order" : "";
+
+            const t = totals(o);
+            totalsEls.SETUP.textContent = fd(t.SETUP);
+            totalsEls.PRODUCTION.textContent = fd(t.PRODUCTION);
+            totalsEls.DOWNTIME.textContent = fd(t.DOWNTIME);
+
+            // percent bars
+            const totalTime = t.SETUP + t.PRODUCTION + t.DOWNTIME || 1;
+            percentSetup.style.width = (t.SETUP / totalTime * 100).toFixed(1) + "%";
+            percentProd.style.width = (t.PRODUCTION / totalTime * 100).toFixed(1) + "%";
+            percentDown.style.width = (t.DOWNTIME / totalTime * 100).toFixed(1) + "%";
+            percentSetup.textContent = ((t.SETUP / totalTime * 100).toFixed(1)) + "%";
+            percentProd.textContent = ((t.PRODUCTION / totalTime * 100).toFixed(1)) + "%";
+            percentDown.textContent = ((t.DOWNTIME / totalTime * 100).toFixed(1)) + "%";
+
+            // log
+            const log = qs("log");
+            log.innerHTML = "";
+
+            // kumulatívne počty
+            let cumGood = 0;
+            let cumBad = 0;
+
+            o.history.forEach(e => {
+                if (e.state !== State.DOWNTIME) {
+                    cumGood += e.goodPieces || 0;
+                    cumBad += e.badPieces || 0;
+                }
+
+                log.innerHTML += `<tr>
+        <td>${active}</td>
+        <td>${StateLabel[e.state]}</td>
+        <td>${fdFull(e.start)}</td>
+        <td>${ft(e.start)}</td>
+        <td>${e.end ? ft(e.end) : "—"}</td>
+        <td>${fd(e.end ? e.end - e.start : now() - e.start)}</td>
+        <td>${e.reason || ""}</td>
+        <td>${cumGood} / ${cumBad}</td>
+        <td>${o.plannedPieces || ""}</td>
+    </tr>`;
+            });
+
+            // aktuálny segment (bežiaci)
+            if (o.current) {
+                log.innerHTML += `<tr class="running">
+        <td>${active}</td>
+        <td>${StateLabel[o.current.state]}</td>
+        <td>${fdFull(o.current.start)}</td>
+        <td>${ft(o.current.start)}</td>
+        <td>—</td>
+        <td>${fd(now() - o.current.start)}</td>
+        <td>${o.current.reason || ""}</td>
+        <td>${cumGood} / ${cumBad}</td>
+        <td>${o.plannedPieces || ""}</td>
+    </tr>`;
+            }
+
+            // ak je zákazka ukončená
+            if (o.state === State.STOPPED) {
+                log.innerHTML += `
+        <tr style="background:#eee;font-weight:bold;">
+            <td>${active}</td>
+            <td>UKONČENÉ</td>
+            <td colspan="5"></td>
+            <td>${cumGood} / ${cumBad}</td>
+            <td>${o.plannedPieces || ""}</td>
+        </tr>
+    `;
+            }
+
+            updateButtons();
+            drawRecent();
+            drawTimeline(o);
+        }
+
+        /* ---------- RECENT 3 ZÁKAZKY ---------- */
+        function drawRecent() {
+            // Odstráni všetky predchádzajúce canvasy a štítky zákaziek
+            recentWrapper.querySelectorAll(".recentCanvas, .recentLabel").forEach(el => el.remove());
+
+            // Posledné 3 zákazky
+            const ids = Object.keys(orders).slice(-3).reverse();
+
+            ids.forEach(id => {
+                const o = orders[id];
+
+                // Div s číslom zákazky
+                const label = document.createElement("div");
+                label.textContent = `Zákazka: ${id}`;
+                label.className = "recentLabel";
+                label.style.fontSize = "12px";
+                label.style.marginBottom = "2px";
+                recentWrapper.appendChild(label);
+
+                // Canvas
+                const canvas = document.createElement("canvas");
+                canvas.className = "recentCanvas";
+                recentWrapper.appendChild(canvas);
+                canvas.width = canvas.offsetWidth || 300;
+                canvas.height = canvas.offsetHeight || 20;
+
+                const ctx = canvas.getContext("2d");
+
+                // Segments
+                const segments = [...o.history];
+                if (o.current) segments.push({ ...o.current, end: now() });
+                if (segments.length === 0) return;
+
+                // iba segmenty, ktoré kreslíme (bez Downtime, aby nezostával biely priestor)
+                const drawableSegments = segments.filter(s => s.state !== State.PAUSE);
+                if (drawableSegments.length === 0) return;
+
+                // totalTime = súčet dĺžok kreslených segmentov
+                const totalTime = drawableSegments.reduce((sum, s) => sum + (s.end - s.start), 0);
+
+                let x = 0;
+                drawableSegments.forEach(e => {
+                    const segWidth = ((e.end - e.start) / totalTime) * canvas.width;
+                    ctx.fillStyle = COLORS[e.state] || "#ccc";
+                    ctx.fillRect(x, 0, segWidth, canvas.height);
+
+                    const percent = ((e.end - e.start) / totalTime * 100).toFixed(1) + "%";
+                    ctx.fillStyle = "#000";
+                    ctx.font = "10px Arial";
+                    ctx.textAlign = "center";
+                    ctx.fillText(percent, x + segWidth / 2, canvas.height / 2 + 4);
+
+                    x += segWidth;
+                });
+            });
+        }
+
+        /* ---------- TIMELINE ---------- */
+        function drawTimeline(o) {
+            const w = timelineCanvas.width = timelineCanvas.offsetWidth;
+            const h = timelineCanvas.height = timelineCanvas.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            const segments = [...o.history];
+            if (o.current) segments.push({ ...o.current, end: now() });
+
+            if (segments.length === 0) return;
+
+            // iba segmenty, ktoré kreslíme (bez Downtime)
+            const drawableSegments = segments.filter(s => s.state !== State.PAUSE);
+            const totalTime = drawableSegments.reduce((sum, s) => sum + (s.end - s.start), 0) || 1;
+
+            let x = 0;
+            drawableSegments.forEach(e => {
+                if (COLORS[e.state]) {
+                    const segWidth = ((e.end - e.start) / totalTime) * w;
+                    ctx.fillStyle = COLORS[e.state];
+                    ctx.fillRect(x, 0, segWidth, h);
+
+                    // zvýraznenie aktuálneho segmentu blikajúcim okrajom
+                    if (o.current && e === drawableSegments[drawableSegments.length - 1]) {
+                        if (Math.floor(now() / 500) % 2 === 0) {
+                            ctx.strokeStyle = "#000"; ctx.lineWidth = 2;
+                            ctx.strokeRect(x, 0, segWidth, h);
+                        }
+                    }
+
+                    // text trvanie + dôvod
+                    ctx.fillStyle = "#000";
+                    ctx.font = "10px Arial";
+                    ctx.textAlign = "center";
+                    let label = ((e.end - e.start) / 60000).toFixed(1) + " min";
+                    if (e.reason) label += " | " + e.reason;
+                    ctx.fillText(label, x + segWidth / 2, h / 2 + 4);
+
+                    x += segWidth;
+                }
+            });
+
+            // časová os – inteligentnejšie legendy
+            timelineLabels.innerHTML = "";
+
+            // totalTime je v ms, prepočítame na minúty
+            const totalMin = Math.ceil(totalTime / 60000);
+
+            // určíme vhodný krok pre labely
+            let step = 1; // predvolený krok: každú minútu
+            if (totalMin > 60) step = 10;        // ak viac než 1 hodina, každých 10 min
+            if (totalMin > 180) step = 30;       // ak viac než 3 hodiny, každých 30 min
+            if (totalMin > 720) step = 60;       // ak viac než 12 hodín, každú hodinu
+
+            for (let i = 0; i <= totalMin; i += step) {
+                const span = document.createElement("span");
+                span.style.position = "absolute";
+                span.style.left = `${(i / totalMin) * 100}%`;
+                span.textContent = i; // alebo formát {h:mm} ak chceš, dole v riadku
+                //span.textContent = `${Math.floor(i / 60)}:${(i % 60).toString().padStart(2, '0')}`;
+                timelineLabels.appendChild(span);
+            }
+
+        }
+
+        startBtn.onclick = () => {
+            if (!active) return;
+            const o = orders[active];
+
+            // ak ešte nie je zadaný plán, opýtame sa
+            if (!o.plannedPieces) {
+                const planned = parseInt(prompt("Zadaj plánovaný počet kusov pre túto zákazku:"), 10) || 0;
+                o.plannedPieces = planned;
+                o.goodPieces = 0;
+                o.badPieces = 0;
+                save();
+            }
+
+            // zisti posledný segment v histórii
+            const lastSegment = o.history[o.history.length - 1];
+
+            if (o.state === State.IDLE && lastSegment && lastSegment.state === State.PRODUCTION) {
+                // zákazka je pauznutá → vyzvi obsluhu
+                const wantsSetup = confirm("Chceš spustiť SETUP pred pokračovaním výroby?");
+                if (wantsSetup) {
+                    setState(State.SETUP);
+                } else {
+                    setState(State.PRODUCTION);
+                }
+            } else {
+                // prvý štart alebo po ukončení → vždy SETUP
+                setState(State.SETUP);
+            }
+        };
+
+        prodBtn.onclick = () => setState(State.PRODUCTION);
+        downBtn.onclick = () => setState(State.DOWNTIME);
+        resumeBtn.onclick = () => {
+            if (!active) return;
+            const o = orders[active];
+            if (o.state !== State.DOWNTIME) return;
+
+            // zobraz panel s výberom
+            downtimeReasonSelect.value = "";
+            downtimeReasonPanel.style.display = "block";
+        };
+
+        confirmReasonBtn.onclick = () => {
+            if (!active) return;
+            const o = orders[active];
+            if (o.state !== State.DOWNTIME) return;
+
+            const r = downtimeReasonSelect.value;
+            if (!r) {
+                alert("Vyber dôvod prestoja");
+                return;
+            }
+
+            if (o.current) {
+                o.current.end = now();
+                o.current.reason = r;
+                o.history.push(o.current);
+            }
+
+            o.current = { state: State.PRODUCTION, start: now(), end: null };
+            o.state = State.PRODUCTION;
+
+            downtimeReasonPanel.style.display = "none";
+
+            save();
+            render();
+        };
+
+        stopBtn.onclick = stopOrder;
+        newOrderBtn.onclick = newOrder;
+
+        clearCacheBtn.onclick = () => {
+            if (!confirm("Naozaj chcete vymazať všetky zákazky?")) return;
+            localStorage.removeItem(STORAGE_KEY); // vymaže všetky zákazky z localStorage
+            orders = {};   // vyčistí lokálnu premennú
+            active = null; // žiadna aktívna zákazka
+            refreshOrders(); // aktualizuje select
+            render();       // aktualizuje zobrazenie
+        };
+
+        /* ---------- EXPORT  JEDNEJ ZÁKAZKY---------- */
+        exportBtn.onclick = () => {
+            if (!active) return;
+            const o = orders[active];
+
+            // hlavička CSV + nové stĺpce
+            let csv = "zakazka,stav,datum,start,end,trvanie,dovod,dobre_kusy,zle_kusy,planovane_kusy\n";
+
+            o.history.forEach(e => {
+                csv += [
+                    active,
+                    StateLabel[e.state],
+                    fdFull(e.start),
+                    ft(e.start),
+                    e.end ? ft(e.end) : "—",
+                    e.end ? fd(e.end - e.start) : fd(now() - e.start),
+                    e.reason || "",
+                    e.goodPieces || 0,
+                    e.badPieces || 0,
+                    o.plannedPieces || ""
+                ].join(",") + "\n";
+            });
+
+            if (o.current) {
+                csv += [
+                    active,
+                    StateLabel[o.current.state],
+                    fdFull(o.current.start),
+                    ft(o.current.start),
+                    "—",
+                    fd(now() - o.current.start),
+                    o.current.reason || "",
+                    o.current.goodPieces || 0,
+                    o.current.badPieces || 0,
+                    o.plannedPieces || ""
+                ].join(",") + "\n";
+            }
+
+            const blob = new Blob([csv], { type: "text/csv" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `${active}.csv`;
+            a.click();
+        };
+
+        // // EXPORT VŠETKÝCH ZÁKAZIEK DO JSON
+        // exportAllBtn.onclick = () => {
+        //         // žiadna zmena, všetky polia sa ukladajú automaticky
+        //         const blob = new Blob([JSON.stringify(orders, null, 2)], { type: "application/json" });
+        //         const a = document.createElement("a");
+        //         a.href = URL.createObjectURL(blob);
+        //         a.download = `vsetky_zakazky.json`;
+        //         a.click();
+        //     };
+
+        // EXPORT VŠETKÝCH ZÁKAZIEK DO JSON (s možnosťou pridať IDLE segmenty)
+        exportAllBtn.onclick = () => {
+            // Optionálne: vyzve obsluhu, či chce zahrnúť IDLE časy
+            const includeIdle = confirm("Chcete exportovať aj umelo generované IDLE časy medzi pauzami?");
+
+            const exportData = {};
+
+            Object.keys(orders).forEach(id => {
+                const o = orders[id];
+
+                // kópia objektu, aby sme nemenili originál
+                const obj = JSON.parse(JSON.stringify(o));
+
+                if (includeIdle) {
+                    const newHistory = [];
+                    obj.history.forEach((seg, idx) => {
+                        // pridáme pôvodný segment
+                        newHistory.push(seg);
+
+                        // generovanie IDLE segmentu
+                        if (idx < obj.history.length - 1) {
+                            const nextSeg = obj.history[idx + 1];
+
+                            // IDLE vzniká buď:
+                            // 1) medzi PRODUCTION a SETUP (existujúca logika)
+                            // 2) medzi PRODUCTION a ďalším PRODUCTION bez SETUP (po pauze)
+                            if (
+                                seg.state === "PRODUCTION" &&
+                                (nextSeg.state === "SETUP" || nextSeg.state === "PRODUCTION")
+                            ) {
+                                // vynecháme úplný prvý SETUP po štarte
+                                if (!(seg.state === "PRODUCTION" && nextSeg.state === "SETUP" && idx === 0)) {
+                                    const idleSeg = {
+                                        state: "IDLE",
+                                        start: seg.end,
+                                        end: nextSeg.start
+                                    };
+                                    newHistory.push(idleSeg);
+                                }
+                            }
+                        }
+                    });
+                    obj.history = newHistory;
+                }
+
+                exportData[id] = obj;
+            });
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `vsetky_zakazky.json`;
+            a.click();
+        };
+
+        importBtn.onclick = () => importFile.click()
+        // IMPORT VŠETKÝCH ZÁKAZIEK Z JSON
+        importFile.onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (typeof data === "object") {
+                        // doplníme fallback pre kusy, aby staré JSONy fungovali
+                        for (let id in data) {
+                            const o = data[id];
+                            o.goodPieces = o.goodPieces || 0;
+                            o.badPieces = o.badPieces || 0;
+                            o.plannedPieces = o.plannedPieces || 0;
+                            if (o.history) {
+                                o.history.forEach(seg => {
+                                    if (seg.state !== State.DOWNTIME) {
+                                        seg.goodPieces = seg.goodPieces || 0;
+                                        seg.badPieces = seg.badPieces || 0;
+                                    }
+                                });
+                            }
+                        }
+
+                        orders = data;
+                        active = Object.keys(orders)[0] || null;
+                        save();
+                        refreshOrders();
+                        render();
+                        renderDowntimeParetoChart();
+                        renderDowntimeCountChart();
+                        renderTotalActivityChart();
+                        renderTrendChart();
+                        renderTrendAnalysis();
+                        alert("Import úspešný!");
+                    } else {
+                        alert("Neplatný formát JSON!");
+                    }
+                } catch (err) {
+                    alert("Chyba pri načítaní JSON: " + err);
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        // ------------------------- Downtime Charts -------------------------
+        function getRange(filter) {
+            const nowDate = Date.now();
+            let fromDate, toDate = nowDate;
+
+            if (filter === "today") {
+                const d = new Date();
+                d.setHours(0, 0, 0, 0);
+                fromDate = d.getTime();
+            } else if (filter === "lastOrder") {
+                // Filter: STOPPED + má históriu + koniec nie je v budúcnosti
+                const stopped = Object.values(orders).filter(o =>
+                    o.state === State.STOPPED &&
+                    o.history.length > 0 &&
+                    o.history[o.history.length - 1].end <= nowDate
+                );
+
+                if (!stopped.length) return null;
+
+                const lastO = stopped.reduce((a, b) =>
+                    (a.history[a.history.length - 1].end > b.history[b.history.length - 1].end) ? a : b
+                );
+
+                fromDate = lastO.history[0].start;
+                toDate = lastO.history[lastO.history.length - 1].end;
+            } else if (filter === "thisWeek") {
+                const d = new Date();
+                const day = d.getDay();
+                const diff = (day === 0 ? 6 : day - 1);
+                d.setDate(d.getDate() - diff);
+                d.setHours(0, 0, 0, 0);
+                fromDate = d.getTime();
+            } else if (filter === "thisMonth") {
+                const d = new Date();
+                d.setDate(1);
+                d.setHours(0, 0, 0, 0);
+                fromDate = d.getTime();
+            } else if (filter === "custom") {
+                const fromInput = qs("customFrom").value;
+                const toInput = qs("customTo").value;
+                if (!fromInput || !toInput) return null;
+                fromDate = new Date(fromInput).getTime();
+                toDate = new Date(toInput).getTime() + 86399999; // Koniec dňa
+            } else {
+                const days = parseInt(filter);
+                fromDate = nowDate - days * 24 * 60 * 60 * 1000;
+            }
+
+            return { fromDate, toDate };
+        }
+
+        function getDowntimeData(filter) {
+            const range = getRange(filter);
+            if (!range) return []; // Ak nie je rozsah (napr. žiadna ukončená zákazka), vrátime prázdne pole
+
+            const data = [];
+            Object.values(orders).forEach(o => {
+                const segments = [...o.history];
+                if (o.current && o.current.state === State.DOWNTIME) {
+                    segments.push({ ...o.current, end: Date.now() });
+                }
+                segments.forEach(e => {
+                    if (e.state === State.DOWNTIME && e.start >= range.fromDate && e.start <= range.toDate) {
+                        data.push({ reason: e.reason || "Neznámy", duration: e.end - e.start });
+                    }
+                });
+            });
+            return data;
+        }
+
+        function aggregateDowntime(data) {
+            const agg = {};
+            data.forEach(d => {
+                if (!agg[d.reason]) agg[d.reason] = 0;
+                agg[d.reason] += d.duration;
+            });
+            return agg;
+        }
+
+        function paretoData(agg) {
+            const arr = Object.entries(agg).sort((a, b) => b[1] - a[1]);
+            const total = arr.reduce((sum, [, v]) => sum + v, 0);
+            let cum = 0;
+            return arr.map(([reason, dur]) => {
+                cum += dur;
+                return { reason, duration: dur, cumPercent: +(cum / total * 100).toFixed(1) };
+            });
+        }
+
+        function countData(data) {
+            const counts = {};
+            data.forEach(d => counts[d.reason] = (counts[d.reason] || 0) + 1);
+            return counts;
+        }
+
+        function paretoCountData(counts) {
+            const arr = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            const total = arr.reduce((sum, [, v]) => sum + v, 0);
+            let cum = 0;
+            return arr.map(([reason, count]) => {
+                cum += count;
+                return { reason, count, cumPercent: +(cum / total * 100).toFixed(1) };
+            });
+        }
+
+        let paretoChartObj = null, countChartObj = null, perOrderChartObj = null;
+
+        function renderDowntimeParetoChart() {
+            const filter = qs("downtimeFilter").value;
+            const data = getDowntimeData(filter);
+            if (!data.length) {
+                if (paretoChartObj) { paretoChartObj.destroy(); paretoChartObj = null; }
+                return;
+            }
+            const agg = aggregateDowntime(data);
+            const pareto = paretoData(agg);
+
+            const labels = pareto.map(p => p.reason);
+            const durations = pareto.map(p => (p.duration / 60000).toFixed(1));
+            const cum = pareto.map(p => p.cumPercent);
+            const colors = pareto.map(p => p.cumPercent <= 80 ? "#FF9696" : "#BDBDBD");
+
+            if (paretoChartObj) paretoChartObj.destroy();
+            const ctx = qs("paretoChart").getContext("2d");
+            paretoChartObj = new Chart(ctx, {
+                data: {
+                    labels,
+                    datasets: [
+                        { type: "bar", label: "Trvanie prestojov [min]", data: durations, backgroundColor: colors, order: 2 },
+                        { type: "line", label: "Kumulatívne %", data: cum, yAxisID: "y1", borderColor: "#000", borderWidth: 2, pointRadius: 4, tension: 0.3, order: 1 },
+                        { type: "line", label: "80 % hranica", data: labels.map(() => 80), yAxisID: "y1", borderColor: "#C62828", borderDash: [6, 6], pointRadius: 0, order: 0 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: "top" } },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: "Minúty" } },
+                        y1: { position: "right", min: 0, max: 100, ticks: { callback: v => v + "%" }, title: { display: true, text: "Kumulatívne %" } }
+                    }
+                }
+            });
+        }
+
+        function renderDowntimeCountChart() {
+            const filter = qs("downtimeFilter").value;
+            const data = getDowntimeData(filter);
+            if (!data.length) {
+                if (countChartObj) { countChartObj.destroy(); countChartObj = null; }
+                return;
+            }
+
+            const counts = countData(data);
+            const pareto = paretoCountData(counts);
+
+            const labels = pareto.map(p => p.reason);
+            const values = pareto.map(p => p.count);
+            const cum = pareto.map(p => p.cumPercent);
+            const colors = pareto.map(p => p.cumPercent <= 80 ? "#FF96FF" : "#BDBDBD");
+
+            if (countChartObj) countChartObj.destroy();
+            const ctx = qs("countChart").getContext("2d");
+            countChartObj = new Chart(ctx, {
+                data: {
+                    labels,
+                    datasets: [
+                        { type: "bar", label: "Počet prestojov", data: values, backgroundColor: colors, order: 2 },
+                        { type: "line", label: "Kumulatívne %", data: cum, yAxisID: "y1", borderColor: "#000", borderWidth: 2, pointRadius: 4, tension: 0.3, order: 1 },
+                        { type: "line", label: "80 % hranica", data: labels.map(() => 80), yAxisID: "y1", borderColor: "#C62828", borderDash: [6, 6], pointRadius: 0, order: 0 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: "Počet" } },
+                        y1: { position: "right", min: 0, max: 100, ticks: { callback: v => v + "%" }, title: { display: true, text: "Kumulatívne %" } }
+                    }
+                }
+            });
+        }
+
+        function getTotalActivityData(filter) {
+            const range = getRange(filter);
+            if (!range) return null;
+
+            const agg = { SETUP: 0, PRODUCTION: 0, DOWNTIME: 0 };
+            Object.values(orders).forEach(o => {
+                const segments = [...o.history];
+                if (o.current) segments.push({ ...o.current, end: Date.now() });
+
+                segments.forEach(s => {
+                    const segmentStart = Math.max(s.start, range.fromDate);
+                    const segmentEnd = Math.min(s.end, range.toDate);
+                    if (segmentStart < segmentEnd && agg[s.state] !== undefined) {
+                        agg[s.state] += segmentEnd - segmentStart;
+                    }
+                });
+            });
+            return agg;
+        }
+
+        let prevWorkingRatio = 0;
+
+        function renderTotalActivityChart() {
+            const filter = qs("downtimeFilter").value;
+            const data = getTotalActivityData(filter);
+
+            if (!data || Object.values(data).every(v => v === 0)) {
+                if (perOrderChartObj) { perOrderChartObj.destroy(); perOrderChartObj = null; }
+                return;
+            }
+
+            const labels = ["Setup", "Production", "Downtime"];
+            const values = [data.SETUP, data.PRODUCTION, data.DOWNTIME].map(v => v / 60000); // minúty
+            const colors = ["#2196F3", "#4CAF50", "#FF9800"];
+
+            const totalTime = data.SETUP + data.PRODUCTION + data.DOWNTIME;
+            const availableTime = totalTime - data.SETUP;
+            const workingRatio = availableTime > 0 ? (data.PRODUCTION / availableTime) * 100 : 0;
+
+            if (perOrderChartObj) perOrderChartObj.destroy();
+            const ctx = qs("perOrderChart").getContext("2d");
+
+            // -----------------------------
+            // Center text plugin (Working Ratio)
+            // -----------------------------
+            const centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw(chart) {
+                    const { width, height } = chart;
+                    const ctx = chart.ctx;
+
+                    prevWorkingRatio += (workingRatio - prevWorkingRatio) * 0.1;
+
+                    ctx.save();
+
+                    // dynamická farba
+                    let color = "#4CAF50";
+                    if (prevWorkingRatio < 60) color = "#F44336";
+                    else if (prevWorkingRatio < 80) color = "#FF9800";
+
+                    ctx.font = `bold ${height / 12}px sans-serif`;
+                    ctx.fillStyle = color;
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(`${prevWorkingRatio.toFixed(1)}%`, width / 2, height / 2 - 5);
+
+                    ctx.font = `normal ${height / 25}px sans-serif`;
+                    ctx.fillStyle = "#777";
+                    ctx.fillText("Working Ratio", width / 2, height / 2 + 20);
+
+                    ctx.restore();
+
+                    if (Math.abs(prevWorkingRatio - workingRatio) > 0.1) chart.draw();
+                }
+            };
+
+            // -----------------------------
+            // Plugin pre malé segmenty s percentami priamo pri segmente
+            // -----------------------------
+            const smallSegmentLabelsPlugin = {
+                id: 'smallSegmentLabels',
+                afterDraw(chart) {
+                    const ctx = chart.ctx;
+                    const dataset = chart.data.datasets[0];
+                    const meta = chart.getDatasetMeta(0);
+
+                    const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                    const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+
+                    ctx.save();
+                    ctx.font = "12px sans-serif";
+                    ctx.fillStyle = "#000";
+                    ctx.textBaseline = "middle";
+
+                    meta.data.forEach((arc, index) => {
+                        const value = dataset.data[index];
+                        const total = dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = (value / total) * 100;
+
+                        if (percentage > 0 && percentage < 10) { // malé segmenty
+                            const startAngle = arc.startAngle;
+                            const endAngle = arc.endAngle;
+                            const angle = (startAngle + endAngle) / 2;
+
+                            const r = arc.outerRadius;
+                            const offset = 5; // vzdialenosť od segmentu
+                            const x = centerX + Math.cos(angle) * (r + offset);
+                            const y = centerY + Math.sin(angle) * (r + offset);
+
+                            ctx.textAlign = Math.cos(angle) >= 0 ? 'left' : 'right';
+                            ctx.fillText(`${percentage.toFixed(1)}%`, x + (ctx.textAlign === 'left' ? 5 : -5), y);
+                        }
+                    });
+
+                    ctx.restore();
+                }
+            };
+
+            // -----------------------------
+            // Vytvorenie grafu
+            // -----------------------------
+            perOrderChartObj = new Chart(ctx, {
+                type: "doughnut",
+                data: { labels, datasets: [{ data: values, backgroundColor: colors }] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "60%",
+                    plugins: {
+                        legend: { position: "bottom" },
+                        title: {
+                            display: true,
+                            text: "Rozdelenie času výroby",
+                            font: { size: 18, weight: "bold" },
+                            padding: { top: 10, bottom: 20 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const value = ctx.raw;
+                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${ctx.label}: ${value.toFixed(1)} min (${percentage}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                if (!total) return "";
+                                const percentage = (value / total) * 100;
+                                if (percentage < 10) return ""; // väčšie percentá v strede
+                                return `${percentage.toFixed(1)}%`;
+                            }
+                        }
+                    },
+                },
+                plugins: [ChartDataLabels, centerTextPlugin, smallSegmentLabelsPlugin]
+            });
+        }
+
+        function getLast4WeeksBuckets() {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            // Posledný pondelok
+            const day = now.getDay(); // 0 = nedeľa
+            const diff = (day === 0 ? 6 : day - 1);
+            const lastMonday = new Date(now);
+            lastMonday.setDate(now.getDate() - diff);
+
+            const buckets = [];
+            for (let i = 4; i > 0; i--) {
+                const start = new Date(lastMonday);
+                start.setDate(lastMonday.getDate() - i * 7);
+                const end = new Date(start);
+                end.setDate(start.getDate() + 6);
+                end.setHours(23, 59, 59, 999);
+                buckets.push({ start: start.getTime(), end: end.getTime() });
+            }
+            return buckets;
+        }
+
+        function getDowntimeDataForPeriod(fromDate, toDate) {
+            const data = [];
+            Object.values(orders).forEach(o => {
+                const segments = [...o.history];
+                if (o.current && o.current.state === State.DOWNTIME) {
+                    segments.push({ ...o.current, end: Date.now() });
+                }
+                segments.forEach(e => {
+                    if (e.state === State.DOWNTIME) {
+                        // priradiť celý prestoj do týždňa, v ktorom skončil
+                        if (e.end >= fromDate && e.end <= toDate) {
+                            data.push({ reason: e.reason || "Neznámy", duration: e.duration ?? (e.end - e.start) });
+                        }
+                    }
+                });
+            });
+            return data;
+        }
+
+        function getWeeklyTrendData() {
+            const buckets = getLast4WeeksBuckets();
+            const availableTimeMs = 5 * 8 * 60 * 60 * 1000; // Predpoklad: 5 dní po 8 hodín (uprav si podľa potreby)
+
+            return buckets.map((b) => {
+                const data = getDowntimeDataForPeriod(b.start, b.end);
+                const agg = aggregateDowntime(data);
+                const totalDowntime = Object.values(agg).reduce((a, b) => a + b, 0);
+
+                // Výpočet celkového času aktivity (Production + Setup) v tomto týždni
+                let activeTime = 0;
+                Object.values(orders).forEach(o => {
+                    o.history.forEach(s => {
+                        const overlapStart = Math.max(s.start, b.start);
+                        const overlapEnd = Math.min(s.end, b.end);
+                        if (overlapStart < overlapEnd && (s.state === 'PRODUCTION' || s.state === 'SETUP')) {
+                            activeTime += (overlapEnd - overlapStart);
+                        }
+                    });
+                });
+
+                const totalTime = activeTime + totalDowntime;
+                // Efektivita = (Čas výroby / Celkový čas kedy bol stroj zapnutý) * 100
+                const utilization = totalTime > 0 ? (activeTime / totalTime) * 100 : 0;
+
+                const startDate = new Date(b.start);
+                const label = `${startDate.getDate()}.${startDate.getMonth() + 1}.`;
+                const top = paretoData(agg)[0] || { reason: "Žiadne", duration: 0 };
+
+                return {
+                    label,
+                    total: totalDowntime,
+                    topReason: top.reason,
+                    count: data.length,
+                    utilization: utilization
+                };
+            });
+        }
+
+        function getProductionAlerts(trendData) {
+            if (trendData.length < 2) return [];
+
+            const alerts = [];
+            const current = trendData[trendData.length - 1];
+            const previous = trendData[trendData.length - 2];
+            const older = trendData[trendData.length - 3] || null;
+
+            // 1. ANALÝZA TRENDU (Nárast prestojov o viac ako 25%)
+            const diffPct = previous.total > 0 ? ((current.total - previous.total) / previous.total) * 100 : 0;
+            if (diffPct > 25) {
+                alerts.push({
+                    type: "danger",
+                    msg: `🚨 **Kritický nárast:** Prestoje sa zvýšili o ${diffPct.toFixed(0)}% za posledný týždeň!`
+                });
+            }
+
+            // 2. ANALÝZA RECIDÍVY (Ten istý problém dva týždne po sebe)
+            if (current.topReason === previous.topReason && current.topReason !== "Žiadne") {
+                alerts.push({
+                    type: "warning",
+                    msg: `🔍 **Recidíva:** Problém "${current.topReason}" je hlavnou príčinou už druhý týždeň po sebe.`
+                });
+            }
+
+            // 3. ANALÝZA DLHODOBÉHO TRENDU (Stúpanie 3 týždne po sebe)
+            if (older && current.total > previous.total && previous.total > older.total) {
+                alerts.push({
+                    type: "danger",
+                    msg: "📈 **Negatívny trend:** Objem prestojov stúpa už 3 týždne po sebe!"
+                });
+            }
+
+            // 4. ANALÝZA EFEKTIVITY (Pád pod kritickú hranicu)
+            if (current.utilization < 80) {
+                alerts.push({
+                    type: "danger",
+                    msg: `📉 **Nízka efektivita:** Využitie stroja kleslo na ${current.utilization.toFixed(1)}%. Cieľ je 85%.`
+                });
+            } else if (current.utilization < previous.utilization) {
+                alerts.push({
+                    type: "warning",
+                    msg: `⚠️ **Pokles výkonu:** Efektivita klesla o ${(previous.utilization - current.utilization).toFixed(1)}% oproti minulemu týždňu.`
+                });
+            }
+
+            return alerts;
+        }
+
+        let trendChartObj = null;
+
+        function renderTrendChart() {
+            const trendData = getWeeklyTrendData();
+            if (!trendData.length) return;
+
+            const labels = trendData.map(t => t.label);
+            const totals = trendData.map(t => (t.total / 60000).toFixed(0));
+
+            // Dynamické farby: Ak je aktuálny týždeň horší ako predchádzajúci -> tmavšia oranžová
+            const colors = totals.map((val, i) => {
+                if (i === 0) return "#90CAF9"; // Prvý stĺpec (najstarší) - neutrálna modrá
+
+                // Ak je tento týždeň horší ako predchádzajúci (viac prestojov)
+                if (parseFloat(val) > parseFloat(totals[i - 1])) {
+                    return "#EF5350"; // Červená - trend sa zhoršuje
+                }
+                return "#66BB6A"; // Zelená - trend sa zlepšuje
+            });
+
+            const ctx = qs("trendChart").getContext("2d");
+            if (trendChartObj) trendChartObj.destroy();
+
+            trendChartObj = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels,
+                    datasets: [{
+                        label: "Prestoje [min]",
+                        data: totals,
+                        backgroundColor: colors,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }, // Legenda je zbytočná, názov je v nadpise
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `Spolu: ${ctx.raw} min | Top: ${trendData[ctx.dataIndex].topReason}`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTrendAnalysis() {
+            const trendData = getWeeklyTrendData();
+            if (!trendData || trendData.length === 0) {
+                qs("trendAnalysis").innerHTML = "Žiadne dáta za posledné 4 týždne.";
+                return;
+            }
+
+            // 1. ZÍSKANIE VAROVANÍ
+            const alerts = getProductionAlerts(trendData);
+            let alertsHtml = "";
+
+            if (alerts.length > 0) {
+                alertsHtml = alerts.map(a => `
+            <div style="background: ${a.type === 'danger' ? '#ffebee' : '#fff3e0'}; 
+                        color: ${a.type === 'danger' ? '#c62828' : '#ef6c00'}; 
+                        padding: 10px; border-radius: 5px; border-left: 5px solid; 
+                        margin-bottom: 8px; font-size: 0.9em;">
+                ${a.msg}
+            </div>
+        `).join("");
+            } else {
+                alertsHtml = `<div style="color: #2e7d32; padding: 10px;">✅ Prevádzka je stabilná a bez kritických výkyvov.</div>`;
+            }
+
+            // 2. TVORBA RIADKOV TABUĽKY
+            // .slice().reverse() zabezpečí, že najnovší týždeň uvidíš hore
+            let rowsHtml = trendData.slice().reverse().map((t, i) => {
+                // Pomocná ikonka trendu (porovnávame s týždňom pod ním v trendData)
+                // Keďže sme robili .reverse(), musíme indexovať opatrne
+                const originalIdx = trendData.length - 1 - i;
+                let trendIcon = "";
+                if (originalIdx > 0) {
+                    const prevTotal = trendData[originalIdx - 1].total;
+                    trendIcon = t.total <= prevTotal ? " 🟢" : " 🔴";
+                }
+
+                // Farba pre percentá efektivity
+                const effColor = t.utilization < 75 ? '#d32f2f' : (t.utilization < 85 ? '#f9a825' : '#2e7d32');
+
+                return `
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px; font-weight: bold;">${t.label}</td>
+                <td style="padding: 10px; text-align: center; color: ${effColor}; font-weight: bold;">
+                    ${t.utilization.toFixed(1)}%
+                </td>
+                <td style="padding: 10px; text-align: right;">
+                    ${Math.round(t.total / 60000)} min ${trendIcon}
+                </td>
+                <td style="padding: 10px; text-align: right; font-size: 0.85em; color: #666;">
+                    ${t.topReason}
+                </td>
+            </tr>
+        `;
+            }).join("");
+
+            // 3. FINÁLNE ZOBRAZENIE DO HTML
+            qs("trendAnalysis").innerHTML = `
+        <div style="font-family: sans-serif; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #fff;">
+            <h3 style="margin-top: 0; color: #333;">Týždenný analytický report</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 10px; font-size: 0.9em; color: #777; text-transform: uppercase;">Upozornenia systému</h4>
+                ${alertsHtml}
+            </div>
+
+            <h4 style="margin-bottom: 10px; font-size: 0.9em; color: #777; text-transform: uppercase;">Prehľad výkonnosti</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <th style="text-align: left; padding: 10px;">Týždeň</th>
+                        <th style="text-align: center; padding: 10px;">Efektivita</th>
+                        <th style="text-align: right; padding: 10px;">Prestoje</th>
+                        <th style="text-align: right; padding: 10px;">Top príčina</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rowsHtml}
+                </tbody>
+            </table>
+        </div>
+    `;
+        }
+
+        // ------------------------- FILTERS -------------------------
+        qs("downtimeFilter").onchange = () => {
+            const filter = qs("downtimeFilter").value;
+            qs("customRange").style.display = filter === "custom" ? "block" : "none";
+
+            if (filter !== "custom") {
+                renderDowntimeParetoChart();
+                renderDowntimeCountChart();
+                renderTotalActivityChart();
+
+            }
+        };
+
+        qs("customApply").onclick = () => {
+            renderDowntimeParetoChart();
+            renderDowntimeCountChart();
+            renderTotalActivityChart();
+
+        };
+
+        // ------------------------- INICIALIZÁCIA -------------------------
+        refreshOrders();
+        updateButtons();
+
+        // 👉 DEFAULT REPORTOVACIE OBDOBIE
+        qs("downtimeFilter").value = "thisMonth";
+
+        setInterval(render, 1000);
+        setTimeout(() => {
+            renderDowntimeParetoChart();
+            renderDowntimeCountChart();
+            renderTotalActivityChart();
+            renderTrendChart();
+            renderTrendAnalysis()
+        }, 100);
+
     </script>
 </body>
 
