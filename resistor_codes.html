@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resistor Color Code</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f0f2f5;
+        }
+
+        .resistor {
+            width: 400px;
+            height: 80px;
+            background: #f5f5dc;
+            margin: auto;
+            margin-top: 40px;
+            border-radius: 12px;
+            position: relative;
+            border: 2px solid #999;
+        }
+
+        .band {
+            width: 8px;
+            height: 100%;
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h2>Resistor Color Code</h2>
+
+    <div class="resistor">
+
+        <div id="b1" class="band" style="left:70px"></div>
+        <div id="b2" class="band" style="left:120px"></div>
+        <div id="b3" class="band" style="left:170px"></div>
+        <div id="b4" class="band" style="left:240px"></div>
+
+    </div>
+
+    <br>
+
+    Band1
+    <select id="band1"></select>
+
+    Band2
+    <select id="band2"></select>
+
+    Multiplier
+    <select id="mult"></select>
+
+    Tolerance
+    <select id="tol"></select>
+
+    <h3 id="result"></h3>
+
+    <script>
+
+        colors = {
+            Black: 0,
+            Brown: 1,
+            Red: 2,
+            Orange: 3,
+            Yellow: 4,
+            Green: 5,
+            Blue: 6,
+            Violet: 7,
+            Grey: 8,
+            White: 9
+        }
+
+        mult = {
+            Black: 1,
+            Brown: 10,
+            Red: 100,
+            Orange: 1000,
+            Yellow: 10000,
+            Green: 100000,
+            Blue: 1000000,
+            Gold: 0.1,
+            Silver: 0.01
+        }
+
+        tol = {
+            Brown: "±1%",
+            Red: "±2%",
+            Green: "±0.5%",
+            Blue: "±0.25%",
+            Violet: "±0.1%",
+            Grey: "±0.05%",
+            Gold: "±5%",
+            Silver: "±10%"
+        }
+
+        function fill(select, data) {
+
+            for (let c in data) {
+
+                let o = document.createElement("option")
+
+                o.value = c
+                o.text = c
+
+                select.appendChild(o)
+
+            }
+
+        }
+
+        fill(band1, colors)
+        fill(band2, colors)
+        fill(mult, mult)
+        fill(tol, tol)
+
+        function calc() {
+
+            let b1 = colors[band1.value]
+            let b2 = colors[band2.value]
+            let m = mult[mult.value]
+
+            let value = (b1 * 10 + b2) * m
+
+            document.getElementById("b1").style.background = band1.value
+            document.getElementById("b2").style.background = band2.value
+            document.getElementById("b3").style.background = mult.value
+            document.getElementById("b4").style.background = tol.value
+
+            let text = value + " Ω"
+
+            if (value > 1000) text = (value / 1000) + " kΩ"
+            if (value > 1000000) text = (value / 1000000) + " MΩ"
+
+            result.innerHTML = text + " " + tol[tol.value]
+
+        }
+
+        document.querySelectorAll("select").forEach(s => s.onchange = calc)
+
+        calc()
+
+    </script>
+
+</body>
+
+</html>
