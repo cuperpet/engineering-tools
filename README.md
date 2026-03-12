@@ -25,8 +25,22 @@ Nástroj na návrh odporových deličov napätia.
 * Výpočet výstupného napätia ($V_{out}$) v reálnom čase.
 * Grafická schéma pre lepšiu orientáciu v zapojení.
 
-### 5. 🏗️ basicMOST (WIP)
-* Nástroj pre prácu s dátami a výrobnými vrstvami.
+### 5. ⏱️ basicMOST (Normovanie práce)
+Kľúčový nástroj pre priemyselné inžinierstvo na stanovenie časových noriem.
+* **Metodika:** Implementácia systému **MOST (Maynard Operation Sequence Technique)**.
+* **Funkcie:** Výpočet TMU (Time Measurement Units) pre sekvencie General Move, Controlled Move a Tool Use.
+* **Prínos:** Presné normovanie manuálnych operácií a optimalizácia taktovacej doby linky.
+
+### 6. 🏭 SMT Production Tracker
+Aplikácia na operatívne riadenie a odvádzanie SMT výroby.
+* **Monitoring:** Sledovanie vyrobených kusov v reálnom čase oproti plánu.
+* **Downtime Management:** Evidencia prestojov a porúch na linke.
+* **Analytika:** Automatický výpočet aktuálnej efektivity (OEE indicator).
+
+### 7. 🎯 P&P Viewer (Pick & Place)
+Vizuálny pomocník pre operátorov osadzovacích automatov.
+* **Funkcia:** Interpretácia súradníc z P&P dát do vizuálnej mapy dosky plošných spojov.
+* **Využitie:** Rýchla kontrola správnosti orientácie a pozície komponentov pri nábehu novej výroby.
 
 ---
 
