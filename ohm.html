@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ohmov zákon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-yellow-500 p-6 text-white flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><i class="fa-solid fa-bolt mr-2"></i>Ohmov zákon</h1>
+            <a href="index.html"
+                class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg text-sm transition">Späť</a>
+        </div>
+
+        <div class="p-8">
+            <p class="text-gray-600 mb-8 text-center text-sm">Zadaj ľubovoľné dve hodnoty a ostatné sa vypočítajú
+                automaticky.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="relative">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Napätie (U) [V]</label>
+                    <input type="number" id="u" oninput="calcOhm('u')"
+                        class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-yellow-500 rounded-xl outline-none transition text-xl font-mono"
+                        placeholder="0.00">
+                </div>
+                <div class="relative">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Prúd (I) [A]</label>
+                    <input type="number" id="i" oninput="calcOhm('i')"
+                        class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-yellow-500 rounded-xl outline-none transition text-xl font-mono"
+                        placeholder="0.00">
+                </div>
+                <div class="relative">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Odpor (R) [Ω]</label>
+                    <input type="number" id="r" oninput="calcOhm('r')"
+                        class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-yellow-500 rounded-xl outline-none transition text-xl font-mono"
+                        placeholder="0.00">
+                </div>
+                <div class="relative">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Výkon (P) [W]</label>
+                    <input type="number" id="p" oninput="calcOhm('p')"
+                        class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-yellow-500 rounded-xl outline-none transition text-xl font-mono"
+                        placeholder="0.00">
+                </div>
+            </div>
+
+            <button onclick="clearFields()"
+                class="w-full mt-8 py-3 text-gray-400 hover:text-red-500 transition text-sm font-bold uppercase tracking-widest">Vymazať
+                polia</button>
+        </div>
+    </div>
+
+    <script>
+        function calcOhm(lastChanged) {
+            let u = parseFloat(document.getElementById('u').value);
+            let i = parseFloat(document.getElementById('i').value);
+            let r = parseFloat(document.getElementById('r').value);
+            let p = parseFloat(document.getElementById('p').value);
+
+            // Logika výpočtu (hľadáme 2 vyplnené polia)
+            if (!isNaN(u) && !isNaN(i)) { r = u / i; p = u * i; }
+            else if (!isNaN(u) && !isNaN(r)) { i = u / r; p = (u * u) / r; }
+            else if (!isNaN(u) && !isNaN(p)) { i = p / u; r = (u * u) / p; }
+            else if (!isNaN(i) && !isNaN(r)) { u = i * r; p = i * i * r; }
+            else if (!isNaN(i) && !isNaN(p)) { u = p / i; r = p / (i * i); }
+            else if (!isNaN(r) && !isNaN(p)) { u = Math.sqrt(p * r); i = Math.sqrt(p / r); }
+            else return;
+
+            if (lastChanged !== 'u') document.getElementById('u').value = u.toFixed(3);
+            if (lastChanged !== 'i') document.getElementById('i').value = i.toFixed(3);
+            if (lastChanged !== 'r') document.getElementById('r').value = r.toFixed(3);
+            if (lastChanged !== 'p') document.getElementById('p').value = p.toFixed(3);
+        }
+
+        function clearFields() {
+            ['u', 'i', 'r', 'p'].forEach(id => document.getElementById(id).value = '');
+        }
+    </script>
+</body>
+
+</html>
