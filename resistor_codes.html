@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="sk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .wire {
             position: absolute;
             width: 100%;
@@ -21,35 +23,82 @@
             background: #cbd5e0;
             z-index: 1;
         }
+
         .resistor-body {
             position: relative;
             width: 220px;
             height: 80px;
-            background-color: #d1f9d1; /* Farba tela */
+            background-color: #d1f9d1;
+            /* Farba tela */
             border-radius: 25px;
             border: 3px solid #a0aec0;
             z-index: 2;
             display: flex;
             justify-content: space-around;
             padding: 0 15px;
-            overflow: hidden; /* Toto zabezpečí, že pásiky nebudú vytŕčať */
-            box-shadow: inset 0 5px 10px rgba(255,255,255,0.5), 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            /* Toto zabezpečí, že pásiky nebudú vytŕčať */
+            box-shadow: inset 0 5px 10px rgba(255, 255, 255, 0.5), 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
         .band {
             width: 15px;
             height: 100%;
-            box-shadow: inset 1px 0 3px rgba(0,0,0,0.3);
+            box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.3);
             transition: background-color 0.2s;
         }
+
         /* Farebná paleta */
-        .c-black { background: #000; } .c-brown { background: #8B4513; }
-        .c-red { background: #FF0000; } .c-orange { background: #FF8C00; }
-        .c-yellow { background: #FFD700; } .c-green { background: #008000; }
-        .c-blue { background: #0000FF; } .c-violet { background: #9400D3; }
-        .c-grey { background: #808080; } .c-white { background: #FFFFFF; }
-        .c-gold { background: #DAA520; } .c-silver { background: #C0C0C0; }
+        .c-black {
+            background: #000;
+        }
+
+        .c-brown {
+            background: #8B4513;
+        }
+
+        .c-red {
+            background: #FF0000;
+        }
+
+        .c-orange {
+            background: #FF8C00;
+        }
+
+        .c-yellow {
+            background: #FFD700;
+        }
+
+        .c-green {
+            background: #008000;
+        }
+
+        .c-blue {
+            background: #0000FF;
+        }
+
+        .c-violet {
+            background: #9400D3;
+        }
+
+        .c-grey {
+            background: #808080;
+        }
+
+        .c-white {
+            background: #FFFFFF;
+        }
+
+        .c-gold {
+            background: #DAA520;
+        }
+
+        .c-silver {
+            background: #C0C0C0;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen p-4 flex flex-col items-center">
 
     <div class="max-w-xl w-full bg-white p-8 rounded-3xl shadow-2xl mt-10">
@@ -59,7 +108,7 @@
             <div class="resistor-container">
                 <div class="wire"></div>
                 <div id="resistorBody" class="resistor-body">
-                    </div>
+                </div>
             </div>
         </div>
 
@@ -70,98 +119,99 @@
 
         <div class="grid grid-cols-1 gap-4">
             <div id="controls" class="space-y-3">
-                </div>
-            
+            </div>
+
             <div class="mt-6 pt-6 border-t border-gray-100">
                 <label class="block text-sm font-bold text-gray-600 mb-2 uppercase">SMD Code Dekodér</label>
                 <div class="flex gap-2">
-                    <input type="text" id="smdInput" placeholder="Napr. 472" oninput="decodeSMD()" 
-                           class="flex-1 p-3 bg-gray-100 border-none rounded-xl focus:ring-2 focus:ring-blue-500 font-mono text-lg">
+                    <input type="text" id="smdInput" placeholder="Napr. 472" oninput="decodeSMD()"
+                        class="flex-1 p-3 bg-gray-100 border-none rounded-xl focus:ring-2 focus:ring-blue-500 font-mono text-lg">
                 </div>
                 <div id="smdResult" class="mt-2 text-blue-600 font-bold text-sm">Zadaj kód...</div>
             </div>
         </div>
     </div>
 
-<script>
-    const data = {
-        "Black": {v:0, m:1}, "Brown": {v:1, m:10, t:"±1%"},
-        "Red": {v:2, m:100, t:"±2%"}, "Orange": {v:3, m:1000},
-        "Yellow": {v:4, m:10000}, "Green": {v:5, m:100000, t:"±0.5%"},
-        "Blue": {v:6, m:1000000, t:"±0.25%"}, "Violet": {v:7, t:"±0.1%"},
-        "Grey": {v:8, t:"±0.05%"}, "White": {v:9},
-        "Gold": {m:0.1, t:"±5%"}, "Silver": {m:0.01, t:"±10%"}
-    };
+    <script>
+        const data = {
+            "Black": { v: 0, m: 1 }, "Brown": { v: 1, m: 10, t: "±1%" },
+            "Red": { v: 2, m: 100, t: "±2%" }, "Orange": { v: 3, m: 1000 },
+            "Yellow": { v: 4, m: 10000 }, "Green": { v: 5, m: 100000, t: "±0.5%" },
+            "Blue": { v: 6, m: 1000000, t: "±0.25%" }, "Violet": { v: 7, t: "±0.1%" },
+            "Grey": { v: 8, t: "±0.05%" }, "White": { v: 9 },
+            "Gold": { m: 0.1, t: "±5%" }, "Silver": { m: 0.01, t: "±10%" }
+        };
 
-    let currentBands = ["Brown", "Red", "Red", "Gold"];
+        let currentBands = ["Brown", "Red", "Red", "Gold"];
 
-    function render() {
-        const controls = document.getElementById('controls');
-        const body = document.getElementById('resistorBody');
-        controls.innerHTML = '';
-        body.innerHTML = '';
+        function render() {
+            const controls = document.getElementById('controls');
+            const body = document.getElementById('resistorBody');
+            controls.innerHTML = '';
+            body.innerHTML = '';
 
-        currentBands.forEach((color, i) => {
-            // Vytvorenie selectu
-            const div = document.createElement('div');
-            const label = i === 2 ? 'Multiplier' : (i === 3 ? 'Tolerance' : `Digit ${i+1}`);
-            let options = Object.keys(data).map(c => {
-                if(i === 3 && !data[c].t) return ''; 
-                return `<option value="${c}" ${c === color ? 'selected' : ''}>${c}</option>`;
-            }).join('');
-            
-            div.innerHTML = `<label class="text-[10px] uppercase font-bold text-gray-400">${label}</label>
+            currentBands.forEach((color, i) => {
+                // Vytvorenie selectu
+                const div = document.createElement('div');
+                const label = i === 2 ? 'Multiplier' : (i === 3 ? 'Tolerance' : `Digit ${i + 1}`);
+                let options = Object.keys(data).map(c => {
+                    if (i === 3 && !data[c].t) return '';
+                    return `<option value="${c}" ${c === color ? 'selected' : ''}>${c}</option>`;
+                }).join('');
+
+                div.innerHTML = `<label class="text-[10px] uppercase font-bold text-gray-400">${label}</label>
                              <select onchange="update(${i}, this.value)" class="w-full p-2 bg-gray-50 border rounded-lg">${options}</select>`;
-            controls.appendChild(div);
+                controls.appendChild(div);
 
-            // Vytvorenie pásika
-            const band = document.createElement('div');
-            band.className = `band c-${color.toLowerCase()}`;
-            body.appendChild(band);
-        });
+                // Vytvorenie pásika
+                const band = document.createElement('div');
+                band.className = `band c-${color.toLowerCase()}`;
+                body.appendChild(band);
+            });
 
-        calculate();
-    }
-
-    function update(index, val) {
-        currentBands[index] = val;
-        render();
-    }
-
-    function calculate() {
-        const v1 = data[currentBands[0]].v;
-        const v2 = data[currentBands[1]].v;
-        const mult = data[currentBands[2]].m;
-        const tol = data[currentBands[3]].t;
-        
-        const total = (v1 * 10 + v2) * mult;
-        
-        document.getElementById('resValue').innerText = format(total);
-        document.getElementById('resTol').innerText = tol;
-    }
-
-    function format(ohms) {
-        if (ohms >= 1000000) return (ohms/1000000).toFixed(2) + " MΩ";
-        if (ohms >= 1000) return (ohms/1000).toFixed(2) + " kΩ";
-        return ohms.toFixed(1) + " Ω";
-    }
-
-    function decodeSMD() {
-        const val = document.getElementById('smdInput').value.trim();
-        const out = document.getElementById('smdResult');
-        if(val.length < 3) { out.innerText = "..."; return; }
-
-        if(val.includes('R')) {
-            out.innerText = "Hodnota: " + val.replace('R', '.') + " Ω";
-        } else {
-            const digits = val.slice(0, -1);
-            const exp = parseInt(val.slice(-1));
-            const res = parseInt(digits) * Math.pow(10, exp);
-            out.innerText = "Hodnota: " + format(res) + " (±5%)";
+            calculate();
         }
-    }
 
-    render();
-</script>
+        function update(index, val) {
+            currentBands[index] = val;
+            render();
+        }
+
+        function calculate() {
+            const v1 = data[currentBands[0]].v;
+            const v2 = data[currentBands[1]].v;
+            const mult = data[currentBands[2]].m;
+            const tol = data[currentBands[3]].t;
+
+            const total = (v1 * 10 + v2) * mult;
+
+            document.getElementById('resValue').innerText = format(total);
+            document.getElementById('resTol').innerText = tol;
+        }
+
+        function format(ohms) {
+            if (ohms >= 1000000) return (ohms / 1000000).toFixed(2) + " MΩ";
+            if (ohms >= 1000) return (ohms / 1000).toFixed(2) + " kΩ";
+            return ohms.toFixed(1) + " Ω";
+        }
+
+        function decodeSMD() {
+            const val = document.getElementById('smdInput').value.trim();
+            const out = document.getElementById('smdResult');
+            if (val.length < 3) { out.innerText = "..."; return; }
+
+            if (val.includes('R')) {
+                out.innerText = "Hodnota: " + val.replace('R', '.') + " Ω";
+            } else {
+                const digits = val.slice(0, -1);
+                const exp = parseInt(val.slice(-1));
+                const res = parseInt(digits) * Math.pow(10, exp);
+                out.innerText = "Hodnota: " + format(res) + " (±5%)";
+            }
+        }
+
+        render();
+    </script>
 </body>
+
 </html>
