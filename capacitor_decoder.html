@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitor Decoder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-cyan-600 p-6 text-white flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight"><i class="fa-solid fa-microchip mr-2"></i>Capacitor
+                    Decoder</h1>
+                <p class="text-cyan-100 text-xs uppercase font-bold tracking-widest mt-1">Kódy a rozmery komponentov</p>
+            </div>
+            <a href="index.html"
+                class="bg-cyan-700 hover:bg-cyan-800 px-4 py-2 rounded-lg text-sm transition font-bold">Späť</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+            <div class="p-8 border-r border-gray-100">
+                <h2 class="text-sm font-black text-gray-400 uppercase mb-6 tracking-widest">Kalkulačka kódu</h2>
+
+                <div class="mb-8">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Zadaj 3-miestny kód (napr. 104
+                        alebo 2R2):</label>
+                    <input type="text" id="capCode" oninput="decodeCap()" placeholder="104" maxlength="4"
+                        class="w-full text-center p-6 text-5xl font-mono border-2 border-cyan-100 rounded-2xl focus:border-cyan-500 outline-none transition-all text-cyan-700">
+                </div>
+
+                <div id="capResult" class="space-y-4">
+                    <div class="bg-cyan-50 p-6 rounded-2xl border border-cyan-100 text-center">
+                        <div id="val-primary" class="text-4xl font-black text-cyan-800">100 nF</div>
+                        <div id="val-secondary" class="text-sm text-cyan-600 font-medium mt-1">0.1 μF | 100 000 pF</div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 bg-gray-50 rounded-xl">
+                    <p class="text-[10px] text-gray-400 leading-tight">
+                        <b>Tip:</b> Prvé dve číslice sú hodnota, tretia je počet núl v pikoFaradoch (pF).
+                        Písmeno <b>R</b> zastupuje desatinnú čiarku.
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-8 bg-gray-50/50">
+                <h2 class="text-sm font-black text-gray-400 uppercase mb-6 tracking-widest text-center">SMD Puzdrá
+                    (Rozmery)</h2>
+
+                <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-gray-100 text-gray-600 font-bold uppercase">
+                            <tr>
+                                <th class="p-3">Kód</th>
+                                <th class="p-3">Palce</th>
+                                <th class="p-3">Metrické (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-cyan-50 transition">
+                                <td class="p-3 font-bold">0402</td>
+                                <td class="p-3">0.04 x 0.02</td>
+                                <td class="p-3">1.0 x 0.5</td>
+                            </tr>
+                            <tr class="hover:bg-cyan-50 transition">
+                                <td class="p-3 font-bold">0603</td>
+                                <td class="p-3">0.06 x 0.03</td>
+                                <td class="p-3">1.6 x 0.8</td>
+                            </tr>
+                            <tr class="hover:bg-cyan-50 transition">
+                                <td class="p-3 font-bold">0805</td>
+                                <td class="p-3">0.08 x 0.05</td>
+                                <td class="p-3">2.0 x 1.25</td>
+                            </tr>
+                            <tr class="hover:bg-cyan-50 transition">
+                                <td class="p-3 font-bold">1206</td>
+                                <td class="p-3">0.12 x 0.06</td>
+                                <td class="p-3">3.2 x 1.6</td>
+                            </tr>
+                            <tr class="hover:bg-cyan-50 transition">
+                                <td class="p-3 font-bold">1210</td>
+                                <td class="p-3">0.12 x 0.10</td>
+                                <td class="p-3">3.2 x 2.5</td>
+                            </tr>
+                            <tr class="hover:bg-cyan-50 transition">
+                                <td class="p-3 font-bold">1812</td>
+                                <td class="p-3">0.18 x 0.12</td>
+                                <td class="p-3">4.5 x 3.2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-[9px] text-gray-400 mt-4 italic text-center text-gray-400 uppercase font-bold">
+                    Standardized EIA / JEDEC sizes</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function decodeCap() {
+            let code = document.getElementById('capCode').value.toUpperCase().trim();
+            const resPrimary = document.getElementById('val-primary');
+            const resSecondary = document.getElementById('val-secondary');
+
+            if (!code) {
+                resPrimary.innerText = "--";
+                resSecondary.innerText = "Zadaj kód";
+                return;
+            }
+
+            let pf = 0;
+
+            if (code.includes('R')) {
+                pf = parseFloat(code.replace('R', '.'));
+            } else if (code.length === 3 && !isNaN(code)) {
+                let base = parseInt(code.substring(0, 2));
+                let exp = parseInt(code.substring(2, 3));
+                pf = base * Math.pow(10, exp);
+            } else if (!isNaN(code)) {
+                pf = parseFloat(code);
+            } else {
+                resPrimary.innerText = "???";
+                resSecondary.innerText = "Neplatný kód";
+                return;
+            }
+
+            // Formátovanie výstupu
+            let display = "";
+            let sec = "";
+
+            if (pf >= 1000000) {
+                display = (pf / 1000000).toFixed(2).replace(/\.00$/, '') + " μF";
+                sec = (pf / 1000).toLocaleString() + " nF";
+            } else if (pf >= 1000) {
+                display = (pf / 1000).toFixed(2).replace(/\.00$/, '') + " nF";
+                sec = (pf / 1000000).toFixed(4) + " μF | " + pf.toLocaleString() + " pF";
+            } else {
+                display = pf + " pF";
+                sec = (pf / 1000).toFixed(3) + " nF";
+            }
+
+            resPrimary.innerText = display;
+            resSecondary.innerText = sec;
+        }
+
+        // Spustíme základný výpočet pre 104 po načítaní
+        window.onload = decodeCap;
+    </script>
+</body>
+
+</html>
