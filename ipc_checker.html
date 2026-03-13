@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPC Quality Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .quality-card {
+            transition: all 0.3s ease;
+        }
+
+        .status-target {
+            border-left: 8px solid #10b981;
+        }
+
+        /* Green */
+        .status-acceptable {
+            border-left: 8px solid #f59e0b;
+        }
+
+        /* Orange */
+        .status-defect {
+            border-left: 8px solid #ef4444;
+        }
+
+        /* Red */
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-indigo-600 p-6 text-white flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight"><i class="fa-solid fa-microscope mr-2"></i>IPC Quality
+                    Checker</h1>
+                <p class="text-indigo-100 text-xs uppercase font-bold tracking-widest mt-1">Vizuálny štandard IPC-A-610
+                </p>
+            </div>
+            <a href="index.html"
+                class="bg-indigo-700 hover:bg-indigo-800 px-4 py-2 rounded-lg text-sm transition font-bold">Späť</a>
+        </div>
+
+        <div class="flex overflow-x-auto border-b bg-gray-50">
+            <button onclick="filter('solder')"
+                class="flex-1 py-4 px-6 font-bold uppercase text-sm tracking-wider hover:bg-white transition whitespace-nowrap border-b-4 border-indigo-500 text-indigo-600"
+                id="btn-solder">Spájkovanie</button>
+            <button onclick="filter('smt')"
+                class="flex-1 py-4 px-6 font-bold uppercase text-sm tracking-wider hover:bg-white transition whitespace-nowrap border-b-4 border-transparent text-gray-500"
+                id="btn-smt">SMT Komponenty</button>
+            <button onclick="filter('pcb')"
+                class="flex-1 py-4 px-6 font-bold uppercase text-sm tracking-wider hover:bg-white transition whitespace-nowrap border-b-4 border-transparent text-gray-500"
+                id="btn-pcb">Čistota a PCB</button>
+        </div>
+
+        <div class="p-6">
+            <div id="content-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-6 border-t flex flex-wrap gap-6 justify-center text-xs font-bold uppercase">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full"></div> Cieľový stav
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-amber-500 rounded-full"></div> Prijateľné
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-red-500 rounded-full"></div> Chyba (Defekt)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const db = [
+            // SOLDER
+            { cat: 'solder', title: 'Priehlbiny (Meniskus)', status: 'target', desc: 'Spájka tvorí konkávny meniskus, plne zmáča plôšku aj vývod.', icon: 'fa-wave-square' },
+            { cat: 'solder', title: 'Minimálna spájka', status: 'acceptable', desc: 'Zmáčanie je viditeľné, spájka pokrýva aspoň 50% plochy.', icon: 'fa-lines-leaning' },
+            { cat: 'solder', title: 'Studený spoj', status: 'defect', desc: 'Povrch je matný, zrnitý, vykazuje známky nedostatočného pretečenia.', icon: 'fa-icicles' },
+            { cat: 'solder', title: 'Spájkový mostík', status: 'defect', desc: 'Skrat medzi dvoma susednými plôškami spôsobený nadbytkom spájky.', icon: 'fa-bridge' },
+
+            // SMT
+            { cat: 'smt', title: 'Zarovnanie Chip', status: 'target', desc: 'Súčiastka je vycentrovaná presne na stred plôšok.', icon: 'fa-arrows-to-dot' },
+            { cat: 'smt', title: 'Bočný presah', status: 'acceptable', desc: 'Presah súčiastky mimo plôšku je menej ako 25% šírky vývodu.', icon: 'fa-arrows-left-right' },
+            { cat: 'smt', title: 'Tombstoning', status: 'defect', desc: 'Súčiastka je postavená na jednej strane (náhrobný kameň).', icon: 'fa-gavel' },
+
+            // PCB
+            { cat: 'pcb', title: 'Čistota povrchu', status: 'target', desc: 'Bez zvyškov tavidla, guličiek spájky alebo iných nečistôt.', icon: 'fa-sparkles' },
+            { cat: 'pcb', title: 'Zvyšky tavidla', status: 'acceptable', desc: 'Mierne nelepivé zvyšky tavidla, ktoré neovplyvňujú funkciu.', icon: 'fa-droplet' },
+            { cat: 'pcb', title: 'Poškodená maska', status: 'defect', desc: 'Odhalená meď na miestach, kde má byť ochranná maska.', icon: 'fa-biohazard' }
+        ];
+
+        function filter(category) {
+            const grid = document.getElementById('content-grid');
+            grid.innerHTML = '';
+
+            // Update tab styles
+            ['solder', 'smt', 'pcb'].forEach(c => {
+                const btn = document.getElementById(`btn-${c}`);
+                if (c === category) {
+                    btn.classList.add('border-indigo-500', 'text-indigo-600');
+                    btn.classList.remove('border-transparent', 'text-gray-500');
+                } else {
+                    btn.classList.remove('border-indigo-500', 'text-indigo-600');
+                    btn.classList.add('border-transparent', 'text-gray-500');
+                }
+            });
+
+            const items = db.filter(i => i.cat === category);
+            items.forEach(item => {
+                const card = document.createElement('div');
+                const statusClass = `status-${item.status}`;
+                const iconColor = item.status === 'target' ? 'text-emerald-500' : (item.status === 'acceptable' ? 'text-amber-500' : 'text-red-500');
+
+                card.className = `quality-card bg-white p-5 rounded-2xl shadow-sm border border-gray-100 ${statusClass} hover:shadow-md`;
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center ${iconColor}">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-800 text-sm leading-tight">${item.title}</h3>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">${item.desc}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Init
+        filter('solder');
+    </script>
+</body>
+
+</html>
