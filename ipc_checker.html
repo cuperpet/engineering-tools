@@ -19,9 +19,18 @@
             display: none;
         }
 
-        .content-area {
-            height: calc(100vh - 64px);
-            overflow-y: auto;
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-hidden {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-visible {
+                transform: translateX(0);
+            }
         }
 
         .menu-content {
@@ -34,31 +43,47 @@
         }
 
         .menu-expanded {
-            max-height: 2000px;
+            max-height: 1500px;
         }
     </style>
 </head>
 
-<body class="bg-gray-50 h-screen overflow-hidden flex flex-col">
+<body class="bg-gray-50 h-screen overflow-hidden flex flex-col font-sans">
 
-    <header class="bg-indigo-600 h-16 flex-shrink-0 flex items-center justify-between px-6 shadow-md text-white z-50">
-        <h1 class="font-bold text-lg tracking-tight uppercase">IPC-A-610 Visual Checker</h1>
+    <header
+        class="bg-indigo-600 h-16 flex-shrink-0 flex items-center justify-between px-4 md:px-6 shadow-md text-white z-[100]">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleSidebar()"
+                class="md:hidden bg-indigo-700 p-2 rounded text-sm font-bold uppercase flex items-center gap-2">
+                <i class="fa-solid fa-bars"></i> Kapitoly
+            </button>
+            <h1 class="hidden sm:block font-bold text-lg tracking-tight uppercase tracking-wider">IPC-A-610 Visual
+                Standard</h1>
+        </div>
         <a href="index.html"
-            class="bg-indigo-700 hover:bg-indigo-800 px-8 py-2 rounded font-bold text-sm transition uppercase shadow-inner">Späť</a>
+            class="bg-indigo-700 hover:bg-indigo-800 px-6 py-2 rounded font-bold text-sm transition uppercase shadow-inner">Späť</a>
     </header>
 
-    <div class="flex flex-col md:flex-row flex-grow overflow-hidden">
+    <div class="flex flex-grow overflow-hidden relative">
 
-        <aside class="w-full md:w-80 bg-white border-r overflow-y-auto no-scrollbar flex-shrink-0 shadow-inner">
-            <div id="tree-menu" class="p-2 space-y-1">
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-[90] w-72 bg-white border-r shadow-2xl md:shadow-none md:relative md:translate-x-0 sidebar-hidden flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center md:hidden bg-gray-50">
+                <span class="font-black text-indigo-600 uppercase text-xs italic">Kategórie IPC</span>
+                <button onclick="toggleSidebar()" class="text-gray-400 text-2xl">&times;</button>
+            </div>
+            <div id="tree-menu" class="flex-grow overflow-y-auto p-2 no-scrollbar">
             </div>
         </aside>
 
-        <main class="flex-grow content-area p-4 md:p-8">
-            <div id="display-container" class="max-w-5xl mx-auto">
-                <div class="flex flex-col items-center justify-center h-[60vh] text-gray-300">
-                    <i class="fa-solid fa-folder-tree text-6xl mb-4 opacity-20"></i>
-                    <p class="text-lg font-bold">Vyberte sekciu z menu pre zobrazenie kritérií</p>
+        <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-[80] hidden md:hidden"></div>
+
+        <main class="flex-grow overflow-y-auto p-4 md:p-10">
+            <div id="display-container" class="max-w-5xl mx-auto h-full">
+                <div class="flex flex-col items-center justify-center h-full text-gray-300 text-center">
+                    <i class="fa-solid fa-microchip text-7xl mb-6 opacity-10"></i>
+                    <p class="text-lg font-bold">Vyberte sekciu z menu vľavo</p>
+                    <p class="text-sm opacity-60">Na mobile použite tlačidlo "KAPITOLY"</p>
                 </div>
             </div>
         </main>
@@ -68,99 +93,98 @@
         const ipcData = [
             {
                 chapter: "5",
-                name: "Spájkovanie",
+                name: "Spájkovanie (Anomálie)",
                 sections: [
-                    { id: "5.2.1", title: "Zmáčanie (Wetting)", target: "Uhol ≤ 90°", acceptable: "Uhol ≤ 90° (Všetky triedy)", defect: "Uhol > 90° (Nezmáčanie)" },
-                    { id: "5.2.2", title: "Studený spoj", target: "Hladký, lesklý, konkávny spoj", acceptable: "N/A", defect: "Zrnitý, matný, narušený povrch" },
-                    { id: "5.2.7.2", title: "Spájkové guľôčky", target: "Bez guľôčok", acceptable: "Uchytené v laku/tavidle, neporušujú izoláciu", defect: "Voľné guľôčky / porušenie izolačnej vzdialenosti" },
-                    { id: "5.2.7.3", title: "Spájkové mostíky", target: "Čisté oddelenie", acceptable: "N/A", defect: "Nežiaduce spojenie (Skrat)" }
+                    { id: "5.2.1", title: "Zmáčanie (Wetting)", target: "Uhol zmáčania ≤ 90°", acceptable: "T1,2,3: Uhol ≤ 90°", defect: "Uhol > 90° (Nezmáčanie / Dewetting)" },
+                    { id: "5.2.2", title: "Studený spoj", target: "Hladký, lesklý a súvislý spoj", acceptable: "N/A", defect: "Zrnitý, nerovnomerný povrch (Všetky triedy)" },
+                    { id: "5.2.7.2", title: "Spájkové guľôčky", target: "Žiadne viditeľné guľôčky", acceptable: "Fixované v tavidle/laku, neporušujú izoláciu", defect: "Voľné guľôčky / porušenie min. vzdialenosti" },
+                    { id: "5.2.7.3", title: "Spájkové mostíky", target: "Žiadne premostenie", acceptable: "N/A", defect: "Nežiaduce spojenie medzi vodičmi (Skrat)" }
                 ]
             },
             {
-                chapter: "8.3",
+                chapter: "8.3.2",
                 name: "SMT - Čipové súčiastky",
                 sections: [
-                    { id: "8.3.2.1", title: "Bočný presah (A)", target: "Žiadny presah", acceptable: "T2: A ≤ 50% W; T3: A ≤ 25% W", defect: "Presah mimo limitu (Riziko skratu)" },
-                    { id: "8.3.2.2", title: "Koncový presah (B)", target: "Žiadny presah", acceptable: "Koniec súčiastky na plôške", defect: "Koniec súčiastky mimo plôšku" },
-                    { id: "8.3.2.5", title: "Min. šírka spoja (W)", target: "W = Šírka vývodu", acceptable: "T2,3: Min 50% šírky vývodu", defect: "Šírka spoja pod limitom" },
-                    { id: "8.3.2.9", title: "Tombstoning (Náhrobok)", target: "N/A", acceptable: "N/A", defect: "Vertikálne postavená súčiastka" }
+                    { id: "8.3.2.1", title: "Bočný presah (A)", target: "Bez presahu", acceptable: "T2: A ≤ 50% W; T3: A ≤ 25% W", defect: "Presah väčší ako povolený limit" },
+                    { id: "8.3.2.2", title: "Koncový presah (B)", target: "Koniec súčiastky vnútri padu", acceptable: "Koniec súčiastky lícuje s padom", defect: "Koniec súčiastky vyčnieva z padu von" },
+                    { id: "8.3.2.5", title: "Min. šírka spoja (W)", target: "W = šírka súčiastky", acceptable: "T2,3: Min. 50% šírky vývodu", defect: "Spoj užší ako 50% šírky vývodu" },
+                    { id: "8.3.2.9", title: "Náhrobok (Tombstoning)", target: "N/A", acceptable: "N/A", defect: "Súčiastka zdvihnutá na jednom konci" }
                 ]
             },
             {
                 chapter: "8.3.5",
-                name: "SMT - Gull Wing (QFP, SOIC)",
+                name: "SMT - Gull Wing (QFP, SO)",
                 sections: [
-                    { id: "8.3.5.1", title: "Bočný presah (A)", target: "Žiadny presah", acceptable: "T2,3: A ≤ 25% W", defect: "Presah > 25% šírky vývodu" },
-                    { id: "8.3.5.4", title: "Výška päty (Heel Fillet)", target: "Päta plne zmáčaná", acceptable: "V = Hrúbka vývodu + zmáčanie", defect: "Päta nie je zmáčaná" },
-                    { id: "8.3.5.7", title: "Koplanarita (Zdvih)", target: "Dotyk s padom", acceptable: "N/A", defect: "Vývod nad hladinou spájky (Open)" }
+                    { id: "8.3.5.1", title: "Bočný presah (A)", target: "Bez presahu", acceptable: "T2,3: A ≤ 25% W (šírky pinu)", defect: "Presah > 25% šírky pinu" },
+                    { id: "8.3.5.4", title: "Výška päty (Heel Fillet)", target: "Výrazný meniskus v päte", acceptable: "V ≥ hrúbka pinu + zmáčanie", defect: "Päta nie je spájkovaná / nezmáčaná" },
+                    { id: "8.3.5.7", title: "Koplanarita (Zdvih pinu)", target: "Pin leží na pade", acceptable: "N/A", defect: "Pin je nad hladinou spájky (Otvorený spoj)" }
                 ]
             },
             {
                 chapter: "8.3.12",
-                name: "SMT - BGA (Plošné pole)",
+                name: "SMT - BGA (Ball Grid Array)",
                 sections: [
-                    { id: "8.3.12.1", title: "BGA - Zarovnanie", target: "Stred na stred", acceptable: "Offset < 25% padu", defect: "Gulička mimo pad" },
-                    { id: "8.3.12.2", title: "BGA - Voidy (Bubliny)", target: "Bez bublín", acceptable: "Max 25% plochy v RTG", defect: "> 25% plochy / trhliny v guličke" }
+                    { id: "8.3.12.1", title: "Zarovnanie (Offset)", target: "Stred guličky na stred padu", acceptable: "Offset ≤ 25% priemeru padu", defect: "Gulička mimo pad" },
+                    { id: "8.3.12.2", title: "Bubliny (Voidy)", target: "Žiadne voidy", acceptable: "Max. 25% plochy guličky v RTG", defect: "> 25% plochy alebo trhliny v guličke" },
+                    { id: "8.3.12.3", title: "BGA Mostík", target: "Čisté guličky", acceptable: "N/A", defect: "Premostenie dvoch guličiek" }
                 ]
             },
             {
                 chapter: "8.3.15",
-                name: "SMT - DPAK / QFN",
+                name: "SMT - QFN / DPAK",
                 sections: [
-                    { id: "8.3.15.1", title: "QFN - Bočný presah", target: "Žiadny presah", acceptable: "T2,3: A ≤ 25% W", defect: "Presah mimo pad" },
-                    { id: "8.3.15.3", title: "QFN - Výška spoja", target: "Viditeľné zmáčanie", acceptable: "Min 25% výšky puzdra", defect: "Nezmáčaný bok" }
+                    { id: "8.3.15.1", title: "QFN Bočný presah", target: "Bez presahu", acceptable: "T1,2,3: A ≤ 25% W", defect: "Presah mimo metalizáciu" },
+                    { id: "8.3.15.3", title: "QFN Výška spoja", target: "Zretelné zmáčanie boku", acceptable: "T2,3: Min. 25% výšky puzdra", defect: "Nedostatočná výška spájky na boku" }
                 ]
             },
             {
                 chapter: "10",
                 name: "PCB / Čistota",
                 sections: [
-                    { id: "10.2.7", title: "Zdvihnutý pad", target: "Pevne spojený", acceptable: "N/A", defect: "Separácia medi od laminátu" },
-                    { id: "10.4.1", title: "Zvyšky tavidla", target: "Čistý povrch", acceptable: "No-clean bezpečné zvyšky", defect: "Lepivé alebo vodivé zvyšky" }
+                    { id: "10.2.7", title: "Zdvihnutý pad", target: "Pad pevne drží", acceptable: "N/A", defect: "Meď je odlepená od laminátu" },
+                    { id: "10.4.1", title: "Zvyšky tavidla", target: "Bez zvyškov", acceptable: "No-clean: nelepivé zvyšky", defect: "Vodivé alebo korozívne zvyšky" }
                 ]
             }
         ];
 
-        function toggleMenu(index) {
-            const content = document.getElementById(`content-${index}`);
-            const icon = document.getElementById(`icon-${index}`);
-            const isOpen = content.classList.contains('menu-expanded');
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('sidebar-hidden');
+            sidebar.classList.toggle('sidebar-visible');
+            overlay.classList.toggle('hidden');
+        }
 
-            // Zatvoriť ostatné (voliteľné, ak chceš mať otvorený len jeden)
-            // document.querySelectorAll('.menu-content').forEach(c => { c.classList.remove('menu-expanded'); c.classList.add('menu-collapsed'); });
-
-            if (isOpen) {
-                content.classList.remove('menu-expanded');
-                content.classList.add('menu-collapsed');
-                icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
-            } else {
-                content.classList.remove('menu-collapsed');
-                content.classList.add('menu-expanded');
-                icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
-            }
+        function toggleAccordion(idx) {
+            const content = document.getElementById(`content-${idx}`);
+            const icon = document.getElementById(`icon-${idx}`);
+            content.classList.toggle('menu-collapsed');
+            content.classList.toggle('menu-expanded');
+            icon.classList.toggle('fa-chevron-right');
+            icon.classList.toggle('fa-chevron-down');
         }
 
         function initMenu() {
             const menu = document.getElementById('tree-menu');
-            ipcData.forEach((group, index) => {
-                const groupDiv = document.createElement('div');
-                groupDiv.className = "mb-1 border-b border-gray-50 pb-1";
-                groupDiv.innerHTML = `
-                    <button onclick="toggleMenu(${index})" class="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg text-gray-700 font-bold text-xs uppercase tracking-tighter transition">
+            ipcData.forEach((group, idx) => {
+                const div = document.createElement('div');
+                div.className = "mb-2 border-b border-gray-50 pb-1";
+                div.innerHTML = `
+                    <button onclick="toggleAccordion(${idx})" class="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg text-gray-700 font-bold text-[10px] uppercase tracking-wider">
                         <span>Kap. ${group.chapter} - ${group.name}</span>
-                        <i id="icon-${index}" class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                        <i id="icon-${idx}" class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
                     </button>
-                    <div id="content-${index}" class="menu-content menu-collapsed space-y-1 pl-2 pr-2">
+                    <div id="content-${idx}" class="menu-content menu-collapsed space-y-1 pl-2 pr-2">
                         ${group.sections.map(sec => `
                             <button onclick="showDetail('${sec.id}')" id="btn-${sec.id.replace(/\./g, '-')}" 
                                     class="nav-item w-full text-left px-3 py-2 rounded text-xs text-gray-500 hover:bg-indigo-50 hover:text-indigo-700 transition flex items-center gap-3">
-                                <span class="font-mono text-[10px] bg-gray-100 px-1 rounded text-gray-400 group-hover:text-indigo-300">${sec.id}</span>
+                                <span class="font-mono text-[10px] bg-gray-100 px-1 rounded text-gray-400">${sec.id}</span>
                                 <span class="truncate">${sec.title}</span>
                             </button>
                         `).join('')}
                     </div>
                 `;
-                menu.appendChild(groupDiv);
+                menu.appendChild(div);
             });
         }
 
@@ -175,44 +199,37 @@
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-link'));
             document.getElementById(`btn-${id.replace(/\./g, '-')}`).classList.add('active-link');
 
+            if (window.innerWidth < 768) toggleSidebar();
+
             const imgPath = `img/${id.replace(/\./g, '-')}.jpg`;
 
             container.innerHTML = `
-                <div class="bg-white rounded-3xl shadow-xl border overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div class="p-6 md:p-8 bg-white border-b">
-                        <span class="text-indigo-600 font-black text-[11px] uppercase tracking-[0.2em]">IPC-A-610G Standard</span>
-                        <h2 class="text-3xl font-black text-gray-900 mt-2 uppercase tracking-tight">${id} ${section.title}</h2>
+                <div class="bg-white rounded-3xl shadow-xl border overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 h-full md:h-auto flex flex-col">
+                    <div class="p-5 bg-white border-b flex-shrink-0 flex justify-between items-end">
+                        <div>
+                            <span class="text-indigo-600 font-black text-[10px] uppercase tracking-widest italic leading-none">IPC-A-610 Standard</span>
+                            <h2 class="text-xl md:text-2xl font-black text-gray-900 mt-1 uppercase leading-tight">${id} ${section.title}</h2>
+                        </div>
                     </div>
 
-                    <div class="p-6 md:p-10 grid lg:grid-cols-2 gap-12 items-start">
-                        <div class="space-y-4">
-                            <div class="aspect-video bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden shadow-inner group transition-all">
-                                <img src="${imgPath}" alt="${section.title}" 
-                                     onerror="this.parentElement.innerHTML='<div class=\'text-center p-8 text-gray-300\'><i class=\'fa-solid fa-camera text-5xl mb-4 opacity-50\'></i><br><span class=\'font-mono text-xs\'>Vložte súbor: ${imgPath}</span></div>'"
-                                     class="max-w-full max-h-full object-contain p-2">
-                            </div>
-                            <div class="p-4 bg-gray-50 rounded-2xl text-[11px] text-gray-400 italic font-medium leading-relaxed">
-                                <i class="fa-solid fa-circle-info mr-2 text-indigo-300"></i>
-                                Ak sa obrázok nezobrazuje, skontrolujte, či sa nachádza v priečinku <strong>img/</strong> s názvom <strong>${id.replace(/\./g, '-')}.jpg</strong>.
-                            </div>
+                    <div class="p-4 md:p-8 overflow-y-auto flex-grow space-y-6 md:space-y-10">
+                        <div class="aspect-video bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden shadow-inner">
+                            <img src="${imgPath}" alt="${section.title}" 
+                                 onerror="this.parentElement.innerHTML='<div class=\'text-center p-4 text-gray-300\'><i class=\'fa-solid fa-camera text-4xl mb-2 opacity-50\'></i><br><span class=\'font-mono text-[10px]\'>img/${id.replace(/\./g, '-')}.jpg</span></div>'"
+                                 class="max-w-full max-h-full object-contain">
                         </div>
 
-                        <div class="space-y-6">
-                            <div class="relative pl-6 py-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-emerald-500 rounded-l-2xl"></div>
-                                <h4 class="text-emerald-700 font-black text-[10px] uppercase tracking-widest mb-2">Cieľový stav (Target)</h4>
+                        <div class="grid gap-4">
+                            <div class="pl-4 py-4 bg-emerald-50 rounded-2xl border-l-8 border-emerald-500 shadow-sm transition-all">
+                                <h4 class="text-emerald-700 font-black text-[10px] uppercase mb-1 tracking-widest">Cieľový stav</h4>
                                 <p class="text-emerald-900 text-sm font-bold leading-snug">${section.target}</p>
                             </div>
-
-                            <div class="relative pl-6 py-4 bg-amber-50 rounded-2xl border border-amber-100">
-                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-amber-500 rounded-l-2xl"></div>
-                                <h4 class="text-amber-700 font-black text-[10px] uppercase tracking-widest mb-2">Prijateľné (Acceptable)</h4>
+                            <div class="pl-4 py-4 bg-amber-50 rounded-2xl border-l-8 border-amber-500 shadow-sm transition-all">
+                                <h4 class="text-amber-700 font-black text-[10px] uppercase mb-1 tracking-widest">Prijateľné</h4>
                                 <p class="text-amber-900 text-sm font-bold leading-snug">${section.acceptable}</p>
                             </div>
-
-                            <div class="relative pl-6 py-4 bg-red-50 rounded-2xl border border-red-100">
-                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-red-500 rounded-l-2xl"></div>
-                                <h4 class="text-red-700 font-black text-[10px] uppercase tracking-widest mb-2">Defekt (Defect)</h4>
+                            <div class="pl-4 py-4 bg-red-50 rounded-2xl border-l-8 border-red-500 shadow-sm transition-all">
+                                <h4 class="text-red-700 font-black text-[10px] uppercase mb-1 tracking-widest">Defekt</h4>
                                 <p class="text-red-900 text-sm font-bold leading-snug">${section.defect}</p>
                             </div>
                         </div>
