@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMT PFMEA & Control Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .fmea-card {
+            transition: all 0.3s ease;
+            border-left-width: 4px;
+        }
+
+        .control-step {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        /* Opravená časť v sekcii <style> */
+        .control-step::before { 
+            content: "\f0ad"; 
+            font-family: "Font Awesome 6 Free"; /* Zmenené na 6, keďže v indexe máš verziu 6.0.0 */
+            font-weight: 900; 
+            position: absolute; 
+            left: 0; 
+            color: #e11d48; 
+        }
+
+        .sidebar-width {
+            width: 100%;
+            max-width: 320px;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-width {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-4 md:p-8 font-sans text-slate-900">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
+        <div class="bg-rose-600 p-6 text-white flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black uppercase tracking-tighter italic">Process FMEA & Control Plan</h1>
+                <p class="text-rose-100 text-[10px] font-bold uppercase tracking-widest opacity-80">SMT Production Line
+                    Logic | Rev. 2026.03</p>
+            </div>
+            <a href="index.html"
+                class="bg-rose-700 hover:bg-rose-800 px-5 py-2 rounded-xl text-xs font-black transition-all shadow-lg uppercase">Späť</a>
+        </div>
+
+        <div class="flex flex-col lg:flex-row">
+
+            <div class="sidebar-width p-8 space-y-6 border-r border-gray-100 bg-white">
+                <div class="flex items-center gap-2 mb-2">
+                    <span
+                        class="bg-rose-100 text-rose-600 w-6 h-6 rounded flex items-center justify-center text-[10px] font-black">01</span>
+                    <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Failure Mode Selection</h3>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-gray-500 uppercase mb-2">Procesný krok
+                        (Operation)</label>
+                    <select id="opStep" onchange="updateFailureModes()"
+                        class="w-full p-3 border-2 border-gray-100 rounded-2xl outline-none focus:border-rose-500 transition bg-slate-50 font-bold text-sm">
+                        <option value="print">OP10: Screen Printing</option>
+                        <option value="mount">OP20: Component Placement</option>
+                        <option value="reflow">OP30: Reflow Soldering</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-gray-500 uppercase mb-2">Failure Mode (Mód
+                        chyby)</label>
+                    <select id="failureMode" onchange="runAnalysis()"
+                        class="w-full p-3 border-2 border-rose-100 rounded-2xl outline-none focus:border-rose-500 transition bg-rose-50 font-black text-sm text-rose-900">
+                    </select>
+                </div>
+
+                <div id="severity-box"
+                    class="mt-6 p-4 rounded-2xl border-2 flex items-center justify-between transition-all">
+                    <span class="text-[10px] font-black uppercase tracking-widest">Severity (S):</span>
+                    <span id="sev-value" class="text-xl font-black italic">--</span>
+                </div>
+            </div>
+
+            <div class="flex-1 p-8 bg-gray-50 space-y-6 border-r border-gray-100">
+                <div class="flex items-center gap-2 mb-2">
+                    <span
+                        class="bg-gray-200 text-gray-600 w-6 h-6 rounded flex items-center justify-center text-[10px] font-black">02</span>
+                    <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Potential Root Causes</h3>
+                </div>
+
+                <div id="causes-container" class="space-y-4">
+                </div>
+            </div>
+
+            <div class="sidebar-width p-8 space-y-6 bg-white">
+                <div class="flex items-center gap-2 mb-2">
+                    <span
+                        class="bg-rose-100 text-rose-600 w-6 h-6 rounded flex items-center justify-center text-[10px] font-black">03</span>
+                    <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Reaction Plan</h3>
+                </div>
+
+                <div id="control-plan-list" class="space-y-5">
+                </div>
+
+                <div id="optimization-tool" class="hidden pt-6 border-t border-gray-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase mb-3 text-center">Spustiť optimalizáciu</p>
+                    <button id="optBtn" onclick="openOptimizer()"
+                        class="w-full p-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 transition shadow-xl">
+                        Process Optimizer <i class="fa-solid fa-microchip ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 bg-slate-900 text-white flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4 text-xs">
+                <div class="bg-rose-600 px-3 py-1 rounded font-black italic uppercase">Automotive Quality Tool</div>
+                <div id="ipc-chapter" class="font-bold text-slate-400 uppercase tracking-widest italic">--</div>
+            </div>
+            <div class="text-[9px] text-slate-500 font-medium tracking-widest uppercase">Zero Defect Strategy | IATF
+                16949 Standards</div>
+        </div>
+    </div>
+
+    <script>
+        const fmeaDB = {
+                'print': {
+                    'bridging': {
+                        name: 'Bridging (Skraty)', s: 9, ipc: '5.2.7.2', tool: 'stencil',
+                        causes: [
+                            { type: 'Method', desc: 'Príliš vysoký nános pasty (hrúbka šablóny).' },
+                            { type: 'Machine', desc: 'Znečistená spodná strana šablóny (podtekanie).' },
+                            { type: 'Material', desc: 'Nízka viskozita pasty (teplota v hale > 26°C).' }
+                        ],
+                        controls: ['Znížiť tlak stierky.', 'Zvýšiť frekvenciu čistenia (Wipe).', 'Kontrola SNAP-OFF (vzdialenosť PCB od šablóny).']
+                    },
+                    'insufficient': {
+                        name: 'Insufficient Solder (Málo pasty)', s: 8, ipc: '5.2.1', tool: 'stencil',
+                        causes: [
+                            { type: 'Machine', desc: 'Upchaté apertúry šablóny (zlý čistiaci papier).' },
+                            { type: 'Method', desc: 'Príliš vysoká rýchlosť stierky (pasta "neprepadne").' }
+                        ],
+                        controls: ['Kontrola Area Ratio v Stencil Experte.', 'Doplniť pastu na šablónu.', 'Overiť stav stierok (opotrebovanie).']
+                    },
+                    'beading': {
+                        name: 'Solder Beading (Guličky pri rezistoroch)', s: 5, ipc: '5.2.7.3', tool: 'stencil',
+                        causes: [
+                            { type: 'Method', desc: 'Nadbytok pasty pod telom súčiastky (0603 a viac).' },
+                            { type: 'Machine', desc: 'Vysoký prítlak osadzovacej hlavy (vytlačenie pasty).' }
+                        ],
+                        controls: ['Úprava apertúry na tvar "Homeplate" alebo "U-shape".', 'Znížiť osadzovací prítlak (Placement force).']
+                    },
+                    'smearing': {
+                        name: 'Smearing (Rozmazanie pasty)', s: 7, ipc: '5.2.1', tool: 'stencil',
+                        causes: [
+                            { type: 'Machine', desc: 'Zlá fixácia PCB v tlačiarni (vibrácie).' },
+                            { type: 'Method', desc: 'Nevhodný čistiaci roztok (rozpúšťa pastu na okrajoch).' }
+                        ],
+                        controls: ['Skontrolovať podporné piny pod PCB.', 'Znížiť množstvo rozpúšťadla pri čistení.']
+                    }
+                },
+                'mount': {
+                    'tombstone': {
+                        name: 'Tombstoning (Náhrobok)', s: 8, ipc: '5.2.11', tool: 'reflow',
+                        causes: [
+                            { type: 'Machine', desc: 'Nepresné osadenie (offset) na jeden z padov.' },
+                            { type: 'Method', desc: 'Nerovnomerný ohrev padov (veľké medené plochy).' }
+                        ],
+                        controls: ['Overiť symetriu padov (DFM).', 'Upraviť profil na "Soak" typ (vyrovnanie teplôt).']
+                    },
+                    'skewing': {
+                        name: 'Skewing (Pootočenie súčiastky)', s: 6, ipc: '7.1.1', tool: 'none',
+                        causes: [
+                            { type: 'Machine', desc: 'Opotrebovaná dýza (súčiastka rotuje pri pohybe).' },
+                            { type: 'Material', desc: 'Nerovnomerný povrch PCB (vlnenie).' }
+                        ],
+                        controls: ['Vymeniť dýzu za správny typ.', 'Znížiť akceleráciu osadzovacej hlavy.']
+                    },
+                    'missing': {
+                        name: 'Missing Component (Chýba diel)', s: 10, ipc: '7.1.2', tool: 'none',
+                        causes: [
+                            { type: 'Machine', desc: 'Chyba vákua alebo zlý Pick-up bod.' },
+                            { type: 'Material', desc: 'Chýbajúce diely v páske (Tape error).' }
+                        ],
+                        controls: ['Vyčistiť vákuové filtre.', 'Zvýšiť citlivosť detekcie komponentu na hlave.']
+                    },
+                    'billboard': {
+                        name: 'Billboarding (Osadenie na bok)', s: 6, ipc: '7.1.3', tool: 'none',
+                        causes: [
+                            { type: 'Machine', desc: 'Vysoká rýchlosť hlavy pri malých čipoch (0201/0402).' },
+                            { type: 'Material', desc: 'Statická elektrina (ESD) v podávači.' }
+                        ],
+                        controls: ['Znížiť rýchlosť osadzovania o 20%.', 'Skontrolovať uzemnenie podávačov (Feeders).']
+                    }
+                },
+                'reflow': {
+                    'voiding': {
+                        name: 'BGA/BTC Voiding (Bubliny)', s: 7, ipc: '5.2.2', tool: 'reflow',
+                        causes: [
+                            { type: 'Method', desc: 'Príliš krátky čas v Soak zóne.' },
+                            { type: 'Material', desc: 'Oxidácia padov alebo "outgassing" z PCB.' }
+                        ],
+                        controls: ['Predĺžiť Soak čas (90-120s).', 'Zvýšiť Peak teplotu o 5°C.', 'Kontrola vlhkosti PCB (Baking).']
+                    },
+                    'hip': {
+                        name: 'Head-in-Pillow (BGA chyba)', s: 10, ipc: '5.2.3', tool: 'reflow',
+                        causes: [
+                            { type: 'Material', desc: 'Deformácia (Warpage) BGA čipu pri zahriatí.' },
+                            { type: 'Method', desc: 'Vyhorenie tavidla (flux) pred dosiahnutím peaku.' }
+                        ],
+                        controls: ['Znížiť teplotný stres (pomalší ramp-up).', 'Použiť pastu s vyššou teplotnou stabilitou.']
+                    },
+                    'cold_joint': {
+                        name: 'Cold Joint (Studený spoj)', s: 9, ipc: '5.2.11.1', tool: 'reflow',
+                        causes: [
+                            { type: 'Machine', desc: 'Nefunkčný ohrev v niektorej zóne pece.' },
+                            { type: 'Method', desc: 'Nízka Peak teplota (nedostatočné roztavenie).' }
+                        ],
+                        controls: ['Vykonať meranie profilu (M.O.L.E. / KIC).', 'Zvýšiť teplotu v posledných dvoch zónach.']
+                    },
+                    'non_wetting': {
+                        name: 'Non-wetting (Nezmáčanie)', s: 9, ipc: '5.2.5', tool: 'reflow',
+                        causes: [
+                            { type: 'Material', desc: 'Kontaminácia padov (mastnota, oxidácia).' },
+                            { type: 'Method', desc: 'Príliš dlhý čas nad liquidom (TAL).' }
+                        ],
+                        controls: ['Overiť čistotu PCB.', 'Skrátiť čas TAL na max 60-90s.']
+                    },
+                    'solder_balls': {
+                        name: 'Solder Balls (Guličky po celom PCB)', s: 6, ipc: '5.2.7.3', tool: 'reflow',
+                        causes: [
+                            { type: 'Method', desc: 'Príliš rýchly nábeh teploty (explózia tavidla).' },
+                            { type: 'Material', desc: 'Vlhkosť v paste (exspirácia).' }
+                        ],
+                        controls: ['Znížiť ramp-up rate v predohreve.', 'Vymeniť pastu za čerstvú.']
+                    }
+                }
+            };
+
+        function updateFailureModes() {
+            const op = document.getElementById('opStep').value;
+            const fmSelect = document.getElementById('failureMode');
+            fmSelect.innerHTML = '<option value="">-- Vyber mód --</option>';
+            Object.keys(fmeaDB[op]).forEach(key => {
+                fmSelect.innerHTML += `<option value="${key}">${fmeaDB[op][key].name}</option>`;
+            });
+            runAnalysis();
+        }
+
+        function runAnalysis() {
+            const op = document.getElementById('opStep').value;
+            const fm = document.getElementById('failureMode').value;
+            const causeBox = document.getElementById('causes-container');
+            const controlBox = document.getElementById('control-plan-list');
+            const optTool = document.getElementById('optimization-tool');
+
+            if (!fm) {
+                causeBox.innerHTML = '<p class="text-[11px] text-gray-400 italic font-bold">Vyberte failure mód zo zoznamu...</p>';
+                controlBox.innerHTML = '';
+                document.getElementById('sev-value').innerText = '--';
+                document.getElementById('severity-box').className = "mt-6 p-4 rounded-2xl border-2 border-gray-100 text-gray-300";
+                optTool.classList.add('hidden');
+                return;
+            }
+
+            const data = fmeaDB[op][fm];
+            document.getElementById('sev-value').innerText = data.s;
+            document.getElementById('severity-box').className = data.s >= 8 ? "mt-6 p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-700 font-black" : "mt-6 p-4 rounded-2xl border-2 border-amber-500 bg-amber-50 text-amber-700 font-black";
+            document.getElementById('ipc-chapter').innerText = "IPC-A-610 Ref: " + data.ipc;
+
+            causeBox.innerHTML = '';
+            data.causes.forEach(c => {
+                causeBox.innerHTML += `
+                <div class="fmea-card p-4 rounded-2xl bg-white border border-gray-100 shadow-sm border-l-slate-800">
+                    <span class="text-[8px] font-black uppercase text-white px-2 py-0.5 bg-slate-800 rounded-full italic">${c.type}</span>
+                    <p class="text-xs font-bold mt-2 text-slate-700">${c.desc}</p>
+                </div>`;
+            });
+
+            controlBox.innerHTML = '';
+            data.controls.forEach(step => {
+                controlBox.innerHTML += `<div class="control-step text-[11px] font-bold text-slate-600 leading-relaxed italic border-b border-gray-50 pb-2">${step}</div>`;
+            });
+
+            optTool.classList.toggle('hidden', data.tool === 'none');
+        }
+
+        function openOptimizer() {
+                const op = document.getElementById('opStep').value;
+                const fm = document.getElementById('failureMode').value;
+                const target = fmeaDB[op][fm].tool;
+
+                if (target === 'stencil') {
+                    window.location.href = 'stencil_checker.html';
+                } else if (target === 'reflow') {
+                    window.location.href = 'reflow_optimizer.html';
+                } else {
+                    alert("Pre tento Failure Mode nie je definovaný konkrétny optimalizačný nástroj.");
+                }
+            }
+
+        window.onload = updateFailureModes;
+    </script>
+</body>
+
+</html>
