@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reflow Configurator Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .zone-preheat {
+            background-color: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+
+        .zone-soak {
+            background-color: #fffbeb;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+
+        .zone-reflow {
+            background-color: #fef2f2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+
+        .zone-cool {
+            background-color: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen font-sans pb-12">
+
+    <div class="bg-rose-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <i class="fa-solid fa-microchip text-2xl"></i>
+            <h1 class="text-xl font-bold tracking-tight uppercase">Reflow Configurator Pro</h1>
+        </div>
+        <a href="index.html"
+            class="bg-rose-700 hover:bg-rose-800 px-8 py-2 rounded-xl text-sm font-black transition-all uppercase tracking-widest shadow-md">
+            SPÄŤ
+        </a>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto mt-8 px-4">
+        <div class="grid lg:grid-cols-12 gap-8">
+
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 border-b pb-2">
+                        Konfigurácia linky</h2>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Počet
+                                    zón</label>
+                                <input type="number" id="zoneCount" value="10" min="4" max="16" onchange="updateUI()"
+                                    class="w-full p-3 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-rose-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Dĺžka zóny
+                                    (cm)</label>
+                                <input type="number" id="zoneLen" value="35" onchange="updateUI()"
+                                    class="w-full p-3 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-rose-500 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Typ pasty /
+                                zliatiny</label>
+                            <select id="alloy" onchange="updateUI()"
+                                class="w-full p-3 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-rose-500 transition">
+                                <option value="SAC305">SAC305 (SnAgCu) - Pb-Free</option>
+                                <option value="SnPb">Sn63Pb37 - Leaded</option>
+                                <option value="LowTemp">Low-Temp (Bi58) - 138°C</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ohrev
+                                (Konvekcia)</label>
+                            <select id="heating" onchange="updateUI()"
+                                class="w-full p-3 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-rose-500 transition">
+                                <option value="TB">Top + Bottom (Symetrický)</option>
+                                <option value="T">Len Top (Asymetrický)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-rose-50 rounded-2xl border border-rose-100">
+                        <h3 class="text-[10px] font-black text-rose-600 uppercase mb-2">Výpočtová rýchlosť:</h3>
+                        <div id="resV" class="text-4xl font-black text-rose-600">-- <span class="text-lg">cm/min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="theoryBox" class="bg-slate-900 p-6 rounded-3xl text-white shadow-xl">
+                    <h3
+                        class="text-rose-400 text-[10px] font-black uppercase mb-4 tracking-widest border-b border-slate-700 pb-2">
+                        IPC / J-STD-020 Target</h3>
+                    <div id="theoryContent" class="space-y-3 text-[11px]">
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-6">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-end mb-6">
+                        <h2 class="text-xl font-black text-slate-800 uppercase italic">Navrhované setpointy pece</h2>
+                        <div class="flex gap-4 text-[9px] font-black uppercase tracking-tighter">
+                            <span class="flex items-center gap-1 text-blue-600"><i class="fa-solid fa-circle"></i>
+                                Preheat</span>
+                            <span class="flex items-center gap-1 text-amber-600"><i class="fa-solid fa-circle"></i>
+                                Soak</span>
+                            <span class="flex items-center gap-1 text-rose-600"><i class="fa-solid fa-circle"></i>
+                                Reflow</span>
+                        </div>
+                    </div>
+
+                    <div id="zonesOutput" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Očakávaný TAL</span>
+                            <div id="estTal" class="text-lg font-black text-slate-700">--</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Očakávaný Peak</span>
+                            <div id="estPeak" class="text-lg font-black text-slate-700">--</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Max Ramp Rate</span>
+                            <div id="estSlope" class="text-lg font-black text-slate-700">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 p-6 rounded-[2rem] border border-amber-100">
+                    <h3 class="text-amber-700 text-xs font-black uppercase mb-2 leading-none">Edukačná poznámka pre
+                        technológa</h3>
+                    <p class="text-[11px] text-amber-800 leading-relaxed font-medium">
+                        Ak zmenšujete počet zón, znižuje sa tepelná stabilita. Pri 6-zónovej peci musí byť gradient
+                        medzi zónami strmší, aby ste dosiahli peak v kratšom čase. <strong>Soak</strong> fáza
+                        (150-200°C) je kritická pre vytlačenie prchavých látok; ak je príliš krátka, hrozí <em>Solder
+                            Balling</em> a <em>Voiding</em>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const specs = {
+            'SAC305': {
+                liq: 217, pMin: 235, pMax: 245, tMin: 60, tMax: 90,
+                soakStart: 150, soakEnd: 200, slope: 2.5,
+                desc: "Bezolovnatý proces vyžaduje precízny TAL na tvorbu intermetalickej vrstvy (IMC)."
+            },
+            'SnPb': {
+                liq: 183, pMin: 210, pMax: 225, tMin: 50, tMax: 80,
+                soakStart: 120, soakEnd: 170, slope: 3.0,
+                desc: "Olovnatý proces je tolerantnejší k tepelnému šoku, pozor na oxidáciu pri dlhom soaku."
+            },
+            'LowTemp': {
+                liq: 138, pMin: 165, pMax: 180, tMin: 60, tMax: 120,
+                soakStart: 90, soakEnd: 130, slope: 2.0,
+                desc: "Používané pre citlivé komponenty. Vyžaduje veľmi pomalý a stabilný nábeh."
+            }
+        };
+
+        function updateUI() {
+            const count = parseInt(document.getElementById('zoneCount').value);
+            const len = parseInt(document.getElementById('zoneLen').value);
+            const alloyKey = document.getElementById('alloy').value;
+            const hType = document.getElementById('heating').value;
+            const s = specs[alloyKey];
+
+            // 1. Logika rýchlosti: Tunel by mal trvať ~ 5 minút (300s)
+            let v = Math.round((count * len) / 4.8);
+            if (hType === 'T') v -= 5; // Ak je len top ohrev, musíme ísť pomalšie
+            document.getElementById('resV').innerHTML = v + ' <span class="text-lg">cm/min</span>';
+
+            // 2. Rozdelenie zón (dynamické podľa počtu)
+            const nPre = Math.ceil(count * 0.3); // 30% predohrev
+            const nSoak = Math.ceil(count * 0.4); // 40% soak
+            const nPeak = Math.max(1, Math.floor(count * 0.2)); // 20% reflow
+            const nCool = count - nPre - nSoak - nPeak;
+
+            let temps = [];
+            // Preheat: Ramp up to Soak Start
+            for (let i = 0; i < nPre; i++) temps.push(Math.round(40 + (s.soakStart - 40) * (i + 1) / nPre));
+            // Soak: Stabilizácia
+            for (let i = 0; i < nSoak; i++) temps.push(Math.round(s.soakStart + (s.soakEnd - s.soakStart) * (i + 1) / nSoak));
+            // Peak: Final Reflow
+            for (let i = 0; i < nPeak; i++) temps.push(Math.round(s.pMax + (hType === 'T' ? 10 : 0)));
+            // Cool: 
+            for (let i = 0; i < nCool; i++) temps.push(Math.round(s.liq - 40));
+
+            // 3. Render zón
+            const out = document.getElementById('zonesOutput');
+            out.innerHTML = '';
+            temps.forEach((t, i) => {
+                let cls = "";
+                if (i < nPre) cls = "zone-preheat";
+                else if (i < nPre + nSoak) cls = "zone-soak";
+                else if (i < nPre + nSoak + nPeak) cls = "zone-reflow";
+                else cls = "zone-cool";
+
+                out.innerHTML += `
+                <div class="border-2 rounded-2xl p-4 text-center transition-all ${cls} shadow-sm">
+                    <span class="text-[8px] font-black uppercase opacity-50">Zóna ${i + 1}</span>
+                    <div class="text-xl font-black">${t}°C</div>
+                </div>`;
+            });
+
+            // 4. Teória a výsledky
+            document.getElementById('theoryContent').innerHTML = `
+            <div class="flex justify-between border-b border-slate-800 pb-1"><span>Target Peak:</span><span class="font-bold text-rose-400">${s.pMin}-${s.pMax}°C</span></div>
+            <div class="flex justify-between border-b border-slate-800 pb-1"><span>Target TAL:</span><span class="font-bold text-rose-400">${s.tMin}-${s.tMax}s</span></div>
+            <div class="flex justify-between border-b border-slate-800 pb-1"><span>Max Slope:</span><span class="font-bold text-rose-400">< ${s.slope}°C/s</span></div>
+            <div class="mt-3 italic text-slate-400">${s.desc}</div>
+        `;
+
+            document.getElementById('estTal').innerText = s.tMin + " - " + s.tMax + " s";
+            document.getElementById('estPeak').innerText = (s.pMin + 5) + "°C (est.)";
+            document.getElementById('estSlope').innerText = s.slope + " °C/s";
+        }
+
+        window.onload = updateUI;
+    </script>
+</body>
+
+</html>

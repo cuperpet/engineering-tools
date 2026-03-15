@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stencil Aperture Expert</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .result-card {
+            transition: all 0.3s ease;
+        }
+
+        .status-ok {
+            color: #059669;
+            background-color: #ecfdf5;
+            border-color: #10b981;
+        }
+
+        .status-ko {
+            color: #dc2626;
+            background-color: #fef2f2;
+            border-color: #f87171;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-4 md:p-8 font-sans">
+
+    <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-indigo-600 p-6 text-white flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold"><i class="fa-solid fa-border-all mr-2"></i>Stencil Aperture Expert</h1>
+                <p class="text-indigo-100 text-xs">Výpočet Area Ratio a kontrola typu pasty podľa IPC-7525</p>
+            </div>
+            <a href="index.html"
+                class="bg-indigo-700 hover:bg-indigo-800 px-4 py-2 rounded-lg text-sm transition shadow-md">Späť</a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border-b border-gray-100">
+            <div class="p-8 space-y-6 border-r border-gray-100">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider mb-4">Parametre apertúry</h3>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Tvar apertúry</label>
+                    <select id="shape" onchange="updateUI()"
+                        class="w-full p-3 border-2 border-gray-100 rounded-xl outline-none focus:border-indigo-500 transition bg-white text-gray-700 shadow-sm">
+                        <option value="rect">Obdĺžnik / Štvorec</option>
+                        <option value="round_rect">Zaoblený obdĺžnik</option>
+                        <option value="circle">Kruh (Round)</option>
+                        <option value="homeplate">Homeplate (Redukcia)</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label id="dim1-label" class="block text-xs font-bold text-gray-500 uppercase mb-1">Šírka (W)
+                            [µm]</label>
+                        <input type="number" id="dim1" value="250" oninput="calculate()"
+                            class="w-full p-3 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition shadow-inner">
+                    </div>
+                    <div id="dim2-container">
+                        <label id="dim2-label" class="block text-xs font-bold text-gray-500 uppercase mb-1">Dĺžka (L)
+                            [µm]</label>
+                        <input type="number" id="dim2" value="250" oninput="calculate()"
+                            class="w-full p-3 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition shadow-inner">
+                    </div>
+                </div>
+
+                <div id="extra-dim" class="hidden">
+                    <label id="extra-label" class="block text-xs font-bold text-gray-500 uppercase mb-1">Rádius (r)
+                        [µm]</label>
+                    <input type="number" id="dimExtra" value="40" oninput="calculate()"
+                        class="w-full p-3 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition shadow-inner">
+                </div>
+
+                <div class="pt-4 border-t border-gray-50">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Typ spájkovacej pasty</label>
+                    <select id="pasteType" onchange="calculate()"
+                        class="w-full p-3 border-2 border-amber-100 rounded-xl outline-none bg-amber-50 text-amber-900 shadow-sm font-medium">
+                        <option value="3">Type 3 (25-45 µm)</option>
+                        <option value="4" selected>Type 4 (20-38 µm)</option>
+                        <option value="5">Type 5 (15-25 µm)</option>
+                        <option value="6">Type 6 (5-15 µm)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="p-8 bg-gray-50 flex flex-col items-center justify-center space-y-4">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider">Vizuálna legenda</h3>
+                <div id="shape-preview"
+                    class="w-full max-w-[240px] aspect-square bg-white rounded-3xl border-2 border-dashed border-gray-200 shadow-sm flex items-center justify-center p-6">
+                </div>
+                <div class="text-center">
+                    <span id="shape-name"
+                        class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-black uppercase tracking-widest">---</span>
+                </div>
+            </div>
+
+            <div class="p-8 space-y-4 bg-white">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider mb-4">Analýza prenosu (Area Ratio)
+                </h3>
+
+                <div id="thickness-results" class="space-y-3">
+                </div>
+
+                <div id="paste-check"
+                    class="mt-6 p-4 rounded-2xl text-center font-bold text-xs border-2 transition-colors duration-500">
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 bg-gray-50 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="flex gap-3">
+                <div
+                    class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-indigo-600 shrink-0">
+                    <i class="fa-solid fa-calculator"></i></div>
+                <div>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">Area Ratio</h4>
+                    <p class="text-[11px] text-gray-500">Pomer plochy otvoru k ploche stien. Limit je <b>> 0.66</b> pre
+                        stabilný prenos pasty.</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div
+                    class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-indigo-600 shrink-0">
+                    <i class="fa-solid fa-circle-nodes"></i></div>
+                <div>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">5-Ball Rule</h4>
+                    <p class="text-[11px] text-gray-500">Minimálne 5 najväčších častíc pasty sa musí zmestiť do šírky
+                        otvoru.</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div
+                    class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-indigo-600 shrink-0">
+                    <i class="fa-solid fa-ruler-combined"></i></div>
+                <div>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">Aperture Reduction</h4>
+                    <p class="text-[11px] text-gray-500">Homeplate a U-shape tvary redukujú objem pasty v strede a
+                        bránia spájkovacím guličkám.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const thicknesses = [80, 100, 120, 130, 150];
+        const pasteSpecs = { "3": 45, "4": 38, "5": 25, "6": 15 };
+
+        const svgColor = "#4f46e5";
+        const svgFill = "#f0f9ff";
+        const arrowMarker = `<defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="${svgColor}"/></marker></defs>`;
+
+        const previews = {
+            rect: `<svg viewBox="0 0 100 100" class="w-48 h-48">${arrowMarker}
+                <rect x="25" y="25" width="50" height="40" fill="${svgFill}" stroke="${svgColor}" stroke-width="2.5"/>
+                <line x1="25" y1="75" x2="75" y2="75" stroke="${svgColor}" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+                <text x="50" y="88" text-anchor="middle" font-size="10" font-weight="bold" fill="${svgColor}">W</text>
+                <line x1="85" y1="25" x2="85" y2="65" stroke="${svgColor}" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+                <text x="94" y="48" text-anchor="middle" font-size="10" font-weight="bold" fill="${svgColor}" transform="rotate(90 94,48)">L</text>
+            </svg>`,
+            circle: `<svg viewBox="0 0 100 100" class="w-48 h-48">
+                <circle cx="50" cy="50" r="30" fill="${svgFill}" stroke="${svgColor}" stroke-width="2.5"/>
+                <line x1="20" y1="50" x2="80" y2="50" stroke="${svgColor}" stroke-dasharray="3" stroke-width="1.5"/>
+                <text x="50" y="44" text-anchor="middle" font-size="10" font-weight="bold" fill="${svgColor}">D</text>
+            </svg>`,
+            round_rect: `<svg viewBox="0 0 100 100" class="w-48 h-48">${arrowMarker}
+                <rect x="25" y="25" width="50" height="40" rx="10" ry="10" fill="${svgFill}" stroke="${svgColor}" stroke-width="2.5"/>
+                <path d="M75,35 A10,10 0 0 1 65,25" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="2"/>
+                <text x="75" y="22" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef4444">r</text>
+            </svg>`,
+            homeplate: `<svg viewBox="0 0 100 100" class="w-48 h-48">${arrowMarker}
+                <path d="M25,25 L75,25 L75,50 L50,70 L25,50 Z" fill="${svgFill}" stroke="${svgColor}" stroke-width="2.5"/>
+                <line x1="25" y1="18" x2="75" y2="18" stroke="${svgColor}" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+                <text x="50" y="12" text-anchor="middle" font-size="10" font-weight="bold" fill="${svgColor}">W</text>
+                <path d="M75,50 L85,50 M50,70 L85,70" stroke="#ef4444" stroke-width="1" stroke-dasharray="2"/>
+                <text x="92" y="63" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef4444" transform="rotate(90 92,63)">z</text>
+            </svg>`
+        };
+
+        function updateUI() {
+            const shape = document.getElementById('shape').value;
+            document.getElementById('dim2-container').classList.toggle('hidden', shape === 'circle');
+            document.getElementById('extra-dim').classList.toggle('hidden', shape === 'rect' || shape === 'circle');
+
+            if (shape === 'circle') document.getElementById('dim1-label').innerText = "Priemer (D)";
+            else document.getElementById('dim1-label').innerText = "Šírka (W)";
+
+            if (shape === 'homeplate') document.getElementById('extra-label').innerText = "Zrezanie (z)";
+            else document.getElementById('extra-label').innerText = "Rádius (r)";
+
+            document.getElementById('shape-preview').innerHTML = previews[shape];
+            document.getElementById('shape-name').innerText = shape.replace('_', ' ');
+            calculate();
+        }
+
+        function calculate() {
+            const shape = document.getElementById('shape').value;
+            const w = parseFloat(document.getElementById('dim1').value) || 0;
+            const l = parseFloat(document.getElementById('dim2').value) || 0;
+            const extra = parseFloat(document.getElementById('dimExtra').value) || 0;
+            const pType = document.getElementById('pasteType').value;
+
+            let area = 0;
+            let perimeter = 0;
+            let smallestDim = w;
+
+            if (shape === 'rect') {
+                area = w * l;
+                perimeter = 2 * (w + l);
+                smallestDim = Math.min(w, l);
+            } else if (shape === 'circle') {
+                area = Math.PI * Math.pow(w / 2, 2);
+                perimeter = Math.PI * w;
+                smallestDim = w;
+            } else if (shape === 'round_rect') {
+                area = (w * l) - (4 * Math.pow(extra, 2)) + (Math.PI * Math.pow(extra, 2));
+                perimeter = 2 * (w + l) - (8 * extra) + (2 * Math.PI * extra);
+                smallestDim = Math.min(w, l);
+            } else if (shape === 'homeplate') {
+                // Skutočný päťuholník Homeplate (obdĺžnik - zrezaná spodná časť)
+                area = (w * l) - (Math.pow(w / 2, 2) * (extra / w)); // Aproximácia plochy
+                area = (w * (l - extra)) + (w * extra / 2); // Presnejší výpočet päťuholníka
+                perimeter = w + 2 * (l - extra) + 2 * (Math.sqrt(Math.pow(w / 2, 2) + Math.pow(extra, 2)));
+                smallestDim = w;
+            }
+
+            // Area Ratio results
+            const resultsDiv = document.getElementById('thickness-results');
+            resultsDiv.innerHTML = '';
+
+            thicknesses.forEach(t => {
+                const ar = area / (perimeter * t);
+                const isOk = ar >= 0.66;
+                const statusClass = isOk ? 'status-ok shadow-sm' : 'status-ko opacity-60';
+
+                resultsDiv.innerHTML += `
+                    <div class="flex items-center justify-between p-3 border-2 rounded-xl ${statusClass} font-bold transition-all">
+                        <span class="text-xs uppercase">Šablóna ${t} µm</span>
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-sm">${ar.toFixed(2)}</span>
+                            <i class="fa-solid ${isOk ? 'fa-check-circle' : 'fa-circle-xmark'}"></i>
+                        </div>
+                    </div>`;
+            });
+
+            // 5-Ball Rule check
+            const maxParticle = pasteSpecs[pType];
+            const ballCount = smallestDim / maxParticle;
+            const pasteCheck = document.getElementById('paste-check');
+
+            if (ballCount >= 5) {
+                pasteCheck.className = "mt-6 p-4 rounded-2xl text-center font-bold text-xs border-2 bg-green-50 text-green-700 border-green-200";
+                pasteCheck.innerHTML = `<i class="fa-solid fa-vial mr-2"></i>PASTA TYPE ${pType} VYHOVUJE (${ballCount.toFixed(1)} častíc)`;
+            } else {
+                pasteCheck.className = "mt-6 p-4 rounded-2xl text-center font-bold text-xs border-2 bg-red-50 text-red-700 border-red-200";
+                pasteCheck.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i>PASTA TYPE ${pType} NEVYHOVUJE (Len ${ballCount.toFixed(1)} častíc)`;
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+
+</html>
