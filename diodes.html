@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diode & LED Polarity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-2 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-amber-500 p-5 md:p-6 text-white flex justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight italic">
+                    <i class="fa-solid fa-bolt mr-2"></i>Diode & LED Polarity
+                </h1>
+                <p class="text-amber-100 text-[9px] md:text-[10px] uppercase font-bold tracking-widest mt-1">Určenie
+                    orientácie súčiastok</p>
+            </div>
+            <a href="index.html"
+                class="bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-lg text-xs md:text-sm transition font-bold uppercase shadow-inner text-white">Späť</a>
+        </div>
+
+        <div class="p-5 md:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="space-y-4">
+                    <h2 class="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-2 italic">SMD
+                        Diódy (MELF, SMA, SOD)</h2>
+
+                    <div
+                        class="p-4 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center gap-4">
+                        <div
+                            class="w-20 h-10 bg-gray-800 rounded flex items-center justify-end p-0.5 relative overflow-hidden shrink-0">
+                            <div class="w-2 h-full bg-gray-300 shadow-[0_0_5px_rgba(255,255,255,0.5)]"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-black text-gray-700 italic">Pásik na tele</p>
+                            <p class="text-[10px] text-gray-500 leading-tight">Pásik vždy označuje **KATÓDU (-)**.</p>
+                            <p class="text-[9px] text-amber-600 font-bold mt-1 uppercase">SMA, SMB, SMC, SOD-123</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center gap-4">
+                        <div
+                            class="w-20 h-8 bg-orange-700 rounded-full flex items-center justify-end p-0 relative border-b-4 border-orange-900 shrink-0">
+                            <div class="w-3 h-full bg-black/30 rounded-r-full"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-black text-gray-700 italic">MELF (Valček)</p>
+                            <p class="text-[10px] text-gray-500 leading-tight">Farebný krúžok na kraji je **KATÓDA
+                                (-)**.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-2 italic">SMD
+                        LED (Chip LED)</h2>
+
+                    <div
+                        class="p-4 bg-green-50 rounded-2xl border border-green-100 flex items-center gap-4 font-bold italic">
+                        <div class="w-16 h-16 bg-green-800 p-2 rounded flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-play text-green-400 rotate-90 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-black text-green-800 uppercase">Značka (Bottom)</p>
+                            <p class="text-[10px] text-gray-600 leading-tight">Šípka alebo "T" na spodku smeruje ku
+                                **KATÓDE (-)**.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center gap-4">
+                        <div
+                            class="w-16 h-16 bg-white border-2 border-gray-300 rounded relative overflow-hidden shrink-0">
+                            <div
+                                class="absolute top-0 right-0 w-6 h-6 bg-gray-300 rotate-45 translate-x-3 -translate-y-3">
+                            </div>
+                            <div class="w-8 h-8 bg-yellow-400 rounded-full m-auto mt-3 shadow-inner"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-black text-gray-700">Zrezaný roh</p>
+                            <p class="text-[10px] text-gray-500 leading-tight">Roh bez plastu označuje stranu **KATÓDY
+                                (-)**.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10">
+                <h2
+                    class="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-2 mb-4 italic text-center">
+                    Referenčná tabuľka rozmerov</h2>
+                <div class="overflow-hidden rounded-2xl border bg-white shadow-sm overflow-x-auto text-[11px]">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-gray-600 font-black uppercase italic">
+                            <tr>
+                                <th class="p-3">Puzdro</th>
+                                <th class="p-3">Dĺžka (mm)</th>
+                                <th class="p-3">Šírka (mm)</th>
+                                <th class="p-3">Alternatíva</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 italic font-medium">
+                            <tr>
+                                <td class="p-3 font-bold text-amber-600 italic">SMA</td>
+                                <td class="p-3">4.3</td>
+                                <td class="p-3">2.6</td>
+                                <td class="p-3 text-gray-400 uppercase">DO-214AC</td>
+                            </tr>
+                            <tr class="bg-amber-50/20">
+                                <td class="p-3 font-bold text-amber-600 italic">SMB</td>
+                                <td class="p-3">4.5</td>
+                                <td class="p-3">3.6</td>
+                                <td class="p-3 text-gray-400 uppercase">DO-214AA</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-amber-600 italic">SMC</td>
+                                <td class="p-3">7.0</td>
+                                <td class="p-3">5.9</td>
+                                <td class="p-3 text-gray-400 uppercase">DO-214AB</td>
+                            </tr>
+                            <tr class="bg-amber-50/20">
+                                <td class="p-3 font-bold text-amber-600 italic font-bold italic">SOD-123</td>
+                                <td class="p-3">2.7</td>
+                                <td class="p-3">1.6</td>
+                                <td class="p-3 text-gray-400 uppercase italic">Signálová</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-amber-600 italic">SOD-323</td>
+                                <td class="p-3">1.7</td>
+                                <td class="p-3">1.2</td>
+                                <td class="p-3 text-gray-400 uppercase italic">Micro</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-6 p-5 bg-amber-900 rounded-3xl text-white">
+                <p class="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-4 text-center italic">
+                    Porovnanie veľkosti puzdier</p>
+                <div class="flex items-end justify-around gap-2 px-2">
+                    <div class="flex flex-col items-center gap-1">
+                        <div class="w-14 h-9 bg-amber-500 rounded-sm shadow-lg"></div><span
+                            class="text-[8px] font-black italic">SMC</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <div class="w-10 h-7 bg-amber-600 rounded-sm shadow-lg"></div><span
+                            class="text-[8px] font-black italic">SMB</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <div class="w-8 h-5 bg-amber-700 rounded-sm shadow-lg"></div><span
+                            class="text-[8px] font-black italic">SMA</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1 font-bold italic">
+                        <div class="w-4 h-3 bg-amber-800 rounded-sm shadow-lg"></div><span class="text-[8px]">SOD</span>
+                    </div>
+                </div>
+                <div class="mt-6 bg-white/10 p-4 rounded-xl border border-white/20">
+                    <p class="text-[9px] leading-tight italic text-amber-100 text-center">
+                        <b>TIP PRE KONTROLU:</b> Ak súčiastka na padoch "pláva" alebo sú plochy príliš veľké, skontroluj
+                        typ puzdra v dokumentácii (napr. SMA vs SMB).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
