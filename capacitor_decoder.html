@@ -12,151 +12,331 @@
 
         body {
             font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-btn.active {
+            border-bottom: 4px solid #0891b2;
+            color: #0891b2;
+            font-weight: 900;
+        }
+
+        .hint-content {
+            display: none;
+        }
+
+        .hint-content.active {
+            display: block;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
     </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+<body class="bg-gray-100 min-h-screen p-2 md:p-8">
 
-    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
-        <div class="bg-cyan-600 p-6 text-white flex justify-between items-center">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-cyan-600 p-5 md:p-6 text-white flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight"><i class="fa-solid fa-microchip mr-2"></i>Capacitor
-                    Decoder</h1>
-                <p class="text-cyan-100 text-xs uppercase font-bold tracking-widest mt-1">Kódy a rozmery komponentov</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight italic">
+                    <i class="fa-solid fa-microchip mr-2"></i>Capacitor Decoder
+                </h1>
+                <p class="text-cyan-100 text-[9px] md:text-[10px] uppercase font-bold tracking-widest mt-1">Kódy a
+                    rozmery komponentov</p>
             </div>
             <a href="index.html"
-                class="bg-cyan-700 hover:bg-cyan-800 px-4 py-2 rounded-lg text-sm transition font-bold">Späť</a>
+                class="bg-cyan-700 hover:bg-cyan-800 px-4 py-2 rounded-lg text-xs md:text-sm transition font-bold uppercase shadow-inner">Späť</a>
+        </div>
+
+        <div class="flex border-b bg-gray-50 overflow-x-auto">
+            <button onclick="switchTab('ceramic')" id="btn-ceramic"
+                class="tab-btn active flex-1 py-4 text-[10px] md:text-[11px] uppercase font-black tracking-widest transition whitespace-nowrap px-4">Keramika
+                (MLCC)</button>
+            <button onclick="switchTab('alu')" id="btn-alu"
+                class="tab-btn flex-1 py-4 text-[10px] md:text-[11px] uppercase font-black tracking-widest transition text-gray-400 whitespace-nowrap px-4">Aluminium
+                (SMD)</button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-            <div class="p-8 border-r border-gray-100">
-                <h2 class="text-sm font-black text-gray-400 uppercase mb-6 tracking-widest">Kalkulačka kódu</h2>
 
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Zadaj 3-miestny kód (napr. 104
-                        alebo 2R2):</label>
-                    <input type="text" id="capCode" oninput="decodeCap()" placeholder="104" maxlength="4"
-                        class="w-full text-center p-6 text-5xl font-mono border-2 border-cyan-100 rounded-2xl focus:border-cyan-500 outline-none transition-all text-cyan-700">
-                </div>
+            <div class="p-5 md:p-8 border-r border-gray-100">
 
-                <div id="capResult" class="space-y-4">
-                    <div class="bg-cyan-50 p-6 rounded-2xl border border-cyan-100 text-center">
-                        <div id="val-primary" class="text-4xl font-black text-cyan-800">100 nF</div>
-                        <div id="val-secondary" class="text-sm text-cyan-600 font-medium mt-1">0.1 μF | 100 000 pF</div>
+                <div id="tab-ceramic" class="tab-content active">
+                    <h2 class="text-[10px] font-black text-gray-400 uppercase mb-4 tracking-widest italic">Kalkulačka
+                        MLCC</h2>
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Zadaj 3-miestny
+                            kód:</label>
+                        <input type="text" id="capCode" oninput="decodeCap()" placeholder="104" maxlength="4"
+                            class="w-full text-center p-4 md:p-6 text-4xl md:text-5xl font-mono border-2 border-cyan-100 rounded-2xl focus:border-cyan-500 outline-none transition-all text-cyan-700 bg-cyan-50/30 shadow-inner uppercase">
+                    </div>
+                    <div class="bg-cyan-50 p-6 md:p-8 rounded-3xl border border-cyan-100 text-center">
+                        <div id="val-primary" class="text-4xl md:text-5xl font-black text-cyan-800 tracking-tighter">100
+                            nF</div>
+                        <div id="val-secondary" class="text-xs md:text-sm text-cyan-600 font-medium mt-2">0.1 μF | 100
+                            000 pF</div>
                     </div>
                 </div>
 
-                <div class="mt-8 p-4 bg-gray-50 rounded-xl">
-                    <p class="text-[10px] text-gray-400 leading-tight">
-                        <b>Tip:</b> Prvé dve číslice sú hodnota, tretia je počet núl v pikoFaradoch (pF).
-                        Písmeno <b>R</b> zastupuje desatinnú čiarku.
-                    </p>
+                <div id="tab-alu" class="tab-content">
+                    <h2 class="text-[10px] font-black text-gray-400 uppercase mb-4 tracking-widest italic">Kalkulačka
+                        ELYT</h2>
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Zadaj kód z vrchu
+                            súčiastky:</label>
+                        <input type="text" id="aluCode" oninput="decodeAlu()" placeholder="A106" maxlength="12"
+                            class="w-full text-center p-4 md:p-6 text-4xl md:text-5xl font-mono border-2 border-cyan-100 rounded-2xl focus:border-cyan-500 outline-none transition-all text-cyan-700 bg-cyan-50/30 shadow-inner uppercase">
+                    </div>
+                    <div class="bg-cyan-600 p-6 md:p-8 rounded-3xl text-white text-center shadow-lg">
+                        <div id="alu-val" class="text-4xl md:text-5xl font-black tracking-tighter">10 μF</div>
+                        <div id="alu-volt"
+                            class="text-lg md:text-xl text-cyan-100 font-bold mt-2 uppercase tracking-widest">10 V</div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b pb-2 mb-4">Manuál
+                        pre operátora</h3>
+
+                    <div id="hint-ceramic" class="hint-content active space-y-2">
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                            <span
+                                class="bg-white px-2 py-1 rounded border font-mono text-xs font-bold text-cyan-700">104</span>
+                            <p class="text-[10px] text-gray-500 leading-tight">Zadaj všetky 3 znaky z tela MLCC.</p>
+                        </div>
+                    </div>
+
+                    <div id="hint-alu" class="hint-content space-y-3">
+                        <div class="flex items-start gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
+                            <i class="fa-solid fa-circle-exclamation text-amber-500 mt-1"></i>
+                            <div>
+                                <p class="text-[9px] text-amber-900 font-black uppercase tracking-tighter">Pozor na
+                                    šaržu!</p>
+                                <p class="text-[9px] text-amber-800 leading-tight">Ignoruj kódy ako "4H2" alebo "V-FK".
+                                    Hľadaj kombináciu čísla a "V" alebo písmeno+čísla.</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border text-[10px]">
+                                <span class="text-gray-400 font-bold">Štandard:</span>
+                                <span
+                                    class="font-mono font-bold text-cyan-700 bg-white px-2 py-0.5 rounded shadow-sm italic">47
+                                    16V</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border text-[10px]">
+                                <span class="text-gray-400 font-bold">Kód výrobcu:</span>
+                                <span
+                                    class="font-mono font-bold text-cyan-700 bg-white px-2 py-0.5 rounded shadow-sm italic">A106</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border text-[10px]">
+                                <span class="text-gray-400 font-bold">Mini (3mm):</span>
+                                <span
+                                    class="font-mono font-bold text-cyan-700 bg-white px-2 py-0.5 rounded shadow-sm italic">J8</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="p-8 bg-gray-50/50">
-                <h2 class="text-sm font-black text-gray-400 uppercase mb-6 tracking-widest text-center">SMD Puzdrá
-                    (Rozmery)</h2>
+            <div class="p-5 md:p-8 bg-gray-50/50">
+                <h2 class="text-[10px] font-black text-gray-400 uppercase mb-4 tracking-widest text-center italic">
+                    Referenčné tabuľky</h2>
 
-                <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-gray-100 text-gray-600 font-bold uppercase">
+                <div id="table-ceramic"
+                    class="tab-content active overflow-hidden rounded-2xl border bg-white shadow-sm">
+                    <table class="w-full text-left text-[11px]">
+                        <thead class="bg-gray-100 text-gray-600 font-bold uppercase italic">
                             <tr>
                                 <th class="p-3">Kód</th>
                                 <th class="p-3">Palce</th>
-                                <th class="p-3">Metrické (mm)</th>
+                                <th class="p-3">mm</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr class="hover:bg-cyan-50 transition">
-                                <td class="p-3 font-bold">0402</td>
-                                <td class="p-3">0.04 x 0.02</td>
-                                <td class="p-3">1.0 x 0.5</td>
+                        <tbody class="divide-y divide-gray-100 italic">
+                            <tr>
+                                <td class="p-3 font-bold text-cyan-700">0402</td>
+                                <td class="p-3">0.04x0.02</td>
+                                <td class="p-3">1.0x0.5</td>
                             </tr>
-                            <tr class="hover:bg-cyan-50 transition">
-                                <td class="p-3 font-bold">0603</td>
-                                <td class="p-3">0.06 x 0.03</td>
-                                <td class="p-3">1.6 x 0.8</td>
+                            <tr class="bg-cyan-50/20">
+                                <td class="p-3 font-bold text-cyan-700">0603</td>
+                                <td class="p-3">0.06x0.03</td>
+                                <td class="p-3">1.6x0.8</td>
                             </tr>
-                            <tr class="hover:bg-cyan-50 transition">
-                                <td class="p-3 font-bold">0805</td>
-                                <td class="p-3">0.08 x 0.05</td>
-                                <td class="p-3">2.0 x 1.25</td>
+                            <tr>
+                                <td class="p-3 font-bold text-cyan-700">0805</td>
+                                <td class="p-3">0.08x0.05</td>
+                                <td class="p-3">2.0x1.25</td>
                             </tr>
-                            <tr class="hover:bg-cyan-50 transition">
-                                <td class="p-3 font-bold">1206</td>
-                                <td class="p-3">0.12 x 0.06</td>
-                                <td class="p-3">3.2 x 1.6</td>
-                            </tr>
-                            <tr class="hover:bg-cyan-50 transition">
-                                <td class="p-3 font-bold">1210</td>
-                                <td class="p-3">0.12 x 0.10</td>
-                                <td class="p-3">3.2 x 2.5</td>
-                            </tr>
-                            <tr class="hover:bg-cyan-50 transition">
-                                <td class="p-3 font-bold">1812</td>
-                                <td class="p-3">0.18 x 0.12</td>
-                                <td class="p-3">4.5 x 3.2</td>
+                            <tr class="bg-cyan-50/20">
+                                <td class="p-3 font-bold text-cyan-700">1206</td>
+                                <td class="p-3">0.12x0.06</td>
+                                <td class="p-3">3.2x1.6</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <p class="text-[9px] text-gray-400 mt-4 italic text-center text-gray-400 uppercase font-bold">
-                    Standardized EIA / JEDEC sizes</p>
+
+                <div id="table-alu" class="tab-content overflow-hidden rounded-2xl border bg-white shadow-sm">
+                    <table class="w-full text-left text-[11px]">
+                        <thead class="bg-gray-100 text-gray-600 font-bold uppercase italic">
+                            <tr>
+                                <th class="p-3">Case</th>
+                                <th class="p-3">Ø D x L (mm)</th>
+                                <th class="p-3">Typ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 italic">
+                            <tr class="bg-cyan-50/30">
+                                <td class="p-3 font-bold text-cyan-700">A</td>
+                                <td class="p-3 font-bold">3.0 x 5.4</td>
+                                <td class="p-3 text-gray-400">Ultra-Mini</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-cyan-700">B</td>
+                                <td class="p-3">4.0 x 5.4</td>
+                                <td class="p-3 text-gray-400">Mini</td>
+                            </tr>
+                            <tr class="bg-cyan-50/10">
+                                <td class="p-3 font-bold text-cyan-700">C</td>
+                                <td class="p-3">5.0 x 5.4</td>
+                                <td class="p-3 text-gray-400">Standard</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-cyan-700">D</td>
+                                <td class="p-3">6.3 x 5.4</td>
+                                <td class="p-3 text-gray-400">Standard</td>
+                            </tr>
+                            <tr class="bg-cyan-50/10">
+                                <td class="p-3 font-bold text-cyan-700">E</td>
+                                <td class="p-3">8.0 x 6.2</td>
+                                <td class="p-3 text-gray-400">Large</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="volt-table-alu"
+                    class="tab-content mt-4 p-4 bg-white border border-cyan-100 rounded-xl shadow-sm">
+                    <h4 class="text-[10px] font-black text-cyan-700 uppercase mb-2 italic">Voltážne písmená (Prvý znak):
+                    </h4>
+                    <div class="grid grid-cols-4 gap-1 text-[9px] font-bold text-gray-500 uppercase">
+                        <span class="bg-gray-50 p-1 rounded text-center">e: 2.5V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">g: 4V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">j: 6.3V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">A: 10V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">C: 16V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">D: 20V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">E: 25V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">V: 35V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">H: 50V</span>
+                        <span class="bg-gray-50 p-1 rounded text-center">K: 80V</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active', 'text-cyan-600'));
+            document.querySelectorAll('.hint-content').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('table-' + tab).classList.add('active');
+            document.getElementById('hint-' + tab).classList.add('active');
+            document.getElementById('btn-' + tab).classList.add('active');
+
+            const vTab = document.getElementById('volt-table-alu');
+            if (tab === 'alu') vTab.classList.add('active'); else vTab.classList.remove('active');
+        }
+
         function decodeCap() {
             let code = document.getElementById('capCode').value.toUpperCase().trim();
             const resPrimary = document.getElementById('val-primary');
             const resSecondary = document.getElementById('val-secondary');
-
-            if (!code) {
-                resPrimary.innerText = "--";
-                resSecondary.innerText = "Zadaj kód";
-                return;
-            }
-
+            if (!code) { resPrimary.innerText = "--"; resSecondary.innerText = "Zadaj kód"; return; }
             let pf = 0;
-
-            if (code.includes('R')) {
-                pf = parseFloat(code.replace('R', '.'));
-            } else if (code.length === 3 && !isNaN(code)) {
+            if (code.includes('R')) { pf = parseFloat(code.replace('R', '.')); }
+            else if (code.length === 3 && !isNaN(code)) {
                 let base = parseInt(code.substring(0, 2));
                 let exp = parseInt(code.substring(2, 3));
                 pf = base * Math.pow(10, exp);
-            } else if (!isNaN(code)) {
-                pf = parseFloat(code);
+            } else if (!isNaN(code)) { pf = parseFloat(code); }
+            else { resPrimary.innerText = "???"; resSecondary.innerText = "Neplatný kód"; return; }
+
+            if (pf >= 1000000) {
+                resPrimary.innerText = (pf / 1000000).toFixed(2).replace(/\.00$/, '') + " μF";
+                resSecondary.innerText = (pf / 1000).toLocaleString() + " nF";
+            } else if (pf >= 1000) {
+                resPrimary.innerText = (pf / 1000).toFixed(2).replace(/\.00$/, '') + " nF";
+                resSecondary.innerText = (pf / 1000000).toFixed(4) + " μF | " + pf.toLocaleString() + " pF";
             } else {
-                resPrimary.innerText = "???";
-                resSecondary.innerText = "Neplatný kód";
+                resPrimary.innerText = pf + " pF";
+                resSecondary.innerText = (pf / 1000).toFixed(3) + " nF";
+            }
+        }
+
+        function decodeAlu() {
+            let code = document.getElementById('aluCode').value.toUpperCase().trim();
+            const valEl = document.getElementById('alu-val');
+            const voltEl = document.getElementById('alu-volt');
+
+            const vMap = { 'E': 2.5, 'G': 4, 'J': 6.3, 'A': 10, 'C': 16, 'D': 20, 'E': 25, 'V': 35, 'H': 50, 'K': 80 };
+            const eSeries = { '0': 1.0, '1': 1.2, '2': 1.5, '3': 1.8, '4': 2.2, '5': 2.7, '6': 3.3, '7': 3.9, '8': 4.7, '9': 5.6, 'A': 6.8, 'B': 8.2 };
+
+            if (!code) { valEl.innerText = "--"; voltEl.innerText = "--"; return; }
+
+            // 1. Priamy zápis (47 16V)
+            if (code.includes('V')) {
+                let vMatch = code.match(/(\d+)V/);
+                let valMatch = code.match(/^(\d+(\.\d+)?)/);
+                voltEl.innerText = vMatch ? vMatch[1] + " V" : "?? V";
+                valEl.innerText = valMatch ? valMatch[1] + " μF" : "??? μF";
                 return;
             }
 
-            // Formátovanie výstupu
-            let display = "";
-            let sec = "";
-
-            if (pf >= 1000000) {
-                display = (pf / 1000000).toFixed(2).replace(/\.00$/, '') + " μF";
-                sec = (pf / 1000).toLocaleString() + " nF";
-            } else if (pf >= 1000) {
-                display = (pf / 1000).toFixed(2).replace(/\.00$/, '') + " nF";
-                sec = (pf / 1000000).toFixed(4) + " μF | " + pf.toLocaleString() + " pF";
-            } else {
-                display = pf + " pF";
-                sec = (pf / 1000).toFixed(3) + " nF";
+            // 2. Kód A106
+            if (code.length >= 4 && vMap[code.charAt(0)]) {
+                let v = vMap[code.charAt(0)];
+                let c = code.substring(1, 4);
+                if (!isNaN(c)) {
+                    let base = parseInt(c.substring(0, 2));
+                    let exp = parseInt(c.substring(2));
+                    let pf = base * Math.pow(10, exp);
+                    valEl.innerText = (pf / 1000000).toFixed(1).replace(/\.0$/, '') + " μF";
+                    voltEl.innerText = v + " V";
+                    return;
+                }
             }
 
-            resPrimary.innerText = display;
-            resSecondary.innerText = sec;
+            // 3. Mini kód J8
+            if (code.length === 2) {
+                let v = vMap[code.charAt(0)];
+                let c = eSeries[code.charAt(1)];
+                if (v && c) {
+                    valEl.innerText = c + " μF";
+                    voltEl.innerText = v + " V";
+                    return;
+                }
+            }
+            valEl.innerText = "???"; voltEl.innerText = "Neznámy";
         }
 
-        // Spustíme základný výpočet pre 104 po načítaní
-        window.onload = decodeCap;
+        window.onload = () => { decodeCap(); decodeAlu(); };
     </script>
 </body>
 
